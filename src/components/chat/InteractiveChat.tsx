@@ -11,9 +11,7 @@ import { useConversation, type Message } from '@/contexts/ConversationContext';
 import { Avatar } from '@/components/ui/Avatar';
 import type { Persona } from '@/types/persona';
 import { ClosedCaptions } from '@/components/accessibility/ClosedCaptions';
-import { NarratorToggle } from '@/components/demo/NarratorToggle';
 import { useClosedCaptions } from '@/hooks/accessibility/useClosedCaptions';
-import { useNarratorVisibility } from '@/hooks/demo/useNarratorVisibility';
 
 interface InteractiveChatProps {
   persona?: Persona;
@@ -47,10 +45,6 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
 
   // Accessibility features
   const { updateCaption, clearCaption } = useClosedCaptions(true); // CC enabled by default
-  const { isVisible: narratorVisible } = useNarratorVisibility({
-    defaultVisible: false, // Hidden by default per client requirement
-    autoHideOnDemo: true,
-  });
 
   // Get current persona ID (memoized to ensure it updates when persona changes)
   const personaId = useMemo(() => (persona?.id || 'c-level') as PersonaId, [persona?.id]);
@@ -312,7 +306,6 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
     <div className="flex flex-col h-full bg-background relative">
       {/* Accessibility Controls */}
       <ClosedCaptions position="bottom" />
-      <NarratorToggle position="top-right" />
 
       {/* Sidebar Toggle Button */}
       <button
@@ -368,12 +361,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
 
                 {message.type === 'ai' && (
                   <div className="flex gap-3 animate-in fade-in slide-in-from-left-2 duration-500" data-message-role="ai">
-                    {narratorVisible && (
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary via-chart-3 to-primary/80 flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/20">
-                        <Sparkles className="w-4 h-4 text-white" />
-                      </div>
-                    )}
-                    {!narratorVisible && <div className="w-8 h-8 flex-shrink-0" />}
+                    <div className="w-8 h-8 flex-shrink-0" />
                     <div className="max-w-2xl flex-1">
                       <div className="bg-gradient-to-br from-primary/8 via-accent/15 to-chart-3/10 rounded-2xl border border-primary/25 shadow-md overflow-hidden">
                         {/* Message Content */}
@@ -485,12 +473,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
             {/* Phase 1: Thinking Indicator */}
             {isThinking && (
               <div className="flex gap-3">
-                {narratorVisible && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary via-chart-3 to-primary/80 flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/20 animate-pulse">
-                    <Sparkles className="w-4 h-4 text-white" />
-                  </div>
-                )}
-                {!narratorVisible && <div className="w-8 h-8 flex-shrink-0" />}
+                <div className="w-8 h-8 flex-shrink-0" />
                 <div className="flex items-center gap-2 px-4 py-3">
                   <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
                   <span className="text-sm text-muted-foreground italic animate-pulse">
@@ -503,12 +486,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
             {/* Phase 2: Composing Indicator */}
             {isComposing && (
               <div className="flex gap-3">
-                {narratorVisible && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary via-chart-3 to-primary/80 flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary/20">
-                    <Sparkles className="w-4 h-4 text-white" />
-                  </div>
-                )}
-                {!narratorVisible && <div className="w-8 h-8 flex-shrink-0" />}
+                <div className="w-8 h-8 flex-shrink-0" />
                 <div className="bg-gradient-to-br from-primary/8 via-accent/15 to-chart-3/10 rounded-2xl border border-primary/25 shadow-md overflow-hidden animate-in fade-in duration-300">
                   <div className="px-4 py-3">
                     {/* Skeleton lines with shimmer effect */}
