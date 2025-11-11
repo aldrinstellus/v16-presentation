@@ -178,18 +178,32 @@ export function Sidebar({
         {/* User Profile with Persona Selector */}
         <div className="border-t border-border p-4">
         <div className="relative">
-          {/* Compact Profile Button */}
+          {/* Ultra-Compact Profile Button - Left Aligned with Badge */}
           <button
             onClick={() => setPersonaSelectorOpen(!personaSelectorOpen)}
-            className="w-full flex items-center gap-3 px-3 py-2 bg-primary/10 rounded-lg hover:bg-primary/15 transition-colors"
+            className="w-full flex items-center gap-2.5 px-2.5 py-2 bg-primary/10 rounded-lg hover:bg-primary/15 transition-colors"
           >
             {/* Avatar */}
-            <Avatar name={currentPersona.name} size={32} />
+            <Avatar name={currentPersona.name} size={28} />
 
-            {/* User Info */}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{currentPersona.name}</p>
-              <p className="text-xs text-muted-foreground truncate">{currentPersona.role}</p>
+            {/* User Info + Badge */}
+            <div className="flex-1 min-w-0 flex items-center gap-2">
+              {/* Text Container */}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-foreground truncate leading-tight">{currentPersona.name}</p>
+                <p className="text-[10px] text-muted-foreground truncate leading-tight">{currentPersona.role}</p>
+              </div>
+
+              {/* Badge */}
+              {(() => {
+                const BadgeIcon = currentPersona.badge.icon;
+                return (
+                  <div className={`flex items-center gap-1 rounded-md ${currentPersona.theme.badgeSolid} px-1.5 py-0.5 flex-shrink-0`}>
+                    <BadgeIcon className="h-2.5 w-2.5 text-white" />
+                    <span className="text-[9px] font-bold uppercase text-white whitespace-nowrap">{currentPersona.badge.label}</span>
+                  </div>
+                );
+              })()}
             </div>
           </button>
 
