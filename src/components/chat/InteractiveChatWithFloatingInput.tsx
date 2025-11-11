@@ -79,7 +79,7 @@ export function InteractiveChatWithFloatingInput() {
       </div>
 
       {/* Floating Input Bar - Responsive */}
-      <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 ${sidebarOpen ? 'lg:left-[calc(50%+150px)]' : ''} w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl px-4 sm:px-6 flex flex-col sm:flex-row items-center gap-3 z-10 transition-all duration-300`}>
+      <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 ${sidebarOpen ? 'lg:left-[calc(50%+150px)]' : ''} w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-[calc(100vw-320px)] px-4 sm:px-6 flex flex-col sm:flex-row items-center gap-3 z-10 transition-all duration-300`}>
         {/* Input with inline Send button */}
         <form onSubmit={handleSubmit} className="flex-1 relative">
           <input
