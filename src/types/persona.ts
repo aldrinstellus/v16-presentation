@@ -1,6 +1,18 @@
 import { LucideIcon } from 'lucide-react';
 
-export type PersonaType = 'c-level' | 'cs-manager' | 'support-agent' | 'csm';
+// Mode type for Government vs Project personas
+export type ModeType = 'government' | 'project';
+
+// Updated persona types to support both modes
+export type PersonaType =
+  // Government Mode (3 personas)
+  | 'cor'                    // Contracting Officer's Representative
+  | 'program-manager'        // Program Manager / Business team lead
+  | 'stakeholder-lead'       // Department Group / Stakeholder lead
+  // Project Mode (3 personas)
+  | 'project-manager'        // Project Manager
+  | 'service-team-lead'      // Service team lead
+  | 'service-team-member';   // Service team member
 
 export interface PersonaTheme {
   primary: string; // HSL values without hsl()
@@ -22,6 +34,7 @@ export interface QuickAction {
 
 export interface Persona {
   id: PersonaType;
+  mode: ModeType;          // NEW: Associates persona with government or project mode
   name: string;
   email: string;
   role: string;

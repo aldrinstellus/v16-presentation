@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 import { InteractiveChatWithFloatingInput } from '@/components/chat/InteractiveChatWithFloatingInput';
 import { usePersona } from '@/hooks/use-persona';
 
-export default function CLevelDemoPage() {
+export default function ProgramManagerDemoPage() {
   const { setPersona } = usePersona();
 
   useEffect(() => {
-    setPersona('cor');
+    setPersona('program-manager');
   }, [setPersona]);
 
   return <InteractiveChatWithFloatingInput />;

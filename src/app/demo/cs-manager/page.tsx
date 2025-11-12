@@ -8,7 +8,7 @@ export default function CSManagerDemoPage() {
   const { setPersona } = usePersona();
 
   useEffect(() => {
-    setPersona('cs-manager');
+    setPersona('program-manager');
   }, [setPersona]);
 
   return <InteractiveChatWithFloatingInput />;

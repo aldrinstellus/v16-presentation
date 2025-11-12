@@ -62,7 +62,7 @@ export function DashboardHeader() {
             <p className="text-sm font-medium text-foreground">{currentPersona.name}</p>
             <p className="text-xs text-muted-foreground">{currentPersona.role}</p>
           </div>
-          <Avatar name={currentPersona.name} size={40} />
+          <Avatar name={currentPersona.name} id={currentPersona.id} size={40} />
         </div>
       </div>
     </header>

@@ -8,7 +8,7 @@ export default function SupportAgentDemoPage() {
   const { setPersona } = usePersona();
 
   useEffect(() => {
-    setPersona('support-agent');
+    setPersona('service-team-member');
   }, [setPersona]);
 
   return <InteractiveChatWithFloatingInput />;

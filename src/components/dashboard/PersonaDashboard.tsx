@@ -70,7 +70,7 @@ export function PersonaDashboard() {
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Open Items</p>
                 <p className="text-3xl font-bold text-foreground">
-                  {currentPersona.id === 'c-level' ? '24' : currentPersona.id === 'cs-manager' ? '18' : '12'}
+                  {currentPersona.id === 'cor' ? '24' : currentPersona.id === 'program-manager' ? '18' : '12'}
                 </p>
               </div>
               <div className={`h-12 w-12 rounded-full ${currentPersona.theme.badgeSolid}/10 flex items-center justify-center`}>
@@ -83,10 +83,10 @@ export function PersonaDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">
-                  {currentPersona.id === 'c-level' ? 'SLA Score' : currentPersona.id === 'cs-manager' ? 'Team Capacity' : 'Tickets Resolved'}
+                  {currentPersona.id === 'cor' ? 'SLA Score' : currentPersona.id === 'program-manager' ? 'Team Capacity' : 'Tickets Resolved'}
                 </p>
                 <p className="text-3xl font-bold text-success">
-                  {currentPersona.id === 'c-level' ? '92%' : currentPersona.id === 'cs-manager' ? '78%' : '23'}
+                  {currentPersona.id === 'cor' ? '92%' : currentPersona.id === 'program-manager' ? '78%' : '23'}
                 </p>
               </div>
               <div className="h-12 w-12 rounded-full bg-success/10 flex items-center justify-center">
@@ -99,10 +99,10 @@ export function PersonaDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">
-                  {currentPersona.id === 'c-level' ? 'At Risk' : currentPersona.id === 'cs-manager' ? 'SLA Breach' : 'Urgent'}
+                  {currentPersona.id === 'cor' ? 'At Risk' : currentPersona.id === 'program-manager' ? 'SLA Breach' : 'Urgent'}
                 </p>
                 <p className="text-3xl font-bold text-destructive">
-                  {currentPersona.id === 'c-level' ? '5' : currentPersona.id === 'cs-manager' ? '3' : '2'}
+                  {currentPersona.id === 'cor' ? '5' : currentPersona.id === 'program-manager' ? '3' : '2'}
                 </p>
               </div>
               <div className="h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center">

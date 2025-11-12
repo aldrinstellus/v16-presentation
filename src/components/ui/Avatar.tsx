@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 interface AvatarProps {
   name: string;
+  id?: string; // Persona ID for stable avatar generation
   initials?: string;
   size?: number;
   className?: string;
@@ -14,26 +15,14 @@ interface AvatarProps {
 function detectGender(name: string): 'male' | 'female' {
   const firstName = name.split(' ')[0].toLowerCase();
 
-  // Common male names
-  const maleNames = [
-    'david', 'michael', 'christopher', 'james', 'john', 'robert', 'william',
-    'richard', 'joseph', 'thomas', 'charles', 'daniel', 'matthew', 'anthony',
-    'mark', 'donald', 'steven', 'paul', 'andrew', 'joshua', 'kenneth', 'kevin',
-    'brian', 'george', 'timothy', 'ronald', 'edward', 'jason', 'jeffrey', 'ryan'
-  ];
-
-  // Common female names
-  const femaleNames = [
-    'jennifer', 'jessica', 'sarah', 'emily', 'amanda', 'melissa', 'michelle',
-    'kimberly', 'lisa', 'angela', 'stephanie', 'heather', 'nicole', 'amy',
-    'mary', 'patricia', 'linda', 'barbara', 'elizabeth', 'susan', 'karen',
-    'nancy', 'betty', 'helen', 'sandra', 'donna', 'carol', 'ruth', 'sharon'
-  ];
+  // V17 Mode Switcher personas
+  const maleNames = ['david', 'marcus', 'michael', 'christopher'];
+  const femaleNames = ['sarah', 'jennifer', 'jessica', 'emily'];
 
   if (maleNames.includes(firstName)) return 'male';
   if (femaleNames.includes(firstName)) return 'female';
 
-  // Default to male for neutral/unknown names (Jordan, Taylor, etc.)
+  // Default to male for unknown
   return 'male';
 }
 
@@ -48,13 +37,16 @@ function getAvatarStyle(name: string): string {
 
 export function Avatar({
   name,
+  id,
   initials: _initials = 'SC', // eslint-disable-line @typescript-eslint/no-unused-vars
   size = 40,
   className = '',
   variant = 'profile'
 }: AvatarProps) {
   // Generate consistent avatar URL using DiceBear API with gender-appropriate style
-  const seed = name.toLowerCase().replace(/\s+/g, '-');
+  // Use persona ID as seed if provided (keeps avatar stable when name changes)
+  // Otherwise fall back to name-based seed
+  const seed = id || name.toLowerCase().replace(/\s+/g, '-');
   const style = getAvatarStyle(name);
   const avatarUrl = `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&backgroundColor=7c3aed&backgroundType=solid`;
 

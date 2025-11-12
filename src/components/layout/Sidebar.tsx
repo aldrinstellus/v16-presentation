@@ -184,7 +184,7 @@ export function Sidebar({
             className="w-full flex items-center gap-2.5 px-2.5 py-2 bg-primary/10 rounded-lg hover:bg-primary/15 transition-colors"
           >
             {/* Avatar */}
-            <Avatar name={currentPersona.name} size={28} />
+            <Avatar name={currentPersona.name} id={currentPersona.id} size={28} />
 
             {/* User Info + Badge */}
             <div className="flex-1 min-w-0 flex items-center gap-2">
@@ -234,7 +234,7 @@ export function Sidebar({
                     >
                       <div className="flex flex-col items-center gap-2">
                         {/* Avatar */}
-                        <Avatar name={persona.name} size={40} />
+                        <Avatar name={persona.name} id={persona.id} size={40} />
                         <div className="w-full text-center">
                           <div className="flex items-center justify-center gap-2">
                             <p className="text-sm font-medium truncate">{persona.name}</p>

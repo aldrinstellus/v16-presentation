@@ -47,7 +47,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
   const { updateCaption, clearCaption } = useClosedCaptions(true); // CC enabled by default
 
   // Get current persona ID (memoized to ensure it updates when persona changes)
-  const personaId = useMemo(() => (persona?.id || 'c-level') as PersonaId, [persona?.id]);
+  const personaId = useMemo(() => (persona?.id || 'cor') as PersonaId, [persona?.id]);
 
   // DEBUG: Log when persona changes
   useEffect(() => {
@@ -99,7 +99,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
     setMessages((prev) => [...prev, userMessage]);
 
     // Find matching response using persona-aware query detection
-    const personaId = (persona?.id || 'c-level') as PersonaId;
+    const personaId = (persona?.id || 'cor') as PersonaId;
     const match = detectWidgetQuery(query, personaId);
 
     if (match) {
@@ -218,7 +218,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
       setMessages(prev => prev.slice(0, lastIndex + 1));
       // Re-submit the query
       setTimeout(() => {
-        const personaId = (persona?.id || 'c-level') as PersonaId;
+        const personaId = (persona?.id || 'cor') as PersonaId;
         const match = detectWidgetQuery(query, personaId);
         if (match) {
           handleMatch(match, query);
@@ -353,6 +353,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
                     </div>
                     <Avatar
                       name={persona?.name || 'User'}
+                      id={persona?.id}
                       size={32}
                       variant="chat"
                     />

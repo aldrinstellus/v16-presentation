@@ -12,7 +12,7 @@ export interface DashboardWidget {
 }
 
 export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
-  'c-level': [
+  'cor': [
     {
       id: 'live-tickets',
       type: 'ticket-list',
@@ -64,7 +64,7 @@ export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
     },
   ],
 
-  'cs-manager': [
+  'program-manager': [
     {
       id: 'live-tickets',
       type: 'ticket-list',
@@ -116,7 +116,7 @@ export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
     },
   ],
 
-  'support-agent': [
+  'service-team-member': [
     {
       id: 'live-tickets',
       type: 'ticket-list',
@@ -168,34 +168,138 @@ export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
     },
   ],
 
-  'csm': [
+  'stakeholder-lead': [
     {
-      id: 'client-health',
+      id: 'executive-summary',
+      type: 'executive-summary',
+      title: 'Executive Summary',
+      description: 'High-level overview of department metrics',
+      query: 'Generate comprehensive executive dashboard summary',
+    },
+    {
+      id: 'analytics-dashboard',
+      type: 'analytics-dashboard',
+      title: 'Analytics Overview',
+      description: 'Detailed analytics and insights',
+      query: 'Show me detailed analytics dashboard',
+    },
+    {
+      id: 'customer-risk',
       type: 'customer-risk-list',
-      title: 'Client Health Scores',
-      description: 'Monitor client engagement and satisfaction',
-      query: 'Show me health scores for my assigned clients',
+      title: 'Stakeholder Risk Analysis',
+      description: 'Departments and stakeholders needing attention',
+      query: 'Which stakeholders are at highest risk?',
     },
     {
-      id: 'renewal-pipeline',
-      type: 'analytics-dashboard',
-      title: 'Renewal Pipeline',
-      description: 'Track upcoming renewals and contracts',
-      query: 'Show upcoming renewals and contract status',
+      id: 'sla-performance',
+      type: 'sla-performance-chart',
+      title: 'SLA Performance',
+      description: 'Service level agreement compliance trends',
+      query: 'Show me SLA performance dashboard for this quarter',
     },
     {
-      id: 'product-adoption',
-      type: 'analytics-dashboard',
-      title: 'Product Adoption',
-      description: 'Feature usage and adoption metrics',
-      query: 'Show product adoption metrics and feature usage across clients',
+      id: 'team-workload',
+      type: 'team-workload-dashboard',
+      title: 'Team Workload',
+      description: 'Current team capacity and distribution',
+      query: 'Show me team workload distribution',
+    },
+  ],
+
+  'project-manager': [
+    {
+      id: 'live-tickets',
+      type: 'ticket-list',
+      title: 'Live Tickets Dashboard',
+      description: 'View real-time project tickets',
+      query: 'Show me all current project tickets',
     },
     {
-      id: 'upsell-opportunities',
+      id: 'team-workload',
+      type: 'team-workload-dashboard',
+      title: 'Team Workload',
+      description: 'Project team assignments and capacity',
+      query: 'Show me team workload distribution and recommend reassignments',
+    },
+    {
+      id: 'agent-comparison',
+      type: 'agent-performance-comparison',
+      title: 'Team Performance',
+      description: 'Compare team member metrics',
+      query: 'Show me team performance metrics for this sprint',
+    },
+    {
+      id: 'sla-alerts',
+      type: 'sla-performance-chart',
+      title: 'Milestone Status',
+      description: 'Project milestones and deadlines',
+      query: 'Show me tickets at risk of missing deadline',
+    },
+    {
+      id: 'escalations',
+      type: 'escalation-path',
+      title: 'Escalation Queue',
+      description: 'Issues requiring project manager intervention',
+      query: 'Show me all escalated issues requiring attention',
+    },
+    {
+      id: 'analytics-dashboard',
       type: 'analytics-dashboard',
-      title: 'Upsell Opportunities',
-      description: 'Cross-sell and expansion opportunities',
-      query: 'Identify upsell and cross-sell opportunities',
+      title: 'Project Analytics',
+      description: 'Project progress and metrics',
+      query: 'Show me project analytics dashboard',
+    },
+  ],
+
+  'service-team-lead': [
+    {
+      id: 'live-tickets',
+      type: 'ticket-list',
+      title: 'Live Tickets Dashboard',
+      description: 'View real-time service team tickets',
+      query: 'Show me all my team tickets from Zoho Desk',
+    },
+    {
+      id: 'team-workload',
+      type: 'team-workload-dashboard',
+      title: 'Team Workload',
+      description: 'Service team assignments and capacity',
+      query: 'Show me service team workload distribution',
+    },
+    {
+      id: 'agent-comparison',
+      type: 'agent-performance-comparison',
+      title: 'Team Performance',
+      description: 'Compare service team member metrics',
+      query: 'Show me team performance metrics for this week',
+    },
+    {
+      id: 'sla-alerts',
+      type: 'sla-performance-chart',
+      title: 'SLA Status',
+      description: 'Service level compliance and alerts',
+      query: 'Show me tickets at risk of SLA breach',
+    },
+    {
+      id: 'priority-customers',
+      type: 'customer-risk-list',
+      title: 'Priority Customers',
+      description: 'High-priority customers needing attention',
+      query: 'Show me all high-priority customers needing attention',
+    },
+    {
+      id: 'escalations',
+      type: 'escalation-path',
+      title: 'Escalation Queue',
+      description: 'Tickets requiring team lead intervention',
+      query: 'Show me all escalated tickets requiring my attention',
+    },
+    {
+      id: 'agent-dashboard',
+      type: 'agent-dashboard',
+      title: 'Team Overview',
+      description: 'Service team status and metrics',
+      query: 'Show me comprehensive team dashboard',
     },
   ],
 };

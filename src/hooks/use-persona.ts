@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Persona, PersonaType } from '@/types/persona';
-import { personas, defaultPersona, getPersonaById } from '@/data/personas';
+import { getPersonaById, getPersonasByMode, getDefaultPersona } from '@/data/personas';
+import { useMode } from '@/contexts/ModeContext';
 
 const PERSONA_STORAGE_KEY = 'selected-persona';
 
 export function usePersona() {
-  const [currentPersona, setCurrentPersona] = useState<Persona>(defaultPersona);
+  const { currentMode } = useMode();
+  const [currentPersona, setCurrentPersona] = useState<Persona>(getDefaultPersona(currentMode));
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Load saved persona from localStorage on mount
@@ -13,11 +15,22 @@ export function usePersona() {
     const savedPersonaId = localStorage.getItem(PERSONA_STORAGE_KEY);
     if (savedPersonaId) {
       const persona = getPersonaById(savedPersonaId);
-      if (persona) {
+      // Only use saved persona if it matches current mode
+      if (persona && persona.mode === currentMode) {
         setCurrentPersona(persona);
+      } else {
+        // Reset to default persona for current mode
+        const defaultPersona = getDefaultPersona(currentMode);
+        setCurrentPersona(defaultPersona);
+        localStorage.setItem(PERSONA_STORAGE_KEY, defaultPersona.id);
       }
+    } else {
+      // No saved persona, use default for mode
+      const defaultPersona = getDefaultPersona(currentMode);
+      setCurrentPersona(defaultPersona);
+      localStorage.setItem(PERSONA_STORAGE_KEY, defaultPersona.id);
     }
-  }, []);
+  }, [currentMode]); // Re-run when mode changes
 
   // Change persona with transition
   const setPersona = useCallback(
@@ -44,7 +57,7 @@ export function usePersona() {
   return {
     currentPersona,
     setPersona,
-    availablePersonas: personas,
+    availablePersonas: getPersonasByMode(currentMode), // Filter by current mode
     isTransitioning,
   };
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import packageJson from "../../package.json";
+import { ModeProvider } from "@/contexts/ModeContext";
 
 // Helper function to format version for display (14.0.0 → V14, 14.1.0 → V14.1)
 function getVersionDisplay(version: string): string {
@@ -34,7 +35,9 @@ export default function RootLayout({
       <head>
       </head>
       <body className="h-screen overflow-hidden bg-background font-sans antialiased">
-        {children}
+        <ModeProvider>
+          {children}
+        </ModeProvider>
       </body>
     </html>
   );
