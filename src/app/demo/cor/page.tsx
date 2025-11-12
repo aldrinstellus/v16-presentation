@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { InteractiveChatWithFloatingInput } from '@/components/chat/InteractiveChatWithFloatingInput';
 import { usePersona } from '@/hooks/use-persona';
 
@@ -11,5 +11,9 @@ export default function CORDemoPage() {
     setPersona('cor');
   }, [setPersona]);
 
-  return <InteractiveChatWithFloatingInput />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <InteractiveChatWithFloatingInput />
+    </Suspense>
+  );
 }
