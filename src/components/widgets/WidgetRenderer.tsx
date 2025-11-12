@@ -26,6 +26,20 @@ import type {
   SystemAccessStatusData,
   InteractiveUpdateData,
   TicketProcessingData,
+  ContractPerformanceData,
+  DeliverableReviewListData,
+  VendorComplianceData,
+  ProgramHealthData,
+  StakeholderEngagementData,
+  RequirementsTrackingData,
+  ChangeRequestData,
+  SprintBurndownData,
+  TeamVelocityData,
+  CodeQualityData,
+  DeploymentPipelineData,
+  TaskKanbanData,
+  ResourceCapacityData,
+  BlockerResolutionData,
 } from '@/types/widget';
 import { ExecutiveSummaryWidget } from './ExecutiveSummaryWidget';
 import { AnalyticsDashboardWidget } from './AnalyticsDashboardWidget';
@@ -53,6 +67,20 @@ import { EscalationPathWidget } from './EscalationPathWidget';
 import { SystemAccessStatusWidget } from './SystemAccessStatusWidget';
 import { InteractiveUpdateWidget } from './InteractiveUpdateWidget';
 import { TicketProcessingWidget } from './TicketProcessingWidget';
+import { ContractPerformanceDashboardWidget } from './ContractPerformanceDashboardWidget';
+import { DeliverableReviewListWidget } from './DeliverableReviewListWidget';
+import { VendorComplianceDashboardWidget } from './VendorComplianceDashboardWidget';
+import { ProgramHealthDashboardWidget } from './ProgramHealthDashboardWidget';
+import { StakeholderEngagementDashboardWidget } from './StakeholderEngagementDashboardWidget';
+import { RequirementsTrackingDashboardWidget } from './RequirementsTrackingDashboardWidget';
+import { ChangeRequestDashboardWidget } from './ChangeRequestDashboardWidget';
+import { SprintBurndownChartWidget } from './SprintBurndownChartWidget';
+import { TeamVelocityDashboardWidget } from './TeamVelocityDashboardWidget';
+import { CodeQualityDashboardWidget } from './CodeQualityDashboardWidget';
+import { DeploymentPipelineDashboardWidget } from './DeploymentPipelineDashboardWidget';
+import { TaskKanbanBoardWidget } from './TaskKanbanBoardWidget';
+import { ResourceCapacityDashboardWidget } from './ResourceCapacityDashboardWidget';
+import { BlockerResolutionDashboardWidget } from './BlockerResolutionDashboardWidget';
 
 interface WidgetRendererProps {
   type: WidgetType;
@@ -141,6 +169,50 @@ export function WidgetRenderer({ type, data, onAction }: WidgetRendererProps) {
 
       case 'ticket-processing':
         return <TicketProcessingWidget data={data as TicketProcessingData} />;
+
+      // V17 Government Mode Widgets
+      case 'contract-performance-dashboard':
+        return <ContractPerformanceDashboardWidget data={data as ContractPerformanceData} />;
+
+      case 'deliverable-review-list':
+        return <DeliverableReviewListWidget data={data as DeliverableReviewListData} />;
+
+      case 'vendor-compliance-dashboard':
+        return <VendorComplianceDashboardWidget data={data as VendorComplianceData} />;
+
+      case 'program-health-dashboard':
+        return <ProgramHealthDashboardWidget data={data as ProgramHealthData} />;
+
+      case 'stakeholder-engagement-dashboard':
+        return <StakeholderEngagementDashboardWidget data={data as StakeholderEngagementData} />;
+
+      case 'requirements-tracking-dashboard':
+        return <RequirementsTrackingDashboardWidget data={data as RequirementsTrackingData} />;
+
+      case 'change-request-dashboard':
+        return <ChangeRequestDashboardWidget data={data as ChangeRequestData} />;
+
+      // V17 Project Mode Widgets
+      case 'sprint-burndown-chart':
+        return <SprintBurndownChartWidget data={data as SprintBurndownData} />;
+
+      case 'team-velocity-dashboard':
+        return <TeamVelocityDashboardWidget data={data as TeamVelocityData} />;
+
+      case 'code-quality-dashboard':
+        return <CodeQualityDashboardWidget data={data as CodeQualityData} />;
+
+      case 'deployment-pipeline-dashboard':
+        return <DeploymentPipelineDashboardWidget data={data as DeploymentPipelineData} />;
+
+      case 'task-kanban-board':
+        return <TaskKanbanBoardWidget data={data as TaskKanbanData} />;
+
+      case 'resource-capacity-dashboard':
+        return <ResourceCapacityDashboardWidget data={data as ResourceCapacityData} />;
+
+      case 'blocker-resolution-dashboard':
+        return <BlockerResolutionDashboardWidget data={data as BlockerResolutionData} />;
 
       default:
         // Fallback for unimplemented widgets

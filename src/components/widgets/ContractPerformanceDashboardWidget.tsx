@@ -1,0 +1,249 @@
+import {
+  FileText,
+  DollarSign,
+  AlertTriangle,
+  CheckCircle2,
+  TrendingUp,
+  TrendingDown,
+  Clock,
+} from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import type { ContractPerformanceData } from '@/types/widget';
+
+export function ContractPerformanceDashboardWidget({ data }: { data: ContractPerformanceData }) {
+  // Defensive check
+  if (!data || typeof data !== 'object') {
+    return (
+      <div className="my-4 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
+        <p className="text-sm text-destructive">Unable to load contract performance data</p>
+      </div>
+    );
+  }
+
+  const performanceData = [
+    { name: 'SLA', value: data.performance.slaCompliance, color: 'var(--chart-1)' },
+    { name: 'Budget', value: data.performance.budgetUtilization, color: 'var(--chart-2)' },
+    { name: 'Deliverables', value: data.performance.deliverableCompletion, color: 'var(--chart-3)' },
+  ];
+
+  const getScoreColor = (score: number) => {
+    if (score >= 90) return 'text-success';
+    if (score >= 70) return 'text-chart-4';
+    return 'text-destructive';
+  };
+
+  const getScoreBg = (score: number) => {
+    if (score >= 90) return 'bg-success/10 border-success/30';
+    if (score >= 70) return 'bg-chart-4/10 border-chart-4/30';
+    return 'bg-destructive/10 border-destructive/30';
+  };
+
+  return (
+    <div className="rounded-lg border border-border bg-card p-6 my-4">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <div className="flex items-center gap-3">
+            <FileText className="h-5 w-5 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">{data.title}</h3>
+          </div>
+          <p className="text-sm text-muted-foreground mt-1">
+            {data.contractId} - {data.contractName}
+          </p>
+        </div>
+        <div className={`px-3 py-1.5 rounded-full text-sm font-medium ${getScoreBg(data.performance.overallScore)}`}>
+          <span className={getScoreColor(data.performance.overallScore)}>
+            {data.performance.overallScore}% Overall
+          </span>
+        </div>
+      </div>
+
+      {/* Vendor Info */}
+      <div className="mb-6 p-4 rounded-lg bg-muted/30 border border-border">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-foreground">{data.vendor.name}</p>
+            <p className="text-xs text-muted-foreground">Vendor ID: {data.vendor.id}</p>
+          </div>
+          <span className="px-2 py-1 rounded text-xs font-medium bg-primary/10 text-primary capitalize">
+            {data.vendor.tier}
+          </span>
+        </div>
+      </div>
+
+      {/* Performance Metrics */}
+      <div className="mb-6">
+        <h4 className="text-sm font-medium mb-3 text-foreground">Performance Metrics</h4>
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={performanceData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis
+              dataKey="name"
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+            />
+            <YAxis
+              domain={[0, 100]}
+              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+            />
+            <Tooltip
+              contentStyle={{
+                background: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '8px',
+                color: 'hsl(var(--foreground))',
+              }}
+            />
+            <Bar dataKey="value" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Financial Summary */}
+      <div className="mb-6">
+        <h4 className="text-sm font-medium mb-3 text-foreground">Financial Status</h4>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="p-3 rounded-lg bg-muted/30 border border-border">
+            <DollarSign className="h-4 w-4 text-muted-foreground mb-1" />
+            <div className="text-lg font-semibold text-foreground">
+              ${(data.financials.totalValue / 1000000).toFixed(1)}M
+            </div>
+            <div className="text-xs text-muted-foreground">Total Value</div>
+          </div>
+          <div className="p-3 rounded-lg bg-chart-1/10 border border-chart-1/30">
+            <TrendingUp className="h-4 w-4 text-chart-1 mb-1" />
+            <div className="text-lg font-semibold text-chart-1">
+              ${(data.financials.spent / 1000000).toFixed(1)}M
+            </div>
+            <div className="text-xs text-muted-foreground">Spent</div>
+          </div>
+          <div className="p-3 rounded-lg bg-chart-4/10 border border-chart-4/30">
+            <Clock className="h-4 w-4 text-chart-4 mb-1" />
+            <div className="text-lg font-semibold text-chart-4">
+              ${(data.financials.committed / 1000).toFixed(0)}K
+            </div>
+            <div className="text-xs text-muted-foreground">Committed</div>
+          </div>
+          <div className="p-3 rounded-lg bg-success/10 border border-success/30">
+            <CheckCircle2 className="h-4 w-4 text-success mb-1" />
+            <div className="text-lg font-semibold text-success">
+              ${(data.financials.remaining / 1000).toFixed(0)}K
+            </div>
+            <div className="text-xs text-muted-foreground">Remaining</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Deliverables */}
+      {data.deliverables && data.deliverables.length > 0 && (
+        <div className="mb-6">
+          <h4 className="text-sm font-medium mb-3 text-foreground">Recent Deliverables</h4>
+          <div className="space-y-2">
+            {data.deliverables.map((deliverable, idx) => {
+              const statusColors = {
+                pending: 'bg-chart-4/10 text-chart-4 border-chart-4/30',
+                submitted: 'bg-chart-3/10 text-chart-3 border-chart-3/30',
+                approved: 'bg-success/10 text-success border-success/30',
+                rejected: 'bg-destructive/10 text-destructive border-destructive/30',
+              };
+
+              return (
+                <div
+                  key={idx}
+                  className="p-3 rounded-lg border border-border bg-muted/20 flex items-center justify-between"
+                >
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">{deliverable.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Due: {new Date(deliverable.dueDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {deliverable.qualityScore !== null && (
+                      <span className="text-sm font-medium text-foreground">
+                        {deliverable.qualityScore}%
+                      </span>
+                    )}
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-medium border ${
+                        statusColors[deliverable.status]
+                      }`}
+                    >
+                      {deliverable.status}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Issues */}
+      {data.issues && data.issues.length > 0 && (
+        <div className="mb-6">
+          <h4 className="text-sm font-medium mb-3 text-foreground flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-destructive" />
+            Active Issues ({data.issues.length})
+          </h4>
+          <div className="space-y-2">
+            {data.issues.map((issue, idx) => {
+              const severityColors = {
+                critical: 'border-l-destructive bg-destructive/5',
+                high: 'border-l-chart-4 bg-chart-4/5',
+                medium: 'border-l-chart-3 bg-chart-3/5',
+                low: 'border-l-muted-foreground/50 bg-muted/20',
+              };
+
+              return (
+                <div
+                  key={idx}
+                  className={`border-l-4 p-3 rounded-r-lg ${severityColors[issue.severity]}`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-foreground">{issue.description}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Assigned to: {issue.assignedTo} • Due:{' '}
+                        {new Date(issue.dueDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <span className="text-xs font-medium text-foreground px-2 py-1 rounded bg-background/50 capitalize">
+                      {issue.severity}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Recommendations */}
+      {data.recommendations && data.recommendations.length > 0 && (
+        <div>
+          <h4 className="text-sm font-medium mb-3 text-foreground">Recommendations</h4>
+          <div className="space-y-2">
+            {data.recommendations.map((rec, idx) => {
+              const priorityColors = {
+                critical: 'border-l-destructive bg-destructive/5',
+                high: 'border-l-chart-4 bg-chart-4/5',
+                medium: 'border-l-chart-3 bg-chart-3/5',
+                low: 'border-l-muted-foreground/50 bg-muted/20',
+              };
+
+              return (
+                <div
+                  key={idx}
+                  className={`border-l-4 p-3 rounded-r-lg ${priorityColors[rec.priority]}`}
+                >
+                  <p className="text-sm font-medium text-foreground">{rec.action}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{rec.reason}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

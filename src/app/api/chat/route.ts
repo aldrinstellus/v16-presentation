@@ -333,6 +333,249 @@ const tools: Anthropic.Tool[] = [
       required: ['email'],
     },
   },
+  // V17 Government Mode Tools
+  {
+    name: 'get_contract_performance',
+    description: 'Get performance metrics for a government contract including SLA compliance, deliverable status, and budget utilization.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        contract_id: {
+          type: 'string',
+          description: 'Contract ID (e.g., CON-2025-042)',
+        },
+        include_deliverables: {
+          type: 'boolean',
+          description: 'Include detailed deliverable information',
+          default: true,
+        },
+      },
+      required: ['contract_id'],
+    },
+  },
+  {
+    name: 'approve_deliverable',
+    description: 'Approve a contract deliverable after review. COR persona can approve deliverables directly.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        deliverable_id: {
+          type: 'string',
+          description: 'Deliverable ID to approve',
+        },
+        contract_id: {
+          type: 'string',
+          description: 'Associated contract ID',
+        },
+        quality_score: {
+          type: 'number',
+          description: 'Quality score (1-100)',
+        },
+        feedback: {
+          type: 'string',
+          description: 'Optional feedback for vendor',
+        },
+      },
+      required: ['deliverable_id', 'contract_id', 'quality_score'],
+    },
+  },
+  {
+    name: 'escalate_vendor_issue',
+    description: 'Escalate a vendor compliance or performance issue to program manager.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        vendor_id: {
+          type: 'string',
+          description: 'Vendor ID',
+        },
+        contract_id: {
+          type: 'string',
+          description: 'Contract ID',
+        },
+        issue_type: {
+          type: 'string',
+          enum: ['sla_breach', 'quality', 'budget', 'timeline'],
+          description: 'Type of issue to escalate',
+        },
+        description: {
+          type: 'string',
+          description: 'Issue description',
+        },
+      },
+      required: ['vendor_id', 'contract_id', 'issue_type', 'description'],
+    },
+  },
+  {
+    name: 'schedule_stakeholder_meeting',
+    description: 'Schedule a stakeholder engagement meeting with agenda and materials.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        stakeholders: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'List of stakeholder emails',
+        },
+        topic: {
+          type: 'string',
+          description: 'Meeting topic',
+        },
+        date: {
+          type: 'string',
+          description: 'Meeting date (e.g., "next Tuesday")',
+        },
+        duration: {
+          type: 'number',
+          description: 'Duration in minutes',
+          default: 60,
+        },
+      },
+      required: ['stakeholders', 'topic', 'date'],
+    },
+  },
+  {
+    name: 'update_requirement_status',
+    description: 'Update the status of a program requirement in requirements tracking system.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        requirement_id: {
+          type: 'string',
+          description: 'Requirement ID',
+        },
+        status: {
+          type: 'string',
+          enum: ['draft', 'approved', 'in_progress', 'completed', 'verified'],
+          description: 'New requirement status',
+        },
+        notes: {
+          type: 'string',
+          description: 'Status update notes',
+        },
+      },
+      required: ['requirement_id', 'status'],
+    },
+  },
+  // V17 Project Mode Tools
+  {
+    name: 'update_sprint_task',
+    description: 'Update the status of a task in the current sprint.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        task_id: {
+          type: 'string',
+          description: 'Task ID',
+        },
+        status: {
+          type: 'string',
+          enum: ['todo', 'in-progress', 'review', 'done'],
+          description: 'New task status',
+        },
+        assignee: {
+          type: 'string',
+          description: 'Assign to team member (optional)',
+        },
+        story_points: {
+          type: 'number',
+          description: 'Story points (optional)',
+        },
+      },
+      required: ['task_id', 'status'],
+    },
+  },
+  {
+    name: 'trigger_deployment',
+    description: 'Trigger a deployment to specified environment (dev/staging/production).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        environment: {
+          type: 'string',
+          enum: ['dev', 'staging', 'production'],
+          description: 'Target deployment environment',
+        },
+        branch: {
+          type: 'string',
+          description: 'Git branch to deploy (e.g., "main", "release/v2.1")',
+        },
+        run_tests: {
+          type: 'boolean',
+          description: 'Run test suite before deployment',
+          default: true,
+        },
+      },
+      required: ['environment', 'branch'],
+    },
+  },
+  {
+    name: 'resolve_blocker',
+    description: 'Mark a blocker as resolved and update affected tasks.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        blocker_id: {
+          type: 'string',
+          description: 'Blocker ID',
+        },
+        resolution: {
+          type: 'string',
+          description: 'How the blocker was resolved',
+        },
+        affected_tasks: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'List of task IDs to unblock',
+        },
+      },
+      required: ['blocker_id', 'resolution'],
+    },
+  },
+  {
+    name: 'run_code_quality_scan',
+    description: 'Trigger a code quality scan and return results (coverage, complexity, vulnerabilities).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        scope: {
+          type: 'string',
+          enum: ['full', 'changed-files', 'critical-only'],
+          description: 'Scan scope',
+          default: 'full',
+        },
+        include_tests: {
+          type: 'boolean',
+          description: 'Include test files in scan',
+          default: true,
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'assign_task_to_team',
+    description: 'Assign a task to a team member based on capacity and skills.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        task_id: {
+          type: 'string',
+          description: 'Task ID to assign',
+        },
+        assignee: {
+          type: 'string',
+          description: 'Team member to assign (email or name)',
+        },
+        priority: {
+          type: 'string',
+          enum: ['low', 'medium', 'high', 'critical'],
+          description: 'Task priority',
+        },
+      },
+      required: ['task_id', 'assignee'],
+    },
+  },
 ];
 
 // Mock tool execution for demo purposes
@@ -631,6 +874,227 @@ function executeTool(toolName: string, toolInput: Record<string, unknown>) {
         })),
         message: 'Course updated successfully! Changes are visible to all enrolled students.',
         timestamp: new Date().toISOString(),
+      };
+
+    // V17 Government Mode Tool Responses
+    case 'get_contract_performance':
+      return {
+        success: true,
+        contract_id: toolInput.contract_id,
+        contract: {
+          name: 'Enterprise IT Infrastructure Modernization',
+          vendor: 'TechSolutions Inc.',
+          vendor_id: 'VEND-1523',
+        },
+        performance: {
+          overall_score: 87,
+          sla_compliance: 92,
+          budget_utilization: 78,
+          deliverable_completion: 85,
+        },
+        financials: {
+          total_value: 2500000,
+          spent: 1950000,
+          committed: 350000,
+          remaining: 200000,
+        },
+        deliverables: toolInput.include_deliverables ? [
+          {
+            id: 'DEL-042-001',
+            name: 'Q4 Security Audit Report',
+            due_date: '2025-11-15',
+            status: 'pending',
+            quality_score: null,
+          },
+          {
+            id: 'DEL-042-002',
+            name: 'Infrastructure Migration Plan',
+            due_date: '2025-10-28',
+            status: 'approved',
+            quality_score: 92,
+          },
+        ] : [],
+        issues: [
+          {
+            severity: 'high',
+            description: 'Q4 Security Audit deliverable delayed by 3 days',
+            due_date: '2025-11-13',
+            assigned_to: 'COR',
+          },
+        ],
+      };
+
+    case 'approve_deliverable':
+      return {
+        success: true,
+        deliverable_id: toolInput.deliverable_id,
+        contract_id: toolInput.contract_id,
+        status: 'approved',
+        quality_score: toolInput.quality_score,
+        approved_at: new Date().toISOString(),
+        approved_by: 'Alexa Johnson (COR)',
+        feedback: toolInput.feedback || 'Deliverable meets all acceptance criteria.',
+        next_steps: [
+          'Vendor notified of approval',
+          'Payment milestone triggered ($125,000)',
+          'Next deliverable: Infrastructure Migration Plan (Due: Nov 28)',
+        ],
+      };
+
+    case 'escalate_vendor_issue':
+      return {
+        success: true,
+        escalation_id: 'ESC-' + Math.random().toString(36).substr(2, 6).toUpperCase(),
+        vendor_id: toolInput.vendor_id,
+        contract_id: toolInput.contract_id,
+        issue_type: toolInput.issue_type,
+        escalated_to: 'Marcus Thompson (Program Manager)',
+        priority: 'high',
+        notifications_sent: {
+          program_manager: true,
+          vendor: true,
+          contracting_office: true,
+        },
+        sla: {
+          response_due: '2025-11-13T14:00:00Z',
+          resolution_due: '2025-11-15T17:00:00Z',
+        },
+        message: 'Issue escalated successfully. Program Manager will review within 2 business days.',
+      };
+
+    case 'schedule_stakeholder_meeting':
+      return {
+        success: true,
+        meeting_id: 'MTG-' + Math.random().toString(36).substr(2, 8),
+        topic: toolInput.topic,
+        date: toolInput.date,
+        duration: toolInput.duration || 60,
+        stakeholders: toolInput.stakeholders,
+        calendar_link: 'https://calendar.google.com/calendar/event?eid=abc123',
+        agenda_prepared: true,
+        materials: [
+          'Stakeholder Engagement Status Report',
+          'Program Health Dashboard',
+          'Action Items Tracking Sheet',
+        ],
+        reminder_sent: true,
+      };
+
+    case 'update_requirement_status':
+      return {
+        success: true,
+        requirement_id: toolInput.requirement_id,
+        old_status: 'in_progress',
+        new_status: toolInput.status,
+        updated_at: new Date().toISOString(),
+        updated_by: 'Jennifer Martinez (Stakeholder Lead)',
+        notes: toolInput.notes || 'Status updated successfully.',
+        affected_deliverables: 2,
+        next_review: '2025-11-20',
+      };
+
+    // V17 Project Mode Tool Responses
+    case 'update_sprint_task':
+      return {
+        success: true,
+        task_id: toolInput.task_id,
+        old_status: 'todo',
+        new_status: toolInput.status,
+        assignee: toolInput.assignee || 'Current assignee',
+        story_points: toolInput.story_points,
+        sprint: 'Sprint 24 - Q4 Features',
+        updated_at: new Date().toISOString(),
+        burndown_impact: toolInput.status === 'done' ? 'Decreased remaining points by 5' : 'No change',
+        notifications_sent: ['Slack', 'Email'],
+      };
+
+    case 'trigger_deployment':
+      return {
+        success: true,
+        deployment_id: 'DEPLOY-' + Math.random().toString(36).substr(2, 8).toUpperCase(),
+        environment: toolInput.environment,
+        branch: toolInput.branch,
+        status: 'running',
+        tests_passed: toolInput.run_tests ? true : null,
+        estimated_completion: '5 minutes',
+        pipeline_url: 'https://github.com/company/repo/actions/runs/123456',
+        stages: [
+          { name: 'Build', status: 'completed', duration: '2m 15s' },
+          { name: 'Test', status: toolInput.run_tests ? 'completed' : 'skipped', duration: '1m 30s' },
+          { name: 'Deploy', status: 'running', duration: 'in progress' },
+        ],
+        message: `Deploying ${toolInput.branch} to ${toolInput.environment}. Check pipeline for live updates.`,
+      };
+
+    case 'resolve_blocker':
+      const affectedTasks = (toolInput.affected_tasks as string[]) || [];
+      return {
+        success: true,
+        blocker_id: toolInput.blocker_id,
+        status: 'resolved',
+        resolution: toolInput.resolution,
+        resolved_at: new Date().toISOString(),
+        resolved_by: 'Sarah Kim (Service Team Lead)',
+        affected_tasks: affectedTasks,
+        tasks_unblocked: affectedTasks.length || 3,
+        velocity_impact: '+8 story points now available for sprint',
+        notifications_sent: ['Project Manager', 'Service Team Members'],
+      };
+
+    case 'run_code_quality_scan':
+      return {
+        success: true,
+        scan_id: 'SCAN-' + Date.now(),
+        scope: toolInput.scope || 'full',
+        status: 'completed',
+        results: {
+          coverage: {
+            overall: 87.3,
+            changed_files: 92.1,
+            trend: 'improving',
+          },
+          complexity: {
+            average_cyclomatic: 8.2,
+            high_complexity_files: 3,
+            threshold: 10,
+          },
+          vulnerabilities: {
+            critical: 0,
+            high: 2,
+            medium: 5,
+            low: 8,
+          },
+          code_smells: 12,
+          duplications: 4.2,
+        },
+        recommendations: [
+          'Fix 2 high-severity vulnerabilities in auth module',
+          'Reduce complexity in UserService.ts (cyclomatic = 15)',
+          'Increase test coverage for API routes to 90%+',
+        ],
+        report_url: 'https://sonarcloud.io/dashboard?id=company-repo',
+      };
+
+    case 'assign_task_to_team':
+      return {
+        success: true,
+        task_id: toolInput.task_id,
+        assignee: toolInput.assignee,
+        priority: toolInput.priority,
+        assigned_at: new Date().toISOString(),
+        capacity_check: {
+          current_workload: 32,
+          max_capacity: 40,
+          available_points: 8,
+          status: 'has_capacity',
+        },
+        estimated_completion: '2025-11-14',
+        notifications: {
+          assignee: true,
+          project_manager: true,
+          slack_channel: '#dev-team',
+        },
+        message: `Task assigned to ${toolInput.assignee}. They have capacity for 8 more story points this sprint.`,
       };
 
     default:

@@ -29,6 +29,22 @@ import {
   multiSystemAccessResolvedDemo,
   profileUpdateSuccessDemo,
   courseUpdateSuccessDemo,
+  // V17 Government Mode Demo Data
+  contractPerformanceDemo,
+  deliverableReviewListDemo,
+  vendorComplianceDemo,
+  programHealthDemo,
+  stakeholderEngagementDemo,
+  requirementsTrackingDemo,
+  changeRequestDemo,
+  // V17 Project Mode Demo Data
+  sprintBurndownDemo,
+  teamVelocityDemo,
+  codeQualityDemo,
+  deploymentPipelineDemo,
+  taskKanbanDemo,
+  resourceCapacityDemo,
+  blockerResolutionDemo,
 } from '@/data/demo-widget-data';
 
 export interface QueryMatch {
@@ -37,7 +53,12 @@ export interface QueryMatch {
   responseText: string;
 }
 
-export type PersonaId = 'c-level' | 'cs-manager' | 'support-agent' | 'csm';
+export type PersonaId =
+  | 'c-level' | 'cs-manager' | 'support-agent' | 'csm'
+  // V17 Government Mode
+  | 'cor' | 'program-manager' | 'stakeholder-lead'
+  // V17 Project Mode
+  | 'project-manager' | 'service-team-lead' | 'service-team-member';
 
 /**
  * Detect widget intent from user query
@@ -50,6 +71,7 @@ export function detectWidgetQuery(
 
   // Route based on persona
   switch (personaId) {
+    // V14/V15 Personas
     case 'c-level':
       return detectCLevelQuery(q);
     case 'cs-manager':
@@ -58,6 +80,20 @@ export function detectWidgetQuery(
       return detectAgentQuery(q);
     case 'csm':
       return detectCSMQuery(q);
+    // V17 Government Mode Personas
+    case 'cor':
+      return detectCORQuery(q);
+    case 'program-manager':
+      return detectProgramManagerQuery(q);
+    case 'stakeholder-lead':
+      return detectStakeholderLeadQuery(q);
+    // V17 Project Mode Personas
+    case 'project-manager':
+      return detectProjectManagerQuery(q);
+    case 'service-team-lead':
+      return detectServiceTeamLeadQuery(q);
+    case 'service-team-member':
+      return detectServiceTeamMemberQuery(q);
     default:
       return null;
   }
@@ -734,5 +770,431 @@ function detectCSMQuery(q: string): QueryMatch | null {
     widgetType: 'csm-dashboard',
     widgetData: null,
     responseText: "Here's your Customer Success Manager dashboard:",
+  };
+}
+
+// ============================================================================
+// V17 GOVERNMENT MODE - COR (Contracting Officer's Representative) QUERIES
+// ============================================================================
+
+function detectCORQuery(q: string): QueryMatch | null {
+  // Contract Performance
+  if (
+    q.includes('contract performance') ||
+    q.includes('contract status') ||
+    (q.includes('show') && q.includes('contract') && (q.includes('active') || q.includes('performance')))
+  ) {
+    return {
+      widgetType: 'contract-performance-dashboard',
+      widgetData: contractPerformanceDemo,
+      responseText: "Here's the performance overview for your active contracts:",
+    };
+  }
+
+  // Deliverable Reviews
+  if (
+    q.includes('deliverable') && (q.includes('review') || q.includes('pending') || q.includes('approve')) ||
+    q.includes('pending deliverables') ||
+    q.includes('deliverable review')
+  ) {
+    return {
+      widgetType: 'deliverable-review-list',
+      widgetData: deliverableReviewListDemo,
+      responseText: "Here are the deliverables pending your review:",
+    };
+  }
+
+  // Vendor Compliance
+  if (
+    q.includes('vendor compliance') ||
+    q.includes('vendor performance') ||
+    (q.includes('vendor') && q.includes('sla'))
+  ) {
+    return {
+      widgetType: 'vendor-compliance-dashboard',
+      widgetData: vendorComplianceDemo,
+      responseText: "Here's the compliance status for your vendors:",
+    };
+  }
+
+  // Budget queries
+  if (q.includes('budget') && (q.includes('status') || q.includes('utilization') || q.includes('remaining'))) {
+    return {
+      widgetType: 'contract-performance-dashboard',
+      widgetData: contractPerformanceDemo,
+      responseText: "Here's the budget utilization for your contracts:",
+    };
+  }
+
+  // SLA compliance
+  if (q.includes('sla') && (q.includes('compliance') || q.includes('breach') || q.includes('violation'))) {
+    return {
+      widgetType: 'vendor-compliance-dashboard',
+      widgetData: vendorComplianceDemo,
+      responseText: "Here's the SLA compliance status:",
+    };
+  }
+
+  // Quality issues
+  if (q.includes('quality') && (q.includes('issue') || q.includes('score') || q.includes('problem'))) {
+    return {
+      widgetType: 'deliverable-review-list',
+      widgetData: deliverableReviewListDemo,
+      responseText: "Here are the deliverables with quality concerns:",
+    };
+  }
+
+  // Default: Show contract performance
+  return {
+    widgetType: 'contract-performance-dashboard',
+    widgetData: contractPerformanceDemo,
+    responseText: "Here's your contract performance dashboard:",
+  };
+}
+
+// ============================================================================
+// V17 GOVERNMENT MODE - PROGRAM MANAGER QUERIES
+// ============================================================================
+
+function detectProgramManagerQuery(q: string): QueryMatch | null {
+  // Program Health
+  if (
+    q.includes('program health') ||
+    q.includes('program status') ||
+    q.includes('program dashboard')
+  ) {
+    return {
+      widgetType: 'program-health-dashboard',
+      widgetData: programHealthDemo,
+      responseText: "Here's the overall program health status:",
+    };
+  }
+
+  // Milestones
+  if (q.includes('milestone') && (q.includes('status') || q.includes('track') || q.includes('progress'))) {
+    return {
+      widgetType: 'program-health-dashboard',
+      widgetData: programHealthDemo,
+      responseText: "Here's the status of program milestones:",
+    };
+  }
+
+  // Risks
+  if (q.includes('risk') && (q.includes('top') || q.includes('critical') || q.includes('high'))) {
+    return {
+      widgetType: 'program-health-dashboard',
+      widgetData: programHealthDemo,
+      responseText: "Here are the top program risks requiring attention:",
+    };
+  }
+
+  // Budget/Schedule variance
+  if (q.includes('variance') || (q.includes('schedule') && q.includes('status'))) {
+    return {
+      widgetType: 'program-health-dashboard',
+      widgetData: programHealthDemo,
+      responseText: "Here's the schedule and budget variance analysis:",
+    };
+  }
+
+  // Resources
+  if (q.includes('resource') && (q.includes('availability') || q.includes('allocation') || q.includes('capacity'))) {
+    return {
+      widgetType: 'program-health-dashboard',
+      widgetData: programHealthDemo,
+      responseText: "Here's the resource availability status:",
+    };
+  }
+
+  // Default: Show program health
+  return {
+    widgetType: 'program-health-dashboard',
+    widgetData: programHealthDemo,
+    responseText: "Here's your program health dashboard:",
+  };
+}
+
+// ============================================================================
+// V17 GOVERNMENT MODE - STAKEHOLDER LEAD QUERIES
+// ============================================================================
+
+function detectStakeholderLeadQuery(q: string): QueryMatch | null {
+  // Stakeholder Engagement
+  if (
+    q.includes('stakeholder') && (q.includes('engagement') || q.includes('status') || q.includes('communication')) ||
+    q.includes('stakeholder dashboard')
+  ) {
+    return {
+      widgetType: 'stakeholder-engagement-dashboard',
+      widgetData: stakeholderEngagementDemo,
+      responseText: "Here's the stakeholder engagement overview:",
+    };
+  }
+
+  // Requirements Tracking
+  if (
+    q.includes('requirement') && (q.includes('track') || q.includes('status') || q.includes('progress')) ||
+    q.includes('requirements tracking')
+  ) {
+    return {
+      widgetType: 'requirements-tracking-dashboard',
+      widgetData: requirementsTrackingDemo,
+      responseText: "Here's the requirements tracking status:",
+    };
+  }
+
+  // Change Requests
+  if (
+    q.includes('change request') ||
+    (q.includes('change') && (q.includes('pending') || q.includes('approval') || q.includes('approved')))
+  ) {
+    return {
+      widgetType: 'change-request-dashboard',
+      widgetData: changeRequestDemo,
+      responseText: "Here are the change requests requiring review:",
+    };
+  }
+
+  // Meetings
+  if (q.includes('meeting') && (q.includes('upcoming') || q.includes('schedule') || q.includes('next'))) {
+    return {
+      widgetType: 'stakeholder-engagement-dashboard',
+      widgetData: stakeholderEngagementDemo,
+      responseText: "Here are your upcoming stakeholder meetings:",
+    };
+  }
+
+  // Action items
+  if (q.includes('action item') || (q.includes('action') && q.includes('pending'))) {
+    return {
+      widgetType: 'stakeholder-engagement-dashboard',
+      widgetData: stakeholderEngagementDemo,
+      responseText: "Here are the pending stakeholder action items:",
+    };
+  }
+
+  // Traceability
+  if (q.includes('traceability') || (q.includes('requirement') && q.includes('coverage'))) {
+    return {
+      widgetType: 'requirements-tracking-dashboard',
+      widgetData: requirementsTrackingDemo,
+      responseText: "Here's the requirements traceability analysis:",
+    };
+  }
+
+  // Default: Show stakeholder engagement
+  return {
+    widgetType: 'stakeholder-engagement-dashboard',
+    widgetData: stakeholderEngagementDemo,
+    responseText: "Here's your stakeholder engagement dashboard:",
+  };
+}
+
+// ============================================================================
+// V17 PROJECT MODE - PROJECT MANAGER QUERIES
+// ============================================================================
+
+function detectProjectManagerQuery(q: string): QueryMatch | null {
+  // Sprint Burndown
+  if (
+    q.includes('burndown') ||
+    q.includes('sprint progress') ||
+    (q.includes('sprint') && (q.includes('status') || q.includes('track')))
+  ) {
+    return {
+      widgetType: 'sprint-burndown-chart',
+      widgetData: sprintBurndownDemo,
+      responseText: "Here's the current sprint burndown chart:",
+    };
+  }
+
+  // Team Velocity
+  if (
+    q.includes('velocity') ||
+    q.includes('team performance') ||
+    (q.includes('team') && q.includes('capacity'))
+  ) {
+    return {
+      widgetType: 'team-velocity-dashboard',
+      widgetData: teamVelocityDemo,
+      responseText: "Here's the team velocity analysis:",
+    };
+  }
+
+  // Resource Capacity
+  if (
+    q.includes('resource') && (q.includes('capacity') || q.includes('allocation') || q.includes('availability')) ||
+    q.includes('team capacity')
+  ) {
+    return {
+      widgetType: 'resource-capacity-dashboard',
+      widgetData: resourceCapacityDemo,
+      responseText: "Here's the resource capacity overview:",
+    };
+  }
+
+  // Sprint planning
+  if (q.includes('sprint planning') || (q.includes('sprint') && q.includes('plan'))) {
+    return {
+      widgetType: 'team-velocity-dashboard',
+      widgetData: teamVelocityDemo,
+      responseText: "Here's the team velocity data for sprint planning:",
+    };
+  }
+
+  // Blockers
+  if (q.includes('blocker') || q.includes('blocked task')) {
+    return {
+      widgetType: 'blocker-resolution-dashboard',
+      widgetData: blockerResolutionDemo,
+      responseText: "Here are the current blockers requiring resolution:",
+    };
+  }
+
+  // Default: Show sprint burndown
+  return {
+    widgetType: 'sprint-burndown-chart',
+    widgetData: sprintBurndownDemo,
+    responseText: "Here's your sprint dashboard:",
+  };
+}
+
+// ============================================================================
+// V17 PROJECT MODE - SERVICE TEAM LEAD QUERIES
+// ============================================================================
+
+function detectServiceTeamLeadQuery(q: string): QueryMatch | null {
+  // Code Quality
+  if (
+    q.includes('code quality') ||
+    q.includes('technical debt') ||
+    q.includes('test coverage') ||
+    (q.includes('code') && (q.includes('smell') || q.includes('issue')))
+  ) {
+    return {
+      widgetType: 'code-quality-dashboard',
+      widgetData: codeQualityDemo,
+      responseText: "Here's the code quality dashboard:",
+    };
+  }
+
+  // Deployment Pipeline
+  if (
+    q.includes('deployment') ||
+    q.includes('pipeline') ||
+    q.includes('ci/cd') ||
+    (q.includes('deploy') && q.includes('status'))
+  ) {
+    return {
+      widgetType: 'deployment-pipeline-dashboard',
+      widgetData: deploymentPipelineDemo,
+      responseText: "Here's the deployment pipeline status:",
+    };
+  }
+
+  // Blockers
+  if (
+    q.includes('blocker') && (q.includes('resolve') || q.includes('resolution') || q.includes('active')) ||
+    q.includes('blocked tasks')
+  ) {
+    return {
+      widgetType: 'blocker-resolution-dashboard',
+      widgetData: blockerResolutionDemo,
+      responseText: "Here's the blocker resolution dashboard:",
+    };
+  }
+
+  // Team workload
+  if (q.includes('team') && (q.includes('workload') || q.includes('capacity') || q.includes('utilization'))) {
+    return {
+      widgetType: 'resource-capacity-dashboard',
+      widgetData: resourceCapacityDemo,
+      responseText: "Here's the team workload overview:",
+    };
+  }
+
+  // Performance metrics
+  if (q.includes('performance') && (q.includes('metric') || q.includes('kpi') || q.includes('dora'))) {
+    return {
+      widgetType: 'deployment-pipeline-dashboard',
+      widgetData: deploymentPipelineDemo,
+      responseText: "Here are the deployment performance metrics:",
+    };
+  }
+
+  // Default: Show code quality
+  return {
+    widgetType: 'code-quality-dashboard',
+    widgetData: codeQualityDemo,
+    responseText: "Here's your code quality dashboard:",
+  };
+}
+
+// ============================================================================
+// V17 PROJECT MODE - SERVICE TEAM MEMBER QUERIES
+// ============================================================================
+
+function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
+  // My Tasks / Kanban
+  if (
+    q.includes('my tasks') ||
+    q.includes('my work') ||
+    q.includes('what should i work on') ||
+    q.includes('kanban') ||
+    (q.includes('task') && (q.includes('assigned') || q.includes('mine')))
+  ) {
+    return {
+      widgetType: 'task-kanban-board',
+      widgetData: taskKanbanDemo,
+      responseText: "Here are your assigned tasks:",
+    };
+  }
+
+  // Sprint tasks
+  if (q.includes('sprint') && q.includes('task')) {
+    return {
+      widgetType: 'task-kanban-board',
+      widgetData: taskKanbanDemo,
+      responseText: "Here are the tasks for the current sprint:",
+    };
+  }
+
+  // Blockers
+  if (q.includes('blocker') || q.includes('blocked')) {
+    return {
+      widgetType: 'blocker-resolution-dashboard',
+      widgetData: blockerResolutionDemo,
+      responseText: "Here are the current blockers:",
+    };
+  }
+
+  // Code quality issues
+  if (q.includes('code') && (q.includes('issue') || q.includes('bug') || q.includes('fix'))) {
+    return {
+      widgetType: 'code-quality-dashboard',
+      widgetData: codeQualityDemo,
+      responseText: "Here are the code quality issues:",
+    };
+  }
+
+  // Knowledge base
+  if (
+    q.includes('how to') ||
+    q.includes('knowledge') ||
+    q.includes('documentation') ||
+    q.includes('guide')
+  ) {
+    return {
+      widgetType: 'knowledge-article',
+      widgetData: knowledgeArticleDemo,
+      responseText: "Here's the relevant knowledge base article:",
+    };
+  }
+
+  // Default: Show my tasks
+  return {
+    widgetType: 'task-kanban-board',
+    widgetData: taskKanbanDemo,
+    responseText: "Here's your task board:",
   };
 }

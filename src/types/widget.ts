@@ -2,6 +2,7 @@
 // These are ADDITIVE to the existing dashboard system (backward compatible)
 
 export type WidgetType =
+  // Original V14/V15 Widget Types
   | 'executive-summary'
   | 'analytics-dashboard'
   | 'performance-trends'
@@ -36,7 +37,24 @@ export type WidgetType =
   | 'upsell-opportunities'
   | 'client-feedback-dashboard'
   | 'business-review-scheduler'
-  | 'product-roadmap-view';
+  | 'product-roadmap-view'
+  // V17 Government Mode Widget Types
+  | 'contract-performance-dashboard'
+  | 'deliverable-review-list'
+  | 'vendor-compliance-dashboard'
+  | 'program-health-dashboard'
+  | 'stakeholder-engagement-dashboard'
+  | 'requirements-tracking-dashboard'
+  | 'change-request-dashboard'
+  // V17 Project Mode Widget Types
+  | 'sprint-burndown-chart'
+  | 'team-velocity-dashboard'
+  | 'code-quality-dashboard'
+  | 'deployment-pipeline-dashboard'
+  | 'task-kanban-board'
+  | 'resource-capacity-dashboard'
+  | 'blocker-resolution-dashboard'
+  | 'kb-article-viewer';
 
 // ============================================================================
 // WIDGET DATA INTERFACES (Based on Bhanu's Demo Data)
@@ -864,6 +882,482 @@ export interface LiveTicketDetailData {
   ticketNumber: string;
 }
 
+// ============================================================================
+// V17 GOVERNMENT MODE WIDGET DATA INTERFACES
+// ============================================================================
+
+// Contract Performance Dashboard Widget (COR Persona)
+export interface ContractPerformanceData {
+  title: string;
+  contractId: string;
+  contractName: string;
+  vendor: {
+    name: string;
+    id: string;
+    tier: 'prime' | 'subcontractor';
+  };
+  performance: {
+    overallScore: number;
+    slaCompliance: number;
+    budgetUtilization: number;
+    deliverableCompletion: number;
+  };
+  financials: {
+    totalValue: number;
+    spent: number;
+    committed: number;
+    remaining: number;
+  };
+  deliverables: Array<{
+    id: string;
+    name: string;
+    dueDate: Date;
+    status: 'pending' | 'submitted' | 'approved' | 'rejected';
+    qualityScore: number;
+  }>;
+  issues: Array<{
+    severity: 'critical' | 'high' | 'medium' | 'low';
+    description: string;
+    dueDate: Date;
+    assignedTo: string;
+  }>;
+  recommendations: Array<{
+    priority: 'critical' | 'high' | 'medium' | 'low';
+    action: string;
+    reason: string;
+  }>;
+}
+
+// Deliverable Review List Widget (COR Persona)
+export interface DeliverableReviewListData {
+  title: string;
+  count: number;
+  filters?: {
+    status?: string;
+    priority?: string;
+    dueWithin?: string;
+  };
+  deliverables: Array<{
+    id: string;
+    name: string;
+    contractId: string;
+    contractName: string;
+    vendor: string;
+    dueDate: string;
+    submittedDate?: string;
+    status: 'pending' | 'submitted' | 'under-review' | 'approved' | 'rejected' | 'resubmission-required';
+    priority: 'critical' | 'high' | 'medium' | 'low';
+    qualityScore?: number;
+    reviewedBy?: string;
+    issues: number;
+    comments: number;
+  }>;
+  summary: {
+    pendingReview: number;
+    approved: number;
+    rejected: number;
+    overdue: number;
+  };
+}
+
+// Vendor Compliance Dashboard Widget (COR Persona)
+export interface VendorComplianceData {
+  title: string;
+  vendor: {
+    name: string;
+    id: string;
+    tier: 'prime' | 'subcontractor';
+    contractValue: number;
+  };
+  compliance: {
+    overallScore: number;
+    slaCompliance: number;
+    securityCompliance: number;
+    reportingCompliance: number;
+    qualityCompliance: number;
+  };
+  violations: Array<{
+    date: string;
+    type: 'sla' | 'security' | 'reporting' | 'quality';
+    severity: 'critical' | 'high' | 'medium' | 'low';
+    description: string;
+    status: 'open' | 'remediated' | 'waived';
+    remediationDue?: string;
+  }>;
+  trends: Array<{
+    month: string;
+    score: number;
+  }>;
+  recommendations: string[];
+}
+
+// Program Health Dashboard Widget (Program Manager Persona)
+export interface ProgramHealthData {
+  title: string;
+  programName: string;
+  programId: string;
+  status: 'on-track' | 'at-risk' | 'critical';
+  health: {
+    schedule: {
+      status: 'green' | 'yellow' | 'red';
+      score: number;
+      variance: string;
+    };
+    budget: {
+      status: 'green' | 'yellow' | 'red';
+      score: number;
+      utilization: number;
+    };
+    resources: {
+      status: 'green' | 'yellow' | 'red';
+      score: number;
+      availability: number;
+    };
+    risks: {
+      status: 'green' | 'yellow' | 'red';
+      count: number;
+      criticalCount: number;
+    };
+  };
+  milestones: Array<{
+    name: string;
+    dueDate: string;
+    status: 'completed' | 'on-track' | 'at-risk' | 'delayed';
+    completion: number;
+  }>;
+  topRisks: Array<{
+    id: string;
+    description: string;
+    impact: 'critical' | 'high' | 'medium' | 'low';
+    probability: 'high' | 'medium' | 'low';
+    mitigation: string;
+  }>;
+  keyMetrics: {
+    contractsActive: number;
+    deliverablesCompleted: number;
+    stakeholderSatisfaction: number;
+    budgetRemaining: number;
+  };
+}
+
+// Stakeholder Engagement Dashboard Widget (Stakeholder Lead Persona)
+export interface StakeholderEngagementData {
+  title: string;
+  stakeholders: Array<{
+    name: string;
+    role: string;
+    organization: string;
+    engagementLevel: 'high' | 'medium' | 'low';
+    sentiment: 'positive' | 'neutral' | 'negative';
+    lastContact: string;
+    nextMeeting?: string;
+    primaryInterests: string[];
+  }>;
+  communications: {
+    thisWeek: number;
+    thisMonth: number;
+    avgResponseTime: string;
+  };
+  upcomingMeetings: Array<{
+    date: string;
+    title: string;
+    attendees: string[];
+    agenda: string[];
+  }>;
+  actionItems: Array<{
+    stakeholder: string;
+    action: string;
+    dueDate: string;
+    status: 'pending' | 'in-progress' | 'completed';
+  }>;
+}
+
+// Requirements Tracking Dashboard Widget (Stakeholder Lead Persona)
+export interface RequirementsTrackingData {
+  title: string;
+  summary: {
+    total: number;
+    approved: number;
+    inReview: number;
+    draft: number;
+    traceability: number;
+  };
+  requirements: Array<{
+    id: string;
+    title: string;
+    category: 'functional' | 'non-functional' | 'technical' | 'business';
+    priority: 'critical' | 'high' | 'medium' | 'low';
+    status: 'draft' | 'in-review' | 'approved' | 'implemented' | 'verified';
+    assignedTo: string;
+    stakeholders: string[];
+    traceability: {
+      designDocs: number;
+      testCases: number;
+      completeness: number;
+    };
+  }>;
+  risksAtRisk: Array<{
+    id: string;
+    title: string;
+    risk: string;
+    mitigation: string;
+  }>;
+}
+
+// Change Request Dashboard Widget (Stakeholder Lead Persona)
+export interface ChangeRequestData {
+  title: string;
+  summary: {
+    pending: number;
+    approved: number;
+    rejected: number;
+    implemented: number;
+  };
+  requests: Array<{
+    id: string;
+    title: string;
+    requestedBy: string;
+    requestDate: string;
+    category: 'scope' | 'schedule' | 'budget' | 'requirements';
+    impact: {
+      schedule: 'high' | 'medium' | 'low' | 'none';
+      budget: 'high' | 'medium' | 'low' | 'none';
+      resources: 'high' | 'medium' | 'low' | 'none';
+    };
+    status: 'pending-review' | 'approved' | 'rejected' | 'implemented';
+    approvers: Array<{
+      name: string;
+      status: 'pending' | 'approved' | 'rejected';
+    }>;
+  }>;
+}
+
+// ============================================================================
+// V17 PROJECT MODE WIDGET DATA INTERFACES
+// ============================================================================
+
+// Sprint Burndown Chart Widget (Project Manager Persona)
+export interface SprintBurndownData {
+  title: string;
+  sprint: {
+    name: string;
+    startDate: string;
+    endDate: string;
+    totalStoryPoints: number;
+    completedStoryPoints: number;
+  };
+  burndown: Array<{
+    date: string;
+    idealRemaining: number;
+    actualRemaining: number;
+  }>;
+  velocity: {
+    current: number;
+    average: number;
+    trend: 'increasing' | 'stable' | 'decreasing';
+  };
+  status: 'on-track' | 'at-risk' | 'critical';
+  risks: string[];
+}
+
+// Team Velocity Dashboard Widget (Project Manager Persona)
+export interface TeamVelocityData {
+  title: string;
+  currentSprint: {
+    name: string;
+    velocity: number;
+    capacity: number;
+    utilizationRate: number;
+  };
+  velocityTrend: Array<{
+    sprint: string;
+    plannedVelocity: number;
+    actualVelocity: number;
+  }>;
+  teamMembers: Array<{
+    name: string;
+    role: string;
+    capacity: number;
+    assigned: number;
+    completed: number;
+    utilizationRate: number;
+  }>;
+  predictability: {
+    score: number;
+    consistency: string;
+  };
+}
+
+// Code Quality Dashboard Widget (Service Team Lead Persona)
+export interface CodeQualityData {
+  title: string;
+  overall: {
+    score: number;
+    grade: 'A' | 'B' | 'C' | 'D' | 'F';
+    trend: 'improving' | 'stable' | 'declining';
+  };
+  metrics: {
+    testCoverage: {
+      value: number;
+      target: number;
+      status: 'pass' | 'warning' | 'fail';
+    };
+    codeSmells: {
+      count: number;
+      critical: number;
+      status: 'pass' | 'warning' | 'fail';
+    };
+    technicalDebt: {
+      hours: number;
+      trend: 'increasing' | 'stable' | 'decreasing';
+    };
+    duplicateCode: {
+      percentage: number;
+      status: 'pass' | 'warning' | 'fail';
+    };
+  };
+  recentIssues: Array<{
+    file: string;
+    type: 'bug' | 'vulnerability' | 'code-smell' | 'duplicate';
+    severity: 'critical' | 'high' | 'medium' | 'low';
+    description: string;
+    assignedTo?: string;
+  }>;
+}
+
+// Deployment Pipeline Dashboard Widget (Service Team Lead Persona)
+export interface DeploymentPipelineData {
+  title: string;
+  pipeline: {
+    status: 'passing' | 'failing' | 'running';
+    lastDeployment: string;
+    environment: 'production' | 'staging' | 'development';
+  };
+  stages: Array<{
+    name: string;
+    status: 'passed' | 'failed' | 'running' | 'pending';
+    duration?: string;
+    startTime?: string;
+  }>;
+  deploymentFrequency: {
+    thisWeek: number;
+    lastWeek: number;
+    average: number;
+  };
+  metrics: {
+    leadTime: string;
+    deploymentSuccess: number;
+    mttr: string;
+    changeFailure: number;
+  };
+  recentDeployments: Array<{
+    version: string;
+    environment: string;
+    status: 'success' | 'failed' | 'rolled-back';
+    deployedBy: string;
+    timestamp: string;
+  }>;
+}
+
+// Task Kanban Board Widget (Service Team Member Persona)
+export interface TaskKanbanData {
+  title: string;
+  sprint: string;
+  columns: Array<{
+    name: 'todo' | 'in-progress' | 'review' | 'done';
+    tasks: Array<{
+      id: string;
+      title: string;
+      assignedTo: string;
+      storyPoints: number;
+      priority: 'critical' | 'high' | 'medium' | 'low';
+      blockedBy?: string;
+      tags: string[];
+    }>;
+  }>;
+  myTasks: {
+    todo: number;
+    inProgress: number;
+    review: number;
+    completed: number;
+  };
+}
+
+// Resource Capacity Dashboard Widget (Project Manager Persona)
+export interface ResourceCapacityData {
+  title: string;
+  teamCapacity: {
+    totalHours: number;
+    allocated: number;
+    available: number;
+    utilizationRate: number;
+  };
+  members: Array<{
+    name: string;
+    role: string;
+    capacity: number;
+    allocated: number;
+    available: number;
+    status: 'available' | 'at-capacity' | 'over-allocated';
+    upcomingPTO: string[];
+  }>;
+  upcomingSprints: Array<{
+    sprint: string;
+    capacity: number;
+    demand: number;
+    gap: number;
+  }>;
+}
+
+// Blocker Resolution Dashboard Widget (Service Team Lead Persona)
+export interface BlockerResolutionData {
+  title: string;
+  activeBlockers: number;
+  avgResolutionTime: string;
+  blockers: Array<{
+    id: string;
+    task: string;
+    blockerType: 'technical' | 'dependency' | 'resource' | 'external';
+    severity: 'critical' | 'high' | 'medium' | 'low';
+    blockedSince: string;
+    impactedTasks: number;
+    assignedTo: string;
+    status: 'open' | 'in-progress' | 'resolved';
+    description: string;
+  }>;
+  resolutionTrend: Array<{
+    week: string;
+    opened: number;
+    resolved: number;
+  }>;
+}
+
+// Knowledge Base Article Viewer Widget (Service Team Member Persona)
+export interface KBArticleViewerData {
+  id: string;
+  title: string;
+  category: string;
+  tags: string[];
+  content: string;
+  videoUrl?: string;
+  attachments?: Array<{
+    name: string;
+    url: string;
+    type: string;
+  }>;
+  metadata: {
+    author: string;
+    lastUpdated: string;
+    views: number;
+    helpfulCount: number;
+  };
+  relatedArticles: Array<{
+    id: string;
+    title: string;
+    category: string;
+  }>;
+}
+
 // Union type for all widget data
 export type WidgetData =
   | ExecutiveSummaryData
@@ -891,4 +1385,21 @@ export type WidgetData =
   | EscalationPathData
   | SystemAccessStatusData
   | InteractiveUpdateData
-  | TicketProcessingData;
+  | TicketProcessingData
+  // V17 Government Mode Widget Data
+  | ContractPerformanceData
+  | DeliverableReviewListData
+  | VendorComplianceData
+  | ProgramHealthData
+  | StakeholderEngagementData
+  | RequirementsTrackingData
+  | ChangeRequestData
+  // V17 Project Mode Widget Data
+  | SprintBurndownData
+  | TeamVelocityData
+  | CodeQualityData
+  | DeploymentPipelineData
+  | TaskKanbanData
+  | ResourceCapacityData
+  | BlockerResolutionData
+  | KBArticleViewerData;

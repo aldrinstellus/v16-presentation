@@ -22,6 +22,22 @@ import type {
   KnowledgeBaseSearchData,
   KnowledgeArticleData,
   MessageComposerData,
+  // V17 Government Mode Interfaces
+  ContractPerformanceData,
+  DeliverableReviewListData,
+  VendorComplianceData,
+  ProgramHealthData,
+  StakeholderEngagementData,
+  RequirementsTrackingData,
+  ChangeRequestData,
+  // V17 Project Mode Interfaces
+  SprintBurndownData,
+  TeamVelocityData,
+  CodeQualityData,
+  DeploymentPipelineData,
+  TaskKanbanData,
+  ResourceCapacityData,
+  BlockerResolutionData,
 } from '@/types/widget';
 
 // C-Level: Executive Summary Widget Data
@@ -2590,11 +2606,782 @@ Customer Success Manager`,
   },
 };
 
+// ============================================================================
+// V17 GOVERNMENT MODE DEMO DATA
+// ============================================================================
+
+// COR Persona: Contract Performance Dashboard
+export const contractPerformanceDemo: ContractPerformanceData = {
+  title: 'Contract Performance Dashboard',
+  contractId: 'CON-2025-042',
+  contractName: 'Enterprise IT Infrastructure Modernization',
+  vendor: {
+    name: 'TechSolutions Inc.',
+    id: 'VEND-1523',
+    tier: 'prime',
+  },
+  performance: {
+    overallScore: 87,
+    slaCompliance: 92,
+    budgetUtilization: 78,
+    deliverableCompletion: 85,
+  },
+  financials: {
+    totalValue: 2500000,
+    spent: 1950000,
+    committed: 350000,
+    remaining: 200000,
+  },
+  deliverables: [
+    {
+      id: 'DEL-2847',
+      name: 'Q4 Security Audit Report',
+      dueDate: new Date('2025-11-15'),
+      status: 'submitted',
+      qualityScore: 78,
+    },
+    {
+      id: 'DEL-2848',
+      name: 'Monthly Performance Dashboard',
+      dueDate: new Date('2025-11-30'),
+      status: 'approved',
+      qualityScore: 92,
+    },
+    {
+      id: 'DEL-2849',
+      name: 'System Architecture Documentation',
+      dueDate: new Date('2025-12-01'),
+      status: 'pending',
+      qualityScore: 0,
+    },
+  ],
+  issues: [
+    {
+      severity: 'high',
+      description: 'Q4 Security Audit Report flagged 2 compliance gaps',
+      dueDate: new Date('2025-11-18'),
+      assignedTo: 'TechSolutions QA Team',
+    },
+    {
+      severity: 'medium',
+      description: 'Budget utilization at 78% with 2 months remaining',
+      dueDate: new Date('2025-11-25'),
+      assignedTo: 'Alexa Johnson (COR)',
+    },
+  ],
+  recommendations: [
+    {
+      priority: 'critical',
+      action: 'Review Security Audit Report findings with vendor',
+      reason: 'Compliance gaps must be addressed before approval',
+    },
+    {
+      priority: 'high',
+      action: 'Schedule budget reconciliation meeting',
+      reason: 'Underutilization may impact contract renewal',
+    },
+  ],
+};
+
+// COR Persona: Deliverable Review List
+export const deliverableReviewListDemo: DeliverableReviewListData = {
+  title: 'Pending Deliverable Reviews',
+  count: 8,
+  filters: {
+    status: 'pending-review',
+    dueWithin: '30-days',
+  },
+  deliverables: [
+    {
+      id: 'DEL-2847',
+      name: 'Q4 Security Audit Report',
+      contractId: 'CON-2025-042',
+      contractName: 'Enterprise IT Infrastructure Modernization',
+      vendor: 'TechSolutions Inc.',
+      dueDate: '2025-11-15',
+      submittedDate: '2025-11-12',
+      status: 'under-review',
+      priority: 'high',
+      qualityScore: 78,
+      reviewedBy: 'Alexa Johnson',
+      issues: 2,
+      comments: 3,
+    },
+    {
+      id: 'DEL-2850',
+      name: 'Technical Design Document',
+      contractId: 'CON-2025-043',
+      contractName: 'Healthcare System Upgrade',
+      vendor: 'HealthTech Solutions',
+      dueDate: '2025-11-20',
+      submittedDate: '2025-11-11',
+      status: 'submitted',
+      priority: 'critical',
+      issues: 0,
+      comments: 1,
+    },
+    {
+      id: 'DEL-2851',
+      name: 'User Training Materials',
+      contractId: 'CON-2025-042',
+      contractName: 'Enterprise IT Infrastructure Modernization',
+      vendor: 'TechSolutions Inc.',
+      dueDate: '2025-11-22',
+      status: 'pending',
+      priority: 'medium',
+      issues: 0,
+      comments: 0,
+    },
+  ],
+  summary: {
+    pendingReview: 5,
+    approved: 12,
+    rejected: 2,
+    overdue: 1,
+  },
+};
+
+// COR Persona: Vendor Compliance Dashboard
+export const vendorComplianceDemo: VendorComplianceData = {
+  title: 'Vendor Compliance Dashboard',
+  vendor: {
+    name: 'TechSolutions Inc.',
+    id: 'VEND-1523',
+    tier: 'prime',
+    contractValue: 2500000,
+  },
+  compliance: {
+    overallScore: 87,
+    slaCompliance: 92,
+    securityCompliance: 85,
+    reportingCompliance: 90,
+    qualityCompliance: 82,
+  },
+  violations: [
+    {
+      date: '2025-11-08',
+      type: 'quality',
+      severity: 'medium',
+      description: 'Deliverable DEL-2847 submitted with quality score below 80%',
+      status: 'open',
+      remediationDue: '2025-11-18',
+    },
+    {
+      date: '2025-10-15',
+      type: 'sla',
+      severity: 'low',
+      description: 'Monthly report submitted 2 hours past deadline',
+      status: 'remediated',
+    },
+  ],
+  trends: [
+    { month: 'Jul', score: 84 },
+    { month: 'Aug', score: 86 },
+    { month: 'Sep', score: 88 },
+    { month: 'Oct', score: 87 },
+    { month: 'Nov', score: 87 },
+  ],
+  recommendations: [
+    'Schedule compliance review meeting for quality issues',
+    'Request remediation plan for DEL-2847 findings',
+    'Monitor SLA performance for next 2 months',
+  ],
+};
+
+// Program Manager Persona: Program Health Dashboard
+export const programHealthDemo: ProgramHealthData = {
+  title: 'IT Modernization Program Health',
+  programName: 'Enterprise IT Infrastructure Modernization',
+  programId: 'PROG-2025-01',
+  status: 'at-risk',
+  health: {
+    schedule: {
+      status: 'yellow',
+      score: 78,
+      variance: '-5%',
+    },
+    budget: {
+      status: 'green',
+      score: 92,
+      utilization: 78,
+    },
+    resources: {
+      status: 'yellow',
+      score: 82,
+      availability: 85,
+    },
+    risks: {
+      status: 'red',
+      count: 12,
+      criticalCount: 3,
+    },
+  },
+  milestones: [
+    {
+      name: 'Phase 1 Infrastructure Deployment',
+      dueDate: '2025-12-31',
+      status: 'on-track',
+      completion: 85,
+    },
+    {
+      name: 'Security Compliance Certification',
+      dueDate: '2025-11-30',
+      status: 'at-risk',
+      completion: 65,
+    },
+    {
+      name: 'User Training Program',
+      dueDate: '2026-01-15',
+      status: 'delayed',
+      completion: 45,
+    },
+  ],
+  topRisks: [
+    {
+      id: 'RISK-042',
+      description: 'Security audit findings may delay certification',
+      impact: 'critical',
+      probability: 'high',
+      mitigation: 'Vendor remediation plan in progress, weekly reviews scheduled',
+    },
+    {
+      id: 'RISK-043',
+      description: 'Training materials delayed by 2 weeks',
+      impact: 'high',
+      probability: 'medium',
+      mitigation: 'Fast-tracking review process, contractor support engaged',
+    },
+  ],
+  keyMetrics: {
+    contractsActive: 5,
+    deliverablesCompleted: 24,
+    stakeholderSatisfaction: 82,
+    budgetRemaining: 450000,
+  },
+};
+
+// Stakeholder Lead Persona: Stakeholder Engagement Dashboard
+export const stakeholderEngagementDemo: StakeholderEngagementData = {
+  title: 'Stakeholder Engagement Dashboard',
+  stakeholders: [
+    {
+      name: 'Sarah Williams',
+      role: 'CIO',
+      organization: 'IT Department',
+      engagementLevel: 'high',
+      sentiment: 'positive',
+      lastContact: '2025-11-10',
+      nextMeeting: '2025-11-15 2:00 PM',
+      primaryInterests: ['Security', 'Budget', 'Timeline'],
+    },
+    {
+      name: 'Michael Chen',
+      role: 'CISO',
+      organization: 'Security Department',
+      engagementLevel: 'high',
+      sentiment: 'neutral',
+      lastContact: '2025-11-09',
+      nextMeeting: '2025-11-18 10:00 AM',
+      primaryInterests: ['Compliance', 'Security Audit'],
+    },
+    {
+      name: 'Emily Rodriguez',
+      role: 'Department Head',
+      organization: 'Operations',
+      engagementLevel: 'medium',
+      sentiment: 'positive',
+      lastContact: '2025-11-05',
+      primaryInterests: ['User Training', 'Change Management'],
+    },
+  ],
+  communications: {
+    thisWeek: 8,
+    thisMonth: 32,
+    avgResponseTime: '4.2 hours',
+  },
+  upcomingMeetings: [
+    {
+      date: '2025-11-15',
+      title: 'Security Audit Review',
+      attendees: ['Sarah Williams', 'Michael Chen', 'Alexa Johnson'],
+      agenda: ['Review audit findings', 'Discuss remediation plan', 'Timeline impacts'],
+    },
+    {
+      date: '2025-11-18',
+      title: 'Training Program Status',
+      attendees: ['Emily Rodriguez', 'Jennifer Chen'],
+      agenda: ['Review training materials', 'Schedule pilot sessions'],
+    },
+  ],
+  actionItems: [
+    {
+      stakeholder: 'Michael Chen',
+      action: 'Provide feedback on security remediation plan',
+      dueDate: '2025-11-17',
+      status: 'pending',
+    },
+    {
+      stakeholder: 'Emily Rodriguez',
+      action: 'Approve training materials',
+      dueDate: '2025-11-20',
+      status: 'in-progress',
+    },
+  ],
+};
+
+// Stakeholder Lead Persona: Requirements Tracking Dashboard
+export const requirementsTrackingDemo: RequirementsTrackingData = {
+  title: 'Requirements Tracking Dashboard',
+  summary: {
+    total: 142,
+    approved: 98,
+    inReview: 22,
+    draft: 18,
+    traceability: 87,
+  },
+  requirements: [
+    {
+      id: 'REQ-1042',
+      title: 'Multi-factor authentication for all user logins',
+      category: 'functional',
+      priority: 'critical',
+      status: 'approved',
+      assignedTo: 'Security Team',
+      stakeholders: ['Michael Chen', 'Sarah Williams'],
+      traceability: {
+        designDocs: 3,
+        testCases: 12,
+        completeness: 95,
+      },
+    },
+    {
+      id: 'REQ-1043',
+      title: 'System performance must support 10,000 concurrent users',
+      category: 'non-functional',
+      priority: 'high',
+      status: 'in-review',
+      assignedTo: 'Infrastructure Team',
+      stakeholders: ['Sarah Williams'],
+      traceability: {
+        designDocs: 2,
+        testCases: 5,
+        completeness: 68,
+      },
+    },
+  ],
+  risksAtRisk: [
+    {
+      id: 'REQ-1044',
+      title: 'Data migration requirements',
+      risk: 'Incomplete traceability (45%)',
+      mitigation: 'Additional design documentation requested',
+    },
+  ],
+};
+
+// Stakeholder Lead Persona: Change Request Dashboard
+export const changeRequestDemo: ChangeRequestData = {
+  title: 'Change Request Dashboard',
+  summary: {
+    pending: 8,
+    approved: 24,
+    rejected: 3,
+    implemented: 18,
+  },
+  requests: [
+    {
+      id: 'CR-2847',
+      title: 'Extend security audit timeline by 2 weeks',
+      requestedBy: 'Alexa Johnson',
+      requestDate: '2025-11-08',
+      category: 'schedule',
+      impact: {
+        schedule: 'medium',
+        budget: 'low',
+        resources: 'low',
+      },
+      status: 'pending-review',
+      approvers: [
+        { name: 'Jennifer Chen', status: 'pending' },
+        { name: 'Sarah Williams', status: 'pending' },
+      ],
+    },
+    {
+      id: 'CR-2848',
+      title: 'Add additional training sessions for end users',
+      requestedBy: 'Emily Rodriguez',
+      requestDate: '2025-11-10',
+      category: 'scope',
+      impact: {
+        schedule: 'low',
+        budget: 'medium',
+        resources: 'high',
+      },
+      status: 'approved',
+      approvers: [
+        { name: 'Jennifer Chen', status: 'approved' },
+        { name: 'Sarah Williams', status: 'approved' },
+      ],
+    },
+  ],
+};
+
+// ============================================================================
+// V17 PROJECT MODE DEMO DATA
+// ============================================================================
+
+// Project Manager Persona: Sprint Burndown Chart
+export const sprintBurndownDemo: SprintBurndownData = {
+  title: 'Sprint 24 Burndown',
+  sprint: {
+    name: 'Sprint 24 - Q4 Features',
+    startDate: '2025-11-04',
+    endDate: '2025-11-17',
+    totalStoryPoints: 55,
+    completedStoryPoints: 40,
+  },
+  burndown: [
+    { date: '11/04', idealRemaining: 55, actualRemaining: 55 },
+    { date: '11/05', idealRemaining: 50, actualRemaining: 52 },
+    { date: '11/06', idealRemaining: 46, actualRemaining: 48 },
+    { date: '11/07', idealRemaining: 41, actualRemaining: 45 },
+    { date: '11/08', idealRemaining: 37, actualRemaining: 40 },
+    { date: '11/11', idealRemaining: 32, actualRemaining: 35 },
+    { date: '11/12', idealRemaining: 28, actualRemaining: 28 },
+    { date: '11/13', idealRemaining: 23, actualRemaining: 20 },
+    { date: '11/14', idealRemaining: 18, actualRemaining: 15 },
+  ],
+  velocity: {
+    current: 42,
+    average: 45,
+    trend: 'decreasing',
+  },
+  status: 'on-track',
+  risks: [
+    'Team velocity below average this sprint',
+    '3 tasks blocked by external dependencies',
+  ],
+};
+
+// Project Manager Persona: Team Velocity Dashboard
+export const teamVelocityDemo: TeamVelocityData = {
+  title: 'Team Velocity Dashboard',
+  currentSprint: {
+    name: 'Sprint 24',
+    velocity: 42,
+    capacity: 55,
+    utilizationRate: 76,
+  },
+  velocityTrend: [
+    { sprint: 'Sprint 20', plannedVelocity: 50, actualVelocity: 48 },
+    { sprint: 'Sprint 21', plannedVelocity: 50, actualVelocity: 52 },
+    { sprint: 'Sprint 22', plannedVelocity: 50, actualVelocity: 45 },
+    { sprint: 'Sprint 23', plannedVelocity: 50, actualVelocity: 48 },
+    { sprint: 'Sprint 24', plannedVelocity: 55, actualVelocity: 42 },
+  ],
+  teamMembers: [
+    {
+      name: 'Molly Rivera',
+      role: 'Service Team Member',
+      capacity: 40,
+      assigned: 38,
+      completed: 32,
+      utilizationRate: 95,
+    },
+    {
+      name: 'Herbert Roberts',
+      role: 'Service Team Lead',
+      capacity: 32,
+      assigned: 30,
+      completed: 28,
+      utilizationRate: 94,
+    },
+    {
+      name: 'Alex Martinez',
+      role: 'Service Team Member',
+      capacity: 40,
+      assigned: 42,
+      completed: 35,
+      utilizationRate: 105,
+    },
+  ],
+  predictability: {
+    score: 88,
+    consistency: 'Good - within 10% variance',
+  },
+};
+
+// Service Team Lead Persona: Code Quality Dashboard
+export const codeQualityDemo: CodeQualityData = {
+  title: 'Code Quality Dashboard',
+  overall: {
+    score: 82,
+    grade: 'B',
+    trend: 'improving',
+  },
+  metrics: {
+    testCoverage: {
+      value: 78,
+      target: 80,
+      status: 'warning',
+    },
+    codeSmells: {
+      count: 42,
+      critical: 5,
+      status: 'warning',
+    },
+    technicalDebt: {
+      hours: 120,
+      trend: 'decreasing',
+    },
+    duplicateCode: {
+      percentage: 3.2,
+      status: 'pass',
+    },
+  },
+  recentIssues: [
+    {
+      file: 'src/auth/oauth.ts',
+      type: 'vulnerability',
+      severity: 'critical',
+      description: 'Insecure credential storage detected',
+      assignedTo: 'Herbert Roberts',
+    },
+    {
+      file: 'src/utils/validation.ts',
+      type: 'code-smell',
+      severity: 'high',
+      description: 'Complex function exceeds cyclomatic complexity threshold',
+      assignedTo: 'Molly Rivera',
+    },
+    {
+      file: 'src/api/payments.ts',
+      type: 'bug',
+      severity: 'medium',
+      description: 'Potential null pointer exception',
+    },
+  ],
+};
+
+// Service Team Lead Persona: Deployment Pipeline Dashboard
+export const deploymentPipelineDemo: DeploymentPipelineData = {
+  title: 'Deployment Pipeline Status',
+  pipeline: {
+    status: 'passing',
+    lastDeployment: '2025-11-12 14:32',
+    environment: 'production',
+  },
+  stages: [
+    { name: 'Build', status: 'passed', duration: '2m 15s', startTime: '14:20' },
+    { name: 'Test', status: 'passed', duration: '5m 42s', startTime: '14:22' },
+    { name: 'Security Scan', status: 'passed', duration: '3m 18s', startTime: '14:28' },
+    { name: 'Deploy', status: 'passed', duration: '1m 22s', startTime: '14:31' },
+  ],
+  deploymentFrequency: {
+    thisWeek: 12,
+    lastWeek: 15,
+    average: 14,
+  },
+  metrics: {
+    leadTime: '18 minutes',
+    deploymentSuccess: 94,
+    mttr: '12 minutes',
+    changeFailure: 6,
+  },
+  recentDeployments: [
+    {
+      version: 'v2.4.8',
+      environment: 'production',
+      status: 'success',
+      deployedBy: 'Herbert Roberts',
+      timestamp: '2025-11-12 14:32',
+    },
+    {
+      version: 'v2.4.7',
+      environment: 'production',
+      status: 'success',
+      deployedBy: 'Dale Thompson',
+      timestamp: '2025-11-11 16:45',
+    },
+    {
+      version: 'v2.4.6',
+      environment: 'production',
+      status: 'rolled-back',
+      deployedBy: 'Herbert Roberts',
+      timestamp: '2025-11-10 09:15',
+    },
+  ],
+};
+
+// Service Team Member Persona: Task Kanban Board
+export const taskKanbanDemo: TaskKanbanData = {
+  title: 'My Tasks - Sprint 24',
+  sprint: 'Sprint 24',
+  columns: [
+    {
+      name: 'todo',
+      tasks: [
+        {
+          id: 'TASK-5822',
+          title: 'Add pagination to customer dashboard',
+          assignedTo: 'Molly Rivera',
+          storyPoints: 5,
+          priority: 'medium',
+          tags: ['frontend', 'ux'],
+        },
+        {
+          id: 'TASK-5825',
+          title: 'Update user profile API endpoint',
+          assignedTo: 'Molly Rivera',
+          storyPoints: 3,
+          priority: 'low',
+          tags: ['api', 'backend'],
+        },
+      ],
+    },
+    {
+      name: 'in-progress',
+      tasks: [
+        {
+          id: 'TASK-5821',
+          title: 'Implement OAuth2 integration with external vendor API',
+          assignedTo: 'Molly Rivera',
+          storyPoints: 8,
+          priority: 'high',
+          blockedBy: 'External API dependency',
+          tags: ['api', 'integration'],
+        },
+      ],
+    },
+    {
+      name: 'review',
+      tasks: [
+        {
+          id: 'TASK-5820',
+          title: 'Fix memory leak in background worker',
+          assignedTo: 'Molly Rivera',
+          storyPoints: 5,
+          priority: 'high',
+          tags: ['backend', 'performance'],
+        },
+      ],
+    },
+    {
+      name: 'done',
+      tasks: [
+        {
+          id: 'TASK-5818',
+          title: 'Add unit tests for payment module',
+          assignedTo: 'Molly Rivera',
+          storyPoints: 3,
+          priority: 'medium',
+          tags: ['testing'],
+        },
+        {
+          id: 'TASK-5815',
+          title: 'Optimize image loading strategy',
+          assignedTo: 'Molly Rivera',
+          storyPoints: 5,
+          priority: 'low',
+          tags: ['frontend', 'performance'],
+        },
+      ],
+    },
+  ],
+  myTasks: {
+    todo: 2,
+    inProgress: 1,
+    review: 1,
+    completed: 2,
+  },
+};
+
+// Project Manager Persona: Resource Capacity Dashboard
+export const resourceCapacityDemo: ResourceCapacityData = {
+  title: 'Resource Capacity Dashboard',
+  teamCapacity: {
+    totalHours: 320,
+    allocated: 280,
+    available: 40,
+    utilizationRate: 87.5,
+  },
+  members: [
+    {
+      name: 'Molly Rivera',
+      role: 'Service Team Member',
+      capacity: 80,
+      allocated: 76,
+      available: 4,
+      status: 'at-capacity',
+      upcomingPTO: ['2025-11-28', '2025-11-29'],
+    },
+    {
+      name: 'Herbert Roberts',
+      role: 'Service Team Lead',
+      capacity: 64,
+      allocated: 60,
+      available: 4,
+      status: 'at-capacity',
+      upcomingPTO: [],
+    },
+    {
+      name: 'Alex Martinez',
+      role: 'Service Team Member',
+      capacity: 80,
+      allocated: 84,
+      available: -4,
+      status: 'over-allocated',
+      upcomingPTO: [],
+    },
+  ],
+  upcomingSprints: [
+    { sprint: 'Sprint 25', capacity: 280, demand: 300, gap: -20 },
+    { sprint: 'Sprint 26', capacity: 240, demand: 280, gap: -40 },
+  ],
+};
+
+// Service Team Lead Persona: Blocker Resolution Dashboard
+export const blockerResolutionDemo: BlockerResolutionData = {
+  title: 'Blocker Resolution Dashboard',
+  activeBlockers: 5,
+  avgResolutionTime: '2.3 days',
+  blockers: [
+    {
+      id: 'BLOCK-042',
+      task: 'TASK-5821 - OAuth2 integration',
+      blockerType: 'external',
+      severity: 'high',
+      blockedSince: '2025-11-09',
+      impactedTasks: 3,
+      assignedTo: 'Dale Thompson',
+      status: 'in-progress',
+      description: 'Waiting for external vendor API credentials',
+    },
+    {
+      id: 'BLOCK-043',
+      task: 'TASK-5827 - Database migration',
+      blockerType: 'technical',
+      severity: 'critical',
+      blockedSince: '2025-11-11',
+      impactedTasks: 5,
+      assignedTo: 'Herbert Roberts',
+      status: 'open',
+      description: 'Schema conflicts with production database',
+    },
+  ],
+  resolutionTrend: [
+    { week: 'Week 44', opened: 8, resolved: 6 },
+    { week: 'Week 45', opened: 5, resolved: 7 },
+    { week: 'Week 46', opened: 7, resolved: 5 },
+  ],
+};
+
 import type { WidgetData } from '@/types/widget';
 
 // Helper function to get demo data for each widget type
 export function getWidgetDemoData(widgetType: string): WidgetData | null {
   const dataMap: Record<string, WidgetData> = {
+    // V14/V15 Widgets
     'executive-summary': executiveSummaryDemo,
     'analytics-dashboard': analyticsDashboardDemo,
     'performance-trends': performanceTrendsDemo,
@@ -2615,9 +3402,25 @@ export function getWidgetDemoData(widgetType: string): WidgetData | null {
     'meeting-scheduler': meetingSchedulerDemo,
     'knowledge-base-search': knowledgeBaseSearchDemo,
     'knowledge-article': knowledgeArticleDemo,
-    'escalation-path': passwordResetEscalationDemo, // Updated for password reset demo
-    'meeting-confirmation': meetingSchedulerDemo, // Reuse meeting scheduler for now
+    'escalation-path': passwordResetEscalationDemo,
+    'meeting-confirmation': meetingSchedulerDemo,
+    // V17 Government Mode Widgets
+    'contract-performance-dashboard': contractPerformanceDemo,
+    'deliverable-review-list': deliverableReviewListDemo,
+    'vendor-compliance-dashboard': vendorComplianceDemo,
+    'program-health-dashboard': programHealthDemo,
+    'stakeholder-engagement-dashboard': stakeholderEngagementDemo,
+    'requirements-tracking-dashboard': requirementsTrackingDemo,
+    'change-request-dashboard': changeRequestDemo,
+    // V17 Project Mode Widgets
+    'sprint-burndown-chart': sprintBurndownDemo,
+    'team-velocity-dashboard': teamVelocityDemo,
+    'code-quality-dashboard': codeQualityDemo,
+    'deployment-pipeline-dashboard': deploymentPipelineDemo,
+    'task-kanban-board': taskKanbanDemo,
+    'resource-capacity-dashboard': resourceCapacityDemo,
+    'blocker-resolution-dashboard': blockerResolutionDemo,
   };
 
-  return dataMap[widgetType] || {};
+  return dataMap[widgetType] || null;
 }
