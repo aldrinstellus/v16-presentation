@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { QuickActionProvider, useQuickAction } from '@/contexts/QuickActionContext';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import { ConversationProvider, useConversation } from '@/contexts/ConversationContext';
+import { PersonaProvider } from '@/contexts/PersonaContext';
+import { PersonaType } from '@/types/persona';
 
 function DemoLayoutContent({ children }: { children: React.ReactNode }) {
   const { setQuickActionQuery } = useQuickAction();
@@ -71,11 +74,18 @@ function DemoLayoutContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function DemoLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  // Extract persona ID from URL path (e.g., /demo/project-manager → project-manager)
+  const personaId = pathname?.split('/').pop() as PersonaType | undefined;
+
   return (
-    <ConversationProvider>
-      <QuickActionProvider>
-        <DemoLayoutContent>{children}</DemoLayoutContent>
-      </QuickActionProvider>
-    </ConversationProvider>
+    <PersonaProvider initialPersonaId={personaId}>
+      <ConversationProvider>
+        <QuickActionProvider>
+          <DemoLayoutContent>{children}</DemoLayoutContent>
+        </QuickActionProvider>
+      </ConversationProvider>
+    </PersonaProvider>
   );
 }

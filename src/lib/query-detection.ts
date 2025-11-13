@@ -45,6 +45,10 @@ import {
   taskKanbanDemo,
   resourceCapacityDemo,
   blockerResolutionDemo,
+  // Analytics Widgets (Cyborg Priority 1)
+  analyticsDashboardDemo,
+  performanceTrendsDemo,
+  sentimentAnalysisDemo,
 } from '@/data/demo-widget-data';
 
 export interface QueryMatch {
@@ -136,12 +140,61 @@ function detectCLevelQuery(q: string): QueryMatch | null {
   }
 
   // PATTERN MATCHING (fallback for query variations)
-  // 1. Executive Summary
+
+  // CYBORG PRIORITY 1: Analytics Widgets (check BEFORE executive summary for specificity)
+
+  // Analytics Dashboard
+  if (
+    q.includes('analytics') ||
+    (q.includes('show') && q.includes('metrics')) ||
+    q.includes('ticket trends') ||
+    q.includes('show data') ||
+    q.includes('metrics overview')
+  ) {
+    return {
+      widgetType: 'analytics-dashboard',
+      widgetData: analyticsDashboardDemo,
+      responseText: "Executive analytics dashboard displays ticket volume trends and response time metrics:",
+    };
+  }
+
+  // Performance Trends
+  if (
+    (q.includes('performance') && q.includes('trend')) ||
+    q.includes('how are we doing') ||
+    q.includes('show trends') ||
+    q.includes('performance over time') ||
+    (q.includes('show') && q.includes('improvement'))
+  ) {
+    return {
+      widgetType: 'performance-trends',
+      widgetData: performanceTrendsDemo,
+      responseText: "Performance trend analysis reveals multi-metric patterns across response time, resolution, and satisfaction:",
+    };
+  }
+
+  // Sentiment Analysis
+  if (
+    q.includes('sentiment') ||
+    (q.includes('customer') && q.includes('feeling')) ||
+    q.includes('customer feedback') ||
+    q.includes('customer happiness') ||
+    (q.includes('how are') && q.includes('customers'))
+  ) {
+    return {
+      widgetType: 'sentiment-analysis',
+      widgetData: sentimentAnalysisDemo,
+      responseText: "Customer sentiment analysis shows overall satisfaction trends and recent feedback:",
+    };
+  }
+
+  // 1. Executive Summary (now fallback for generic dashboard/summary queries)
   if (
     q.includes('executive summary') ||
     q.includes('system health') ||
     (q.includes('good morning') && q.includes('summary')) ||
-    (q.includes('show me') && (q.includes('dashboard') || q.includes('summary')))
+    (q.includes('show me') && q.includes('dashboard') && !q.includes('analytics')) ||
+    (q.includes('show me') && q.includes('summary'))
   ) {
     return {
       widgetType: 'executive-summary',
@@ -160,7 +213,7 @@ function detectCLevelQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'customer-risk-list',
       widgetData: customerRiskListDemo,
-      responseText: "Here's the list of all high-risk customers requiring attention:",
+      responseText: "Strategic risk portfolio shows customers requiring executive attention:",  // WONDER WOMAN FIX: C-Level specific
     };
   }
 
@@ -210,7 +263,7 @@ function detectCLevelQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'ticket-list',
       widgetData: ticketListDemo,
-      responseText: "Here are the live tickets from Zoho Desk:",
+      responseText: "Executive ticket overview from Zoho Desk:",  // WONDER WOMAN FIX: C-Level specific
     };
   }
 
@@ -230,7 +283,7 @@ function detectCLevelQuery(q: string): QueryMatch | null {
       return {
         widgetType: 'live-ticket-detail',
         widgetData: { ticketNumber },
-        responseText: `Here are the complete details for ticket #${ticketNumber} from Zoho Desk:`,
+        responseText: `Ticket details with executive summary from Zoho Desk:`,  // WONDER WOMAN FIX: C-Level specific
       };
     }
 
@@ -787,7 +840,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'contract-performance-dashboard',
       widgetData: contractPerformanceDemo,
-      responseText: "Here's the performance overview for your active contracts:",
+      responseText: "Your contract portfolio shows performance metrics across all active contracts:",
     };
   }
 
@@ -800,7 +853,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'deliverable-review-list',
       widgetData: deliverableReviewListDemo,
-      responseText: "Here are the deliverables pending your review:",
+      responseText: "Deliverable review queue shows items requiring your attention and approval:",
     };
   }
 
@@ -813,7 +866,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'vendor-compliance-dashboard',
       widgetData: vendorComplianceDemo,
-      responseText: "Here's the compliance status for your vendors:",
+      responseText: "Vendor compliance monitoring indicates the following status across your portfolio:",
     };
   }
 
@@ -822,7 +875,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'contract-performance-dashboard',
       widgetData: contractPerformanceDemo,
-      responseText: "Here's the budget utilization for your contracts:",
+      responseText: "Budget tracking for CON-2025-042 shows utilization against allocated funds:",
     };
   }
 
@@ -831,7 +884,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'vendor-compliance-dashboard',
       widgetData: vendorComplianceDemo,
-      responseText: "Here's the SLA compliance status:",
+      responseText: "SLA compliance analysis reveals vendor performance against contractual obligations:",
     };
   }
 
@@ -840,7 +893,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'deliverable-review-list',
       widgetData: deliverableReviewListDemo,
-      responseText: "Here are the deliverables with quality concerns:",
+      responseText: "Quality assurance review identifies deliverables with technical concerns requiring resolution:",
     };
   }
 
@@ -848,7 +901,7 @@ function detectCORQuery(q: string): QueryMatch | null {
   return {
     widgetType: 'contract-performance-dashboard',
     widgetData: contractPerformanceDemo,
-    responseText: "Here's your contract performance dashboard:",
+    responseText: "Contract oversight dashboard displays performance tracking for your active portfolio:",
   };
 }
 
@@ -866,7 +919,7 @@ function detectProgramManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'program-health-dashboard',
       widgetData: programHealthDemo,
-      responseText: "Here's the overall program health status:",
+      responseText: "Program health assessment for eGrants Modernization indicates overall status:",
     };
   }
 
@@ -875,7 +928,7 @@ function detectProgramManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'program-health-dashboard',
       widgetData: programHealthDemo,
-      responseText: "Here's the status of program milestones:",
+      responseText: "Strategic milestone tracking shows progress across Phase 2 implementation:",
     };
   }
 
@@ -884,7 +937,7 @@ function detectProgramManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'program-health-dashboard',
       widgetData: programHealthDemo,
-      responseText: "Here are the top program risks requiring attention:",
+      responseText: "Cross-project risk analysis reveals critical items requiring executive attention:",
     };
   }
 
@@ -893,7 +946,7 @@ function detectProgramManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'program-health-dashboard',
       widgetData: programHealthDemo,
-      responseText: "Here's the schedule and budget variance analysis:",
+      responseText: "Schedule and budget variance analysis indicates deviation from baseline plan:",
     };
   }
 
@@ -902,7 +955,7 @@ function detectProgramManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'program-health-dashboard',
       widgetData: programHealthDemo,
-      responseText: "Here's the resource availability status:",
+      responseText: "Resource allocation across initiatives shows capacity and utilization:",
     };
   }
 
@@ -910,7 +963,7 @@ function detectProgramManagerQuery(q: string): QueryMatch | null {
   return {
     widgetType: 'program-health-dashboard',
     widgetData: programHealthDemo,
-    responseText: "Here's your program health dashboard:",
+    responseText: "Program portfolio dashboard displays strategic oversight for all initiatives:",
   };
 }
 
@@ -927,7 +980,7 @@ function detectStakeholderLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'stakeholder-engagement-dashboard',
       widgetData: stakeholderEngagementDemo,
-      responseText: "Here's the stakeholder engagement overview:",
+      responseText: "Stakeholder relationship tracking shows communication effectiveness with DNR leadership:",
     };
   }
 
@@ -939,7 +992,7 @@ function detectStakeholderLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'requirements-tracking-dashboard',
       widgetData: requirementsTrackingDemo,
-      responseText: "Here's the requirements tracking status:",
+      responseText: "Requirements validation indicates fulfillment status across all program objectives:",
     };
   }
 
@@ -951,7 +1004,7 @@ function detectStakeholderLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'change-request-dashboard',
       widgetData: changeRequestDemo,
-      responseText: "Here are the change requests requiring review:",
+      responseText: "Change request pipeline shows items requiring stakeholder review and approval:",
     };
   }
 
@@ -960,7 +1013,7 @@ function detectStakeholderLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'stakeholder-engagement-dashboard',
       widgetData: stakeholderEngagementDemo,
-      responseText: "Here are your upcoming stakeholder meetings:",
+      responseText: "Upcoming stakeholder coordination meetings with DNR program office:",
     };
   }
 
@@ -969,7 +1022,7 @@ function detectStakeholderLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'stakeholder-engagement-dashboard',
       widgetData: stakeholderEngagementDemo,
-      responseText: "Here are the pending stakeholder action items:",
+      responseText: "Pending action items from stakeholder meetings require follow-up and closure:",
     };
   }
 
@@ -978,7 +1031,7 @@ function detectStakeholderLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'requirements-tracking-dashboard',
       widgetData: requirementsTrackingDemo,
-      responseText: "Here's the requirements traceability analysis:",
+      responseText: "Requirements traceability matrix shows coverage from business needs to implementation:",
     };
   }
 
@@ -986,7 +1039,7 @@ function detectStakeholderLeadQuery(q: string): QueryMatch | null {
   return {
     widgetType: 'stakeholder-engagement-dashboard',
     widgetData: stakeholderEngagementDemo,
-    responseText: "Here's your stakeholder engagement dashboard:",
+    responseText: "Stakeholder management dashboard displays engagement status across all groups:",
   };
 }
 
@@ -1004,7 +1057,7 @@ function detectProjectManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'sprint-burndown-chart',
       widgetData: sprintBurndownDemo,
-      responseText: "Here's the current sprint burndown chart:",
+      responseText: "Sprint 24 velocity tracking shows current progress against commitment:",
     };
   }
 
@@ -1017,7 +1070,7 @@ function detectProjectManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'team-velocity-dashboard',
       widgetData: teamVelocityDemo,
-      responseText: "Here's the team velocity analysis:",
+      responseText: "Team capacity analysis indicates velocity trends across the last 6 sprints:",
     };
   }
 
@@ -1029,7 +1082,7 @@ function detectProjectManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'resource-capacity-dashboard',
       widgetData: resourceCapacityDemo,
-      responseText: "Here's the resource capacity overview:",
+      responseText: "Resource allocation for current sprint shows team availability and utilization:",
     };
   }
 
@@ -1038,7 +1091,7 @@ function detectProjectManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'team-velocity-dashboard',
       widgetData: teamVelocityDemo,
-      responseText: "Here's the team velocity data for sprint planning:",
+      responseText: "Sprint planning data shows historical velocity for capacity-based commitment:",
     };
   }
 
@@ -1047,7 +1100,7 @@ function detectProjectManagerQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'blocker-resolution-dashboard',
       widgetData: blockerResolutionDemo,
-      responseText: "Here are the current blockers requiring resolution:",
+      responseText: "Blocker resolution status requires immediate attention from scrum master:",
     };
   }
 
@@ -1055,7 +1108,7 @@ function detectProjectManagerQuery(q: string): QueryMatch | null {
   return {
     widgetType: 'sprint-burndown-chart',
     widgetData: sprintBurndownDemo,
-    responseText: "Here's your sprint dashboard:",
+    responseText: "Sprint dashboard shows current iteration progress and team velocity:",
   };
 }
 
@@ -1074,7 +1127,7 @@ function detectServiceTeamLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'code-quality-dashboard',
       widgetData: codeQualityDemo,
-      responseText: "Here's the code quality dashboard:",
+      responseText: "Code quality metrics show technical debt trends and test coverage status:",
     };
   }
 
@@ -1088,7 +1141,7 @@ function detectServiceTeamLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'deployment-pipeline-dashboard',
       widgetData: deploymentPipelineDemo,
-      responseText: "Here's the deployment pipeline status:",
+      responseText: "Deployment pipeline health indicates CI/CD success rates and build times:",
     };
   }
 
@@ -1100,7 +1153,7 @@ function detectServiceTeamLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'blocker-resolution-dashboard',
       widgetData: blockerResolutionDemo,
-      responseText: "Here's the blocker resolution dashboard:",
+      responseText: "Technical blocker resolution requires engineering team intervention:",
     };
   }
 
@@ -1109,16 +1162,16 @@ function detectServiceTeamLeadQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'resource-capacity-dashboard',
       widgetData: resourceCapacityDemo,
-      responseText: "Here's the team workload overview:",
+      responseText: "Team performance tracking shows developer workload and sprint capacity:",
     };
   }
 
-  // Performance metrics
-  if (q.includes('performance') && (q.includes('metric') || q.includes('kpi') || q.includes('dora'))) {
+  // Performance metrics (DORA)
+  if (q.includes('dora') || (q.includes('performance') && (q.includes('metric') || q.includes('kpi')))) {
     return {
       widgetType: 'deployment-pipeline-dashboard',
       widgetData: deploymentPipelineDemo,
-      responseText: "Here are the deployment performance metrics:",
+      responseText: "DORA metrics analysis reveals deployment frequency and lead time performance:",
     };
   }
 
@@ -1126,7 +1179,7 @@ function detectServiceTeamLeadQuery(q: string): QueryMatch | null {
   return {
     widgetType: 'code-quality-dashboard',
     widgetData: codeQualityDemo,
-    responseText: "Here's your code quality dashboard:",
+    responseText: "Code quality analysis dashboard displays technical health and engineering excellence:",
   };
 }
 
@@ -1146,7 +1199,7 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'task-kanban-board',
       widgetData: taskKanbanDemo,
-      responseText: "Here are your assigned tasks:",
+      responseText: "Your task board shows current sprint assignments with priority and status:",
     };
   }
 
@@ -1155,7 +1208,7 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'task-kanban-board',
       widgetData: taskKanbanDemo,
-      responseText: "Here are the tasks for the current sprint:",
+      responseText: "Sprint assignments require completion before next standup meeting:",
     };
   }
 
@@ -1164,7 +1217,7 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'blocker-resolution-dashboard',
       widgetData: blockerResolutionDemo,
-      responseText: "Here are the current blockers:",
+      responseText: "Blocker status for your work requires team lead escalation:",
     };
   }
 
@@ -1173,7 +1226,7 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'code-quality-dashboard',
       widgetData: codeQualityDemo,
-      responseText: "Here are the code quality issues:",
+      responseText: "Code quality issues in your PRs need attention before merge:",
     };
   }
 
@@ -1187,7 +1240,7 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     return {
       widgetType: 'knowledge-article',
       widgetData: knowledgeArticleDemo,
-      responseText: "Here's the relevant knowledge base article:",
+      responseText: "Knowledge base search found technical documentation for your query:",
     };
   }
 
@@ -1195,6 +1248,6 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
   return {
     widgetType: 'task-kanban-board',
     widgetData: taskKanbanDemo,
-    responseText: "Here's your task board:",
+    responseText: "Developer task board displays your current work items and sprint progress:",
   };
 }
