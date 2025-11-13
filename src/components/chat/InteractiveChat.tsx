@@ -312,11 +312,12 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
   const handleAPIStreaming = async (query: string, match?: QueryMatch) => {
     try {
       // Show initial thinking state
-      setThinkingState({
-        isVisible: true,
-        state: 'analyzing',
-        text: 'Analyzing your question...',
-      });
+      // TODO: Re-enable thinking state when implemented
+      // setThinkingState({
+      //   isVisible: true,
+      //   state: 'analyzing',
+      //   text: 'Analyzing your question...',
+      // });
 
       const response = await fetch('/api/chat', {
         method: 'POST',
