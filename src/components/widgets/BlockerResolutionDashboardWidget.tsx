@@ -128,6 +128,18 @@ export function BlockerResolutionDashboardWidget({ data }: { data: BlockerResolu
           <div className="rounded-lg border border-border bg-card/50 p-4">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={data.resolutionTrend}>
+                <defs>
+                  <linearGradient id="openedGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#ef4444" stopOpacity={0.9} />
+                    <stop offset="50%" stopColor="#dc2626" stopOpacity={0.7} />
+                    <stop offset="100%" stopColor="#b91c1c" stopOpacity={0.5} />
+                  </linearGradient>
+                  <linearGradient id="resolvedGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#22c55e" stopOpacity={0.9} />
+                    <stop offset="50%" stopColor="#16a34a" stopOpacity={0.7} />
+                    <stop offset="100%" stopColor="#15803d" stopOpacity={0.5} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis
                   dataKey="week"
@@ -146,8 +158,8 @@ export function BlockerResolutionDashboardWidget({ data }: { data: BlockerResolu
                   }}
                 />
                 <Legend />
-                <Bar dataKey="opened" fill="hsl(var(--destructive))" name="Opened" />
-                <Bar dataKey="resolved" fill="hsl(var(--success))" name="Resolved" />
+                <Bar dataKey="opened" fill="url(#openedGradient)" name="Opened" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="resolved" fill="url(#resolvedGradient)" name="Resolved" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

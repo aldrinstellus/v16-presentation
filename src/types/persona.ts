@@ -1,9 +1,9 @@
 import { LucideIcon } from 'lucide-react';
 
-// Mode type for Government vs Project personas
-export type ModeType = 'government' | 'project';
+// Mode type for Government vs Project vs ATC personas
+export type ModeType = 'government' | 'project' | 'atc';
 
-// Updated persona types to support both modes
+// Updated persona types to support all modes
 export type PersonaType =
   // Government Mode (3 personas)
   | 'cor'                    // Contracting Officer's Representative
@@ -12,7 +12,12 @@ export type PersonaType =
   // Project Mode (3 personas)
   | 'project-manager'        // Project Manager
   | 'service-team-lead'      // Service team lead
-  | 'service-team-member';   // Service team member
+  | 'service-team-member'    // Service team member
+  // ATC Mode (4 personas - from v14/v15)
+  | 'atc-executive'          // C-Level Executive
+  | 'atc-manager'            // CS Manager
+  | 'atc-support'            // Support Agent
+  | 'atc-csm';               // Customer Success Manager
 
 export interface PersonaTheme {
   primary: string; // HSL values without hsl()

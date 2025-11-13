@@ -7,8 +7,16 @@ import {
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import type { TeamVelocityData } from '@/types/widget';
+import { pmTeamVelocityData } from '@/data/persona-data/project-manager-data';
+import { usePersona } from '@/hooks/use-persona';
+import { CustomTooltip } from './CustomTooltip';
 
-export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }) {
+export function TeamVelocityDashboardWidget({ data: providedData }: { data?: TeamVelocityData }) {
+  const { currentPersona } = usePersona();
+
+  // Use persona-specific data for Project Manager persona, fallback to provided data
+  const data = currentPersona.id === 'project-manager' ? pmTeamVelocityData : providedData;
+
   // Defensive check
   if (!data || typeof data !== 'object') {
     return (
@@ -98,13 +106,18 @@ export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }
             <ResponsiveContainer width="100%" height={270}>
               <BarChart data={data.velocityTrend} barGap={8}>
                 <defs>
+                  {/* Enhanced 4-stop gradients for richer appearance */}
                   <linearGradient id="colorPlanned" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1}/>
-                    <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.8}/>
+                    <stop offset="0%" stopColor="#a78bfa" stopOpacity={1}/>
+                    <stop offset="30%" stopColor="#8b5cf6" stopOpacity={0.95}/>
+                    <stop offset="70%" stopColor="#7c3aed" stopOpacity={0.9}/>
+                    <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.85}/>
                   </linearGradient>
                   <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={1}/>
-                    <stop offset="100%" stopColor="#2563eb" stopOpacity={0.8}/>
+                    <stop offset="0%" stopColor="#60a5fa" stopOpacity={1}/>
+                    <stop offset="30%" stopColor="#3b82f6" stopOpacity={0.95}/>
+                    <stop offset="70%" stopColor="#2563eb" stopOpacity={0.9}/>
+                    <stop offset="100%" stopColor="#1d4ed8" stopOpacity={0.85}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
@@ -118,12 +131,7 @@ export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }
                   tick={{ fill: 'hsl(var(--muted-foreground))' }}
                 />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '6px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                  }}
+                  content={<CustomTooltip formatter={(value) => `${value} pts`} />}
                   cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
                 />
                 <Legend />

@@ -8,8 +8,16 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from 'recharts';
 import { motion } from 'framer-motion';
 import type { SprintBurndownData } from '@/types/widget';
+import { pmSprintBurndownData } from '@/data/persona-data/project-manager-data';
+import { usePersona } from '@/hooks/use-persona';
+import { CustomTooltip } from './CustomTooltip';
 
-export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }) {
+export function SprintBurndownChartWidget({ data: providedData }: { data?: SprintBurndownData }) {
+  const { currentPersona } = usePersona();
+
+  // Use persona-specific data for Project Manager persona, fallback to provided data
+  const data = currentPersona.id === 'project-manager' ? pmSprintBurndownData : providedData;
+
   // Defensive check
   if (!data || typeof data !== 'object') {
     return (
@@ -119,13 +127,18 @@ export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }
             <ResponsiveContainer width="100%" height={320}>
               <AreaChart data={data.burndown}>
                 <defs>
+                  {/* Enhanced 4-stop gradients for richer appearance */}
                   <linearGradient id="colorIdeal" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#94a3b8" stopOpacity={0.3}/>
-                    <stop offset="100%" stopColor="#94a3b8" stopOpacity={0.05}/>
+                    <stop offset="0%" stopColor="#cbd5e1" stopOpacity={0.4}/>
+                    <stop offset="30%" stopColor="#94a3b8" stopOpacity={0.3}/>
+                    <stop offset="70%" stopColor="#64748b" stopOpacity={0.15}/>
+                    <stop offset="100%" stopColor="#475569" stopOpacity={0.05}/>
                   </linearGradient>
                   <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#f97316" stopOpacity={0.5}/>
-                    <stop offset="100%" stopColor="#f97316" stopOpacity={0.1}/>
+                    <stop offset="0%" stopColor="#fb923c" stopOpacity={0.6}/>
+                    <stop offset="30%" stopColor="#f97316" stopOpacity={0.5}/>
+                    <stop offset="70%" stopColor="#ea580c" stopOpacity={0.3}/>
+                    <stop offset="100%" stopColor="#c2410c" stopOpacity={0.1}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
@@ -140,12 +153,7 @@ export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }
                   label={{ value: 'Story Points', angle: -90, position: 'insideLeft', fill: 'hsl(var(--muted-foreground))' }}
                 />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '6px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                  }}
+                  content={<CustomTooltip formatter={(value) => `${value} pts`} />}
                   cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 2, strokeDasharray: '5 5' }}
                 />
                 <Legend />
@@ -187,7 +195,9 @@ export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }
             {data.risks.map((risk, idx) => (
               <div key={idx} className="rounded-lg border border-chart-4/30 bg-chart-4/5 p-3 flex items-start gap-2">
                 <AlertTriangle className="h-4 w-4 text-chart-4 mt-0.5" />
-                <span className="text-sm text-foreground">{risk}</span>
+                <span className="text-sm text-foreground">
+                  {typeof risk === 'string' ? risk : risk.description || JSON.stringify(risk)}
+                </span>
               </div>
             ))}
           </div>

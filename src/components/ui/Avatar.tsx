@@ -17,7 +17,7 @@ function detectGender(name: string): 'male' | 'female' {
 
   // V17 Mode Switcher personas
   const maleNames = ['david', 'marcus', 'michael', 'christopher'];
-  const femaleNames = ['sarah', 'jennifer', 'jessica', 'emily'];
+  const femaleNames = ['sarah', 'jennifer', 'jessica', 'emily', 'jordan'];
 
   if (maleNames.includes(firstName)) return 'male';
   if (femaleNames.includes(firstName)) return 'female';

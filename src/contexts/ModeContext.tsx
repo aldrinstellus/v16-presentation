@@ -18,7 +18,7 @@ export function ModeProvider({ children }: { children: ReactNode }) {
   // Load from localStorage on mount
   useEffect(() => {
     const savedMode = localStorage.getItem(MODE_STORAGE_KEY) as ModeType | null;
-    if (savedMode && (savedMode === 'government' || savedMode === 'project')) {
+    if (savedMode && (savedMode === 'government' || savedMode === 'project' || savedMode === 'atc')) {
       setCurrentMode(savedMode);
     }
   }, []);

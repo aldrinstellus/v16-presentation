@@ -12,6 +12,8 @@ import { Avatar } from '@/components/ui/Avatar';
 import type { Persona } from '@/types/persona';
 import { ClosedCaptions } from '@/components/accessibility/ClosedCaptions';
 import { useClosedCaptions } from '@/hooks/accessibility/useClosedCaptions';
+import { ClientOnly } from '@/components/ui/ClientOnly';
+import { ThinkingBlock } from '@/components/chat/ThinkingBlock';
 
 interface InteractiveChatProps {
   persona?: Persona;
@@ -32,6 +34,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
   const [isTyping, setIsTyping] = useState(false); // Keep for backward compatibility
   const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
   const [displayedText, setDisplayedText] = useState<Record<string, string>>({});
+  const [showThinking, setShowThinking] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
@@ -105,9 +108,15 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
     if (match) {
       await handleMatch(match, query);
     } else {
+      // No match found - show thinking animation then helpful response
 
-      // No match found - helpful response
-      await simulateAIResponse('I can help with that.');
+      // Show thinking indicator for 2 seconds
+      setShowThinking(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Hide thinking block
+      setShowThinking(false);
+
       const fallbackMessage: Message = {
         id: `ai-${Date.now()}`,
         type: 'ai',
@@ -251,41 +260,176 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
 
   // Helper to handle matched responses
   const handleMatch = async (match: QueryMatch, query: string) => {
-    // Use responseText from QueryMatch interface
-    const responseText = match.responseText;
+    // Check if DEMO_MODE is enabled (from environment variable)
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
-    // Phase 1 & 2: Thinking and Composing animations
-    await simulateAIResponse(responseText);
+    if (isDemoMode) {
+      // Show thinking indicator for 2 seconds
+      setShowThinking(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Create message with isTyping flag
-    const messageId = `ai-${Date.now()}`;
-    const aiMessage: Message = {
-      id: messageId,
-      type: 'ai',
-      content: responseText,
-      timestamp: new Date(),
-      userQuery: query,
-      isTyping: true,
-    };
-    setMessages((prev) => [...prev, aiMessage]);
+      // Hide thinking block
+      setShowThinking(false);
 
-    // Phase 3: Typewriter effect - reveal text word by word
-    await typewriterEffect(responseText, messageId);
-
-    // Show widget after typing completes
-    if (match.widgetType && match.widgetData) {
-      console.log('[InteractiveChat] Widget detected:', match.widgetType);
-      console.log('[InteractiveChat] Widget data:', match.widgetData);
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      const widgetMessage: Message = {
-        id: `widget-${Date.now()}`,
-        type: 'widget',
-        widgetType: match.widgetType,
-        widgetData: match.widgetData,
+      // Create AI message with response text
+      const responseText = match.responseText;
+      const messageId = `ai-${Date.now()}`;
+      const aiMessage: Message = {
+        id: messageId,
+        type: 'ai',
+        content: responseText,
         timestamp: new Date(),
+        userQuery: query,
+        isTyping: true,
       };
-      console.log('[InteractiveChat] Adding widget message:', widgetMessage);
-      setMessages((prev) => [...prev, widgetMessage]);
+      setMessages((prev) => [...prev, aiMessage]);
+
+      // Typewriter effect - reveal text word by word
+      await typewriterEffect(responseText, messageId);
+
+      // Show widget after typing completes
+      if (match.widgetType && match.widgetData) {
+        console.log('[InteractiveChat] Widget detected:', match.widgetType);
+        console.log('[InteractiveChat] Widget data:', match.widgetData);
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        const widgetMessage: Message = {
+          id: `widget-${Date.now()}`,
+          type: 'widget',
+          widgetType: match.widgetType,
+          widgetData: match.widgetData,
+          timestamp: new Date(),
+        };
+        console.log('[InteractiveChat] Adding widget message:', widgetMessage);
+        setMessages((prev) => [...prev, widgetMessage]);
+      }
+    } else {
+      // Use real API with SSE streaming and thinking states
+      await handleAPIStreaming(query, match);
+    }
+  };
+
+  // Handle real API streaming with thinking states
+  const handleAPIStreaming = async (query: string, match?: QueryMatch) => {
+    try {
+      // Show initial thinking state
+      setThinkingState({
+        isVisible: true,
+        state: 'analyzing',
+        text: 'Analyzing your question...',
+      });
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: query }),
+      });
+
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      let fullContent = '';
+      const messageId = `ai-${Date.now()}`;
+      let hasCreatedMessage = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const dataStr = line.slice(6);
+
+            if (dataStr === '[DONE]') {
+              // Hide thinking block
+              setShowThinking(false);
+              continue;
+            }
+
+            try {
+              const data = JSON.parse(dataStr);
+
+              // Handle thinking events
+              if (data.type === 'thinking') {
+                setShowThinking(true);
+              }
+
+              // Handle content streaming
+              if (data.type === 'text') {
+                fullContent = data.content;
+
+                // Hide thinking block when content starts
+                setShowThinking(false);
+
+                if (!hasCreatedMessage) {
+                  // Create the AI message
+                  const aiMessage: Message = {
+                    id: messageId,
+                    type: 'ai',
+                    content: fullContent,
+                    timestamp: new Date(),
+                    userQuery: query,
+                    isTyping: false,
+                  };
+                  setMessages((prev) => [...prev, aiMessage]);
+                  hasCreatedMessage = true;
+                } else {
+                  // Update existing message
+                  setMessages(prev =>
+                    prev.map(msg =>
+                      msg.id === messageId ? { ...msg, content: fullContent } : msg
+                    )
+                  );
+                }
+
+                // Update closed captions
+                updateCaption(fullContent);
+              }
+            } catch (e) {
+              console.error('Failed to parse SSE data:', e);
+            }
+          }
+        }
+      }
+
+      // Clear caption after streaming completes
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      clearCaption();
+
+      // Show widget if detected
+      if (match?.widgetType && match?.widgetData) {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        const widgetMessage: Message = {
+          id: `widget-${Date.now()}`,
+          type: 'widget',
+          widgetType: match.widgetType,
+          widgetData: match.widgetData,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, widgetMessage]);
+      }
+    } catch (error) {
+      console.error('API streaming error:', error);
+      setShowThinking(false);
+
+      const errorMessage: Message = {
+        id: `ai-${Date.now()}`,
+        type: 'ai',
+        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        timestamp: new Date(),
+        userQuery: query,
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     }
   };
 
@@ -322,20 +466,21 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
 
       {/* Messages Container */}
       <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-6 py-6 pb-40">
-        <div className="pb-8">
-          {messages.length === 0 && !isThinking && !isComposing && (
-            <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center max-w-3xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-3">
-                AI-enhanced customer support services
-              </h1>
-              <p className="text-muted-foreground text-lg mb-8 max-w-md">
-                Saving costs and improving performance
-              </p>
-            </div>
-          )}
+        <ClientOnly fallback={<div className="pb-8"><div className="space-y-6" /></div>}>
+          <div className="pb-8">
+            {messages.length === 0 && !isThinking && !isComposing && (
+              <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center max-w-3xl mx-auto">
+                <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-3">
+                  AI-enhanced customer support services
+                </h1>
+                <p className="text-muted-foreground text-lg mb-8 max-w-md">
+                  Saving costs and improving performance
+                </p>
+              </div>
+            )}
 
-          {/* Messages */}
-          <div className="space-y-6">
+            {/* Messages */}
+            <div className="space-y-6">
             {messages.map((message) => (
               <div key={message.id} className={message.type !== 'widget' ? 'max-w-3xl mx-auto' : ''}>
                 {message.type === 'user' && (
@@ -471,8 +616,18 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
               </div>
             ))}
 
-            {/* Phase 1: Thinking Indicator */}
-            {isThinking && (
+            {/* Simple Thinking Block */}
+            {showThinking && (
+              <div className="flex gap-3 max-w-3xl mx-auto">
+                <div className="w-8 h-8 flex-shrink-0" />
+                <div className="flex-1">
+                  <ThinkingBlock isVisible={showThinking} />
+                </div>
+              </div>
+            )}
+
+            {/* Legacy Phase 1: Thinking Indicator (kept for backward compatibility) */}
+            {isThinking && !showThinking && (
               <div className="flex gap-3">
                 <div className="w-8 h-8 flex-shrink-0" />
                 <div className="flex items-center gap-2 px-4 py-3">
@@ -484,8 +639,8 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
               </div>
             )}
 
-            {/* Phase 2: Composing Indicator */}
-            {isComposing && (
+            {/* Legacy Phase 2: Composing Indicator (kept for backward compatibility) */}
+            {isComposing && !showThinking && (
               <div className="flex gap-3">
                 <div className="w-8 h-8 flex-shrink-0" />
                 <div className="bg-gradient-to-br from-primary/8 via-accent/15 to-chart-3/10 rounded-2xl border border-primary/25 shadow-md overflow-hidden animate-in fade-in duration-300">
@@ -503,7 +658,8 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
           </div>
 
           <div ref={messagesEndRef} />
-        </div>
+          </div>
+        </ClientOnly>
       </div>
 
       {/* Input Area - Fixed at bottom, centered */}

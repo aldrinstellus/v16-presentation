@@ -10,8 +10,16 @@ import {
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import type { ContractPerformanceData } from '@/types/widget';
+import { corContractPerformanceData } from '@/data/persona-data/cor-data';
+import { usePersona } from '@/hooks/use-persona';
+import { CustomTooltip } from './CustomTooltip';
 
-export function ContractPerformanceDashboardWidget({ data }: { data: ContractPerformanceData }) {
+export function ContractPerformanceDashboardWidget({ data: providedData }: { data?: ContractPerformanceData }) {
+  const { currentPersona } = usePersona();
+
+  // Use persona-specific data for COR persona, fallback to provided data
+  const data = currentPersona.id === 'cor' ? corContractPerformanceData : providedData;
+
   // Defensive check
   if (!data || typeof data !== 'object') {
     return (
@@ -106,17 +114,24 @@ export function ContractPerformanceDashboardWidget({ data }: { data: ContractPer
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={performanceData}>
               <defs>
+                {/* Enhanced 4-stop gradients for richer appearance */}
                 <linearGradient id="colorSLA" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="#059669" stopOpacity={0.8}/>
+                  <stop offset="0%" stopColor="#34d399" stopOpacity={1}/>
+                  <stop offset="30%" stopColor="#10b981" stopOpacity={0.95}/>
+                  <stop offset="70%" stopColor="#059669" stopOpacity={0.9}/>
+                  <stop offset="100%" stopColor="#047857" stopOpacity={0.85}/>
                 </linearGradient>
                 <linearGradient id="colorBudget" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="#2563eb" stopOpacity={0.8}/>
+                  <stop offset="0%" stopColor="#60a5fa" stopOpacity={1}/>
+                  <stop offset="30%" stopColor="#3b82f6" stopOpacity={0.95}/>
+                  <stop offset="70%" stopColor="#2563eb" stopOpacity={0.9}/>
+                  <stop offset="100%" stopColor="#1d4ed8" stopOpacity={0.85}/>
                 </linearGradient>
                 <linearGradient id="colorDeliverables" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1}/>
-                  <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.8}/>
+                  <stop offset="0%" stopColor="#a78bfa" stopOpacity={1}/>
+                  <stop offset="30%" stopColor="#8b5cf6" stopOpacity={0.95}/>
+                  <stop offset="70%" stopColor="#7c3aed" stopOpacity={0.9}/>
+                  <stop offset="100%" stopColor="#6d28d9" stopOpacity={0.85}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
@@ -129,13 +144,7 @@ export function ContractPerformanceDashboardWidget({ data }: { data: ContractPer
                 tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
               />
               <Tooltip
-                contentStyle={{
-                  background: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px',
-                  color: 'hsl(var(--foreground))',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                }}
+                content={<CustomTooltip formatter={(value) => `${value}%`} />}
                 cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
               />
               <Bar dataKey="value" radius={[8, 8, 0, 0]} animationDuration={1000}>

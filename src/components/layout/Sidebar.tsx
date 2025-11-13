@@ -190,7 +190,7 @@ export function Sidebar({
             className="w-full flex items-center gap-2.5 px-2.5 py-2 bg-primary/10 rounded-lg hover:bg-primary/15 transition-colors"
           >
             {/* Avatar */}
-            <Avatar name={currentPersona.name} id={currentPersona.id} size={28} />
+            <Avatar key={currentPersona.id} name={currentPersona.name} id={currentPersona.id} size={28} />
 
             {/* User Info + Badge */}
             <div className="flex-1 min-w-0 flex items-center gap-2">

@@ -3702,11 +3702,44 @@ export async function POST(req: NextRequest) {
     const stream = new ReadableStream({
       async start(controller) {
         try {
+          // Phase 1: Send "analyzing" thinking state
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({
+                type: 'thinking',
+                state: 'analyzing',
+                text: 'Analyzing your question and understanding what you need...',
+              })}\n\n`
+            )
+          );
+          await new Promise(resolve => setTimeout(resolve, 800));
+
+          // Phase 2: Send "processing" thinking state
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({
+                type: 'thinking',
+                state: 'processing',
+                text: 'Processing your request and gathering relevant information...',
+              })}\n\n`
+            )
+          );
+          await new Promise(resolve => setTimeout(resolve, 1200));
+
+          // Phase 3: Send "synthesizing" thinking state
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({
+                type: 'thinking',
+                state: 'synthesizing',
+                text: 'Synthesizing the response and preparing the answer...',
+              })}\n\n`
+            )
+          );
+          await new Promise(resolve => setTimeout(resolve, 800));
+
           // DEMO MODE: Return streaming mock response with typewriter effect
           if (DEMO_MODE) {
-            // Add initial "thinking" delay for realistic response timing
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
             const demoResponse = getDemoResponse(message);
 
             // Check if response contains special markers (DASHBOARD_DATA or EXECUTION_RESULT)

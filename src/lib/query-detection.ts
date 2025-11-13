@@ -59,6 +59,8 @@ export interface QueryMatch {
 
 export type PersonaId =
   | 'c-level' | 'cs-manager' | 'support-agent' | 'csm'
+  // V17 ATC Mode
+  | 'atc-executive' | 'atc-manager' | 'atc-support' | 'atc-csm'
   // V17 Government Mode
   | 'cor' | 'program-manager' | 'stakeholder-lead'
   // V17 Project Mode
@@ -83,6 +85,15 @@ export function detectWidgetQuery(
     case 'support-agent':
       return detectAgentQuery(q);
     case 'csm':
+      return detectCSMQuery(q);
+    // V17 ATC Mode Personas (route to V14/V15 detection logic)
+    case 'atc-executive':
+      return detectCLevelQuery(q);
+    case 'atc-manager':
+      return detectManagerQuery(q);
+    case 'atc-support':
+      return detectAgentQuery(q);
+    case 'atc-csm':
       return detectCSMQuery(q);
     // V17 Government Mode Personas
     case 'cor':
@@ -295,7 +306,110 @@ function detectCLevelQuery(q: string): QueryMatch | null {
     };
   }
 
-  // 6. Meeting Scheduler
+  // 6. Revenue Impact Analysis (NEW)
+  if (
+    (q.includes('revenue') && q.includes('impact')) ||
+    (q.includes('revenue') && q.includes('analysis'))
+  ) {
+    return {
+      widgetType: 'analytics-dashboard',
+      widgetData: analyticsDashboardDemo,
+      responseText: "Revenue impact analysis from support operations shows financial correlations:",
+    };
+  }
+
+  // 7. Customer Satisfaction Scores (NEW)
+  if (
+    (q.includes('satisfaction') && q.includes('score')) ||
+    (q.includes('customer satisfaction') && q.includes('metric')) ||
+    q.includes('show me customer satisfaction')
+  ) {
+    return {
+      widgetType: 'sentiment-analysis',
+      widgetData: sentimentAnalysisDemo,
+      responseText: "Customer satisfaction score analysis reveals overall sentiment trends:",
+    };
+  }
+
+  // 8. Escalation Trends (NEW)
+  if (
+    (q.includes('escalation') && q.includes('trend')) ||
+    (q.includes('escalation') && q.includes('over')) ||
+    q.includes('escalation trends')
+  ) {
+    return {
+      widgetType: 'analytics-dashboard',
+      widgetData: analyticsDashboardDemo,
+      responseText: "Escalation trend analysis shows patterns over the last 3 months:",
+    };
+  }
+
+  // 9. Customer Retention Metrics (NEW)
+  if (
+    (q.includes('retention') && q.includes('metric')) ||
+    (q.includes('customer retention') && q.includes('forecast')) ||
+    q.includes('retention metrics')
+  ) {
+    return {
+      widgetType: 'customer-risk-list',
+      widgetData: customerRiskListDemo,
+      responseText: "Customer retention metrics and forecasts for strategic planning:",
+    };
+  }
+
+  // 10. Resource Allocation Efficiency (NEW)
+  if (
+    (q.includes('resource') && q.includes('allocation')) ||
+    (q.includes('resource') && q.includes('efficiency')) ||
+    q.includes('resource allocation efficiency')
+  ) {
+    return {
+      widgetType: 'performance-trends',
+      widgetData: performanceTrendsDemo,
+      responseText: "Resource allocation efficiency analysis across support operations:",
+    };
+  }
+
+  // 11. Team Capacity vs Demand (NEW)
+  if (
+    (q.includes('capacity') && q.includes('demand')) ||
+    (q.includes('team capacity') && q.includes('projection')) ||
+    q.includes('capacity vs demand')
+  ) {
+    return {
+      widgetType: 'performance-trends',
+      widgetData: performanceTrendsDemo,
+      responseText: "Team capacity versus demand projections for strategic resource planning:",
+    };
+  }
+
+  // 12. Integration ROI Analysis (NEW)
+  if (
+    (q.includes('integration') && q.includes('roi')) ||
+    (q.includes('integration') && q.includes('analysis')) ||
+    q.includes('integration roi')
+  ) {
+    return {
+      widgetType: 'analytics-dashboard',
+      widgetData: analyticsDashboardDemo,
+      responseText: "Integration ROI analysis shows return on technology investments:",
+    };
+  }
+
+  // 13. Competitive Positioning (NEW)
+  if (
+    (q.includes('competitive') && q.includes('position')) ||
+    (q.includes('competitive') && q.includes('feedback')) ||
+    q.includes('competitive positioning')
+  ) {
+    return {
+      widgetType: 'sentiment-analysis',
+      widgetData: sentimentAnalysisDemo,
+      responseText: "Competitive positioning analysis derived from customer feedback:",
+    };
+  }
+
+  // 14. Meeting Scheduler
   if (
     q.includes('schedule') ||
     q.includes('book') ||
@@ -459,6 +573,58 @@ function detectManagerQuery(q: string): QueryMatch | null {
       widgetType: 'message-composer',
       widgetData: messageComposerDemo,
       responseText: "I've drafted a message for you to review:",
+    };
+  }
+
+  // 7. Customers with Multiple Open Tickets (NEW)
+  if (
+    (q.includes('multiple') && q.includes('open') && q.includes('ticket')) ||
+    (q.includes('customers with') && q.includes('multiple tickets')) ||
+    q.includes('customers with multiple open tickets')
+  ) {
+    return {
+      widgetType: 'customer-risk-list',
+      widgetData: customerRiskListDemo,
+      responseText: "Customers with multiple open tickets requiring attention:",
+    };
+  }
+
+  // 8. Accounts with Declining Satisfaction (NEW)
+  if (
+    (q.includes('declining') && q.includes('satisfaction')) ||
+    (q.includes('accounts with declining') && q.includes('score')) ||
+    q.includes('declining satisfaction scores')
+  ) {
+    return {
+      widgetType: 'customer-risk-list',
+      widgetData: customerRiskListDemo,
+      responseText: "Accounts with declining satisfaction scores require intervention:",
+    };
+  }
+
+  // 9. Team Capacity Planning (NEW)
+  if (
+    (q.includes('capacity') && q.includes('planning')) ||
+    (q.includes('team capacity') && q.includes('Q1')) ||
+    q.includes('capacity planning')
+  ) {
+    return {
+      widgetType: 'team-workload-dashboard',
+      widgetData: teamWorkloadDashboardDemo,
+      responseText: "Team capacity planning analysis for Q1 2026 resource allocation:",
+    };
+  }
+
+  // 10. Escalation Trends & Root Cause Analysis (NEW)
+  if (
+    (q.includes('escalation') && q.includes('trend') && q.includes('root cause')) ||
+    (q.includes('escalation trends') && q.includes('analysis')) ||
+    q.includes('escalation trends and root cause')
+  ) {
+    return {
+      widgetType: 'analytics-dashboard',
+      widgetData: analyticsDashboardDemo,
+      responseText: "Escalation trend analysis with root cause identification:",
     };
   }
 
@@ -743,6 +909,45 @@ function detectAgentQuery(q: string): QueryMatch | null {
     };
   }
 
+  // 10. AI Resolution Tracking (NEW)
+  if (
+    (q.includes('how many') && q.includes('ai') && q.includes('resolve')) ||
+    (q.includes('ai') && q.includes('resolved')) ||
+    q.includes('ai resolve for me')
+  ) {
+    return {
+      widgetType: 'agent-dashboard',
+      widgetData: agentDashboardDemo,
+      responseText: "AI automation analytics show resolution statistics for your workload:",
+    };
+  }
+
+  // 11. Conversation History (NEW)
+  if (
+    (q.includes('conversation') && q.includes('history')) ||
+    (q.includes('show me conversation') && q.includes('with')) ||
+    q.includes('conversation history with')
+  ) {
+    return {
+      widgetType: 'ticket-list',
+      widgetData: ticketListDemo,
+      responseText: "Customer conversation history and interaction timeline:",
+    };
+  }
+
+  // 12. Jira Ticket Linking (NEW)
+  if (
+    (q.includes('link') && q.includes('ticket') && q.includes('jira')) ||
+    (q.includes('link') && q.includes('jira') && q.includes('issue')) ||
+    q.includes('link ticket to jira')
+  ) {
+    return {
+      widgetType: 'ticket-detail',
+      widgetData: ticketDetailDemo,
+      responseText: "Jira integration interface for linking support tickets to engineering issues:",
+    };
+  }
+
   return null;
 }
 
@@ -751,78 +956,250 @@ function detectAgentQuery(q: string): QueryMatch | null {
 // ============================================================================
 
 function detectCSMQuery(q: string): QueryMatch | null {
-  // Client Health & Adoption
-  if (q.includes('health score') || q.includes('client health')) {
-    return {
-      widgetType: 'client-health-dashboard',
-      widgetData: null,
-      responseText: "Here are the health scores for your assigned clients:",
-    };
-  }
+  // PRIORITY 1: Client Health & Risk (Most Specific First)
 
-  if (q.includes('product adoption') || q.includes('feature usage')) {
+  // Declining Product Adoption
+  if (
+    (q.includes('declining') && q.includes('adoption')) ||
+    (q.includes('declining') && q.includes('product')) ||
+    q.includes('product adoption') && q.includes('declining')
+  ) {
     return {
       widgetType: 'product-adoption-metrics',
       widgetData: null,
-      responseText: "Here's the product adoption analysis across your clients:",
+      responseText: "Client product adoption analysis shows declining engagement that requires attention:",
     };
   }
 
-  if (q.includes('churn') && q.includes('risk')) {
+  // Churn Risk (Specific Patterns)
+  if (
+    (q.includes('churn') && (q.includes('risk') || q.includes('quarter'))) ||
+    (q.includes('at risk') && q.includes('churn')) ||
+    q.includes('risk of churn')
+  ) {
     return {
       widgetType: 'churn-risk-analysis',
       widgetData: null,
-      responseText: "These clients are at risk of churning this quarter:",
+      responseText: "Client retention risk assessment identifies accounts at risk of churning:",
     };
   }
 
-  // Renewals & Revenue
+  // Health Scores (General)
+  if (
+    q.includes('health score') ||
+    q.includes('client health') ||
+    (q.includes('show') && q.includes('health') && q.includes('client'))
+  ) {
+    return {
+      widgetType: 'client-health-dashboard',
+      widgetData: null,
+      responseText: "Client health scores for your assigned portfolio:",
+    };
+  }
+
+  // Product Adoption (General)
+  if (
+    q.includes('product adoption') ||
+    q.includes('feature usage') ||
+    (q.includes('adoption') && q.includes('metric'))
+  ) {
+    return {
+      widgetType: 'product-adoption-metrics',
+      widgetData: null,
+      responseText: "Product adoption analysis across your client base:",
+    };
+  }
+
+  // PRIORITY 2: Engagement & Trends
+
+  // Client Engagement Trends
+  if (
+    (q.includes('engagement') && q.includes('trend')) ||
+    (q.includes('client') && q.includes('engagement')) ||
+    q.includes('engagement trends month-over-month')
+  ) {
+    return {
+      widgetType: 'client-feedback-dashboard',
+      widgetData: null,
+      responseText: "Client engagement trend analysis reveals interaction patterns:",
+    };
+  }
+
+  // PRIORITY 3: Renewals & Revenue
+
+  // Upcoming Renewals (Specific Timeframe)
+  if (
+    (q.includes('renewal') && (q.includes('upcoming') || q.includes('next'))) ||
+    (q.includes('renewal') && q.includes('90 days')) ||
+    q.includes('upcoming renewals')
+  ) {
+    return {
+      widgetType: 'renewal-pipeline',
+      widgetData: null,
+      responseText: "Renewal pipeline for the next 90 days shows contracts requiring attention:",
+    };
+  }
+
+  // Expansion Opportunities
+  if (
+    (q.includes('expansion') && q.includes('opportunit')) ||
+    (q.includes('identify') && q.includes('expansion')) ||
+    q.includes('expansion opportunities')
+  ) {
+    return {
+      widgetType: 'upsell-opportunities',
+      widgetData: null,
+      responseText: "Revenue expansion analysis identifies growth opportunities across your portfolio:",
+    };
+  }
+
+  // Premium Tier Upgrades
+  if (
+    (q.includes('premium') && q.includes('tier') && q.includes('upgrade')) ||
+    (q.includes('ready for') && q.includes('upgrade')) ||
+    q.includes('premium tier upgrade')
+  ) {
+    return {
+      widgetType: 'upsell-opportunities',
+      widgetData: null,
+      responseText: "Client upgrade readiness analysis shows accounts positioned for premium tier:",
+    };
+  }
+
+  // Revenue Retention & Expansion Metrics
+  if (
+    (q.includes('revenue') && (q.includes('retention') || q.includes('expansion'))) ||
+    (q.includes('retention') && q.includes('expansion') && q.includes('metric')) ||
+    (q.includes('analyze') && q.includes('revenue'))
+  ) {
+    return {
+      widgetType: 'upsell-opportunities',
+      widgetData: null,
+      responseText: "Revenue retention and expansion metrics analysis:",
+    };
+  }
+
+  // Renewal & Contract (General)
   if (q.includes('renewal') || q.includes('contract')) {
     return {
       widgetType: 'renewal-pipeline',
       widgetData: null,
-      responseText: "Here's your renewal pipeline for the next 90 days:",
+      responseText: "Renewal pipeline overview for your assigned accounts:",
     };
   }
 
-  if (q.includes('upsell') || q.includes('cross-sell') || q.includes('expansion')) {
+  // Upsell & Cross-sell (General)
+  if (
+    q.includes('upsell') ||
+    q.includes('cross-sell') ||
+    q.includes('expansion')
+  ) {
     return {
       widgetType: 'upsell-opportunities',
       widgetData: null,
-      responseText: "Here are the expansion opportunities identified:",
+      responseText: "Expansion and upsell opportunities across your client portfolio:",
     };
   }
 
-  // Client Feedback & Engagement
-  if (q.includes('nps') || q.includes('feedback') || q.includes('satisfaction')) {
+  // PRIORITY 4: Client Feedback & NPS
+
+  // NPS Survey Results (Specific)
+  if (
+    (q.includes('nps') && (q.includes('survey') || q.includes('result'))) ||
+    (q.includes('recent') && q.includes('nps')) ||
+    q.includes('nps survey results')
+  ) {
     return {
       widgetType: 'client-feedback-dashboard',
       widgetData: null,
-      responseText: "Here's the recent client feedback and NPS scores:",
+      responseText: "Recent NPS survey results by client reveal satisfaction trends:",
     };
   }
 
+  // Client Feedback & Satisfaction (General)
+  if (
+    q.includes('nps') ||
+    q.includes('feedback') ||
+    q.includes('satisfaction')
+  ) {
+    return {
+      widgetType: 'client-feedback-dashboard',
+      widgetData: null,
+      responseText: "Client feedback and Net Promoter Score analysis:",
+    };
+  }
+
+  // PRIORITY 5: Business Reviews & Meetings
+
+  // Which Clients Need Business Reviews
+  if (
+    (q.includes('which') && q.includes('business review')) ||
+    (q.includes('need') && q.includes('business review')) ||
+    q.includes('clients need business review')
+  ) {
+    return {
+      widgetType: 'business-review-scheduler',
+      widgetData: null,
+      responseText: "Client business review scheduling assessment shows accounts requiring QBRs:",
+    };
+  }
+
+  // Schedule Quarterly Business Reviews
+  if (
+    (q.includes('schedule') && q.includes('business review')) ||
+    (q.includes('quarterly') && q.includes('business review')) ||
+    q.includes('schedule qbr') ||
+    q.includes('quarterly business reviews')
+  ) {
+    return {
+      widgetType: 'business-review-scheduler',
+      widgetData: null,
+      responseText: "Quarterly business review scheduling interface for top accounts:",
+    };
+  }
+
+  // Business Review & QBR (General)
   if (q.includes('business review') || q.includes('qbr')) {
     return {
       widgetType: 'business-review-scheduler',
       widgetData: null,
-      responseText: "Here's your business review schedule and upcoming meetings:",
+      responseText: "Business review schedule and upcoming client meetings:",
     };
   }
 
-  if (q.includes('product roadmap') || q.includes('upcoming feature')) {
+  // PRIORITY 6: Product Roadmap
+
+  // Most Requested Roadmap Items
+  if (
+    (q.includes('most requested') && q.includes('roadmap')) ||
+    (q.includes('roadmap') && q.includes('most requested')) ||
+    q.includes('product roadmap items most requested')
+  ) {
     return {
       widgetType: 'product-roadmap-view',
       widgetData: null,
-      responseText: "Here's the product roadmap with client-requested features:",
+      responseText: "Product roadmap analysis highlighting features most requested by clients:",
     };
   }
 
-  // Default: Show CSM dashboard
+  // Product Roadmap (General)
+  if (
+    q.includes('product roadmap') ||
+    q.includes('upcoming feature') ||
+    q.includes('roadmap')
+  ) {
+    return {
+      widgetType: 'product-roadmap-view',
+      widgetData: null,
+      responseText: "Product roadmap with client-requested features and development timeline:",
+    };
+  }
+
+  // FALLBACK: Show CSM dashboard
   return {
     widgetType: 'csm-dashboard',
     widgetData: null,
-    responseText: "Here's your Customer Success Manager dashboard:",
+    responseText: "Customer Success Manager dashboard overview:",
   };
 }
 
