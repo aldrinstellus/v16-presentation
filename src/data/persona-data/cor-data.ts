@@ -20,7 +20,7 @@ export const corContractPerformanceData: ContractPerformanceData = {
   vendor: {
     id: 'VEN-TC-001',
     name: 'TechCorp Solutions Inc.',
-    tier: 'tier-1',
+    tier: 'prime',
     contactEmail: 'project.manager@techcorpsolutions.com',
     contactPhone: '(202) 555-0142',
   },
