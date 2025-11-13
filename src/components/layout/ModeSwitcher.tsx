@@ -23,7 +23,7 @@ export function ModeSwitcher() {
     };
 
     const firstPersonaId = firstPersonaMap[mode];
-    setPersona(firstPersonaId as any); // Switch persona
+    setPersona(firstPersonaId); // Switch persona
     router.push(`/demo/${firstPersonaId}`); // Navigate to page
   };
 

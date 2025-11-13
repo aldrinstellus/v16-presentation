@@ -2,11 +2,17 @@
 
 import { motion, AnimatePresence } from 'motion/react';
 
+interface TooltipPayload {
+  value: number | string;
+  name: string;
+  color?: string;
+}
+
 interface CustomTooltipProps {
   active?: boolean;
-  payload?: any[];
+  payload?: TooltipPayload[];
   label?: string;
-  formatter?: (value: any, name: string) => string;
+  formatter?: (value: number | string, name: string) => string;
 }
 
 /**
