@@ -4,6 +4,7 @@ import { Building2, Users, Briefcase } from 'lucide-react';
 import { useMode } from '@/contexts/ModeContext';
 import { usePersona } from '@/hooks/use-persona';
 import { useRouter } from 'next/navigation';
+import { PersonaType } from '@/types/persona';
 
 export function ModeSwitcher() {
   const { currentMode, setMode } = useMode();
@@ -22,7 +23,7 @@ export function ModeSwitcher() {
       atc: 'atc-executive'
     };
 
-    const firstPersonaId = firstPersonaMap[mode];
+    const firstPersonaId = firstPersonaMap[mode] as PersonaType;
     setPersona(firstPersonaId); // Switch persona
     router.push(`/demo/${firstPersonaId}`); // Navigate to page
   };
