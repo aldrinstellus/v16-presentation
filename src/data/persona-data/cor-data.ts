@@ -40,8 +40,6 @@ export const corContractPerformanceData: ContractPerformanceData = {
     spent: 1900000,
     committed: 425000,
     remaining: 175000,
-    burnRate: 158333, // Monthly burn rate
-    projectedOverrun: 0,
   },
   deliverables: [
     {
