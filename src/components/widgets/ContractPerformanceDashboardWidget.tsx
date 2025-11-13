@@ -7,7 +7,8 @@ import {
   TrendingDown,
   Clock,
 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { motion } from 'framer-motion';
 import type { ContractPerformanceData } from '@/types/widget';
 
 export function ContractPerformanceDashboardWidget({ data }: { data: ContractPerformanceData }) {
@@ -21,10 +22,32 @@ export function ContractPerformanceDashboardWidget({ data }: { data: ContractPer
   }
 
   const performanceData = [
-    { name: 'SLA', value: data.performance.slaCompliance, color: 'var(--chart-1)' },
-    { name: 'Budget', value: data.performance.budgetUtilization, color: 'var(--chart-2)' },
-    { name: 'Deliverables', value: data.performance.deliverableCompletion, color: 'var(--chart-3)' },
+    { name: 'SLA', value: data.performance.slaCompliance, color: '#10b981', gradient: 'url(#colorSLA)' },
+    { name: 'Budget', value: data.performance.budgetUtilization, color: '#3b82f6', gradient: 'url(#colorBudget)' },
+    { name: 'Deliverables', value: data.performance.deliverableCompletion, color: '#8b5cf6', gradient: 'url(#colorDeliverables)' },
   ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return 'text-success';
@@ -39,7 +62,12 @@ export function ContractPerformanceDashboardWidget({ data }: { data: ContractPer
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card p-6 my-4">
+    <motion.div
+      className="rounded-lg border border-border bg-card p-6 my-4 shadow-lg"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -72,66 +100,104 @@ export function ContractPerformanceDashboardWidget({ data }: { data: ContractPer
       </div>
 
       {/* Performance Metrics */}
-      <div className="mb-6">
+      <motion.div className="mb-6" variants={itemVariants}>
         <h4 className="text-sm font-medium mb-3 text-foreground">Performance Metrics</h4>
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={performanceData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis
-              dataKey="name"
-              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-            />
-            <YAxis
-              domain={[0, 100]}
-              tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
-            />
-            <Tooltip
-              contentStyle={{
-                background: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '8px',
-                color: 'hsl(var(--foreground))',
-              }}
-            />
-            <Bar dataKey="value" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+        <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted/20 p-4 shadow-inner">
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={performanceData}>
+              <defs>
+                <linearGradient id="colorSLA" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10b981" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="#059669" stopOpacity={0.8}/>
+                </linearGradient>
+                <linearGradient id="colorBudget" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="#2563eb" stopOpacity={0.8}/>
+                </linearGradient>
+                <linearGradient id="colorDeliverables" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1}/>
+                  <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.8}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              />
+              <YAxis
+                domain={[0, 100]}
+                tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+              />
+              <Tooltip
+                contentStyle={{
+                  background: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px',
+                  color: 'hsl(var(--foreground))',
+                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                }}
+                cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
+              />
+              <Bar dataKey="value" radius={[8, 8, 0, 0]} animationDuration={1000}>
+                {performanceData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.gradient} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </motion.div>
 
       {/* Financial Summary */}
-      <div className="mb-6">
+      <motion.div className="mb-6" variants={itemVariants}>
         <h4 className="text-sm font-medium mb-3 text-foreground">Financial Status</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="p-3 rounded-lg bg-muted/30 border border-border">
+          <motion.div
+            className="p-3 rounded-lg bg-gradient-to-br from-muted/30 to-muted/10 border border-border shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
             <DollarSign className="h-4 w-4 text-muted-foreground mb-1" />
             <div className="text-lg font-semibold text-foreground">
               ${(data.financials.totalValue / 1000000).toFixed(1)}M
             </div>
             <div className="text-xs text-muted-foreground">Total Value</div>
-          </div>
-          <div className="p-3 rounded-lg bg-chart-1/10 border border-chart-1/30">
-            <TrendingUp className="h-4 w-4 text-chart-1 mb-1" />
-            <div className="text-lg font-semibold text-chart-1">
+          </motion.div>
+          <motion.div
+            className="p-3 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 shadow-sm hover:shadow-md hover:shadow-blue-500/20 transition-shadow cursor-pointer"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <TrendingUp className="h-4 w-4 text-blue-500 mb-1" />
+            <div className="text-lg font-semibold text-blue-500">
               ${(data.financials.spent / 1000000).toFixed(1)}M
             </div>
             <div className="text-xs text-muted-foreground">Spent</div>
-          </div>
-          <div className="p-3 rounded-lg bg-chart-4/10 border border-chart-4/30">
-            <Clock className="h-4 w-4 text-chart-4 mb-1" />
-            <div className="text-lg font-semibold text-chart-4">
+          </motion.div>
+          <motion.div
+            className="p-3 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 shadow-sm hover:shadow-md hover:shadow-amber-500/20 transition-shadow cursor-pointer"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Clock className="h-4 w-4 text-amber-500 mb-1" />
+            <div className="text-lg font-semibold text-amber-500">
               ${(data.financials.committed / 1000).toFixed(0)}K
             </div>
             <div className="text-xs text-muted-foreground">Committed</div>
-          </div>
-          <div className="p-3 rounded-lg bg-success/10 border border-success/30">
-            <CheckCircle2 className="h-4 w-4 text-success mb-1" />
-            <div className="text-lg font-semibold text-success">
+          </motion.div>
+          <motion.div
+            className="p-3 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30 shadow-sm hover:shadow-md hover:shadow-green-500/20 transition-shadow cursor-pointer"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <CheckCircle2 className="h-4 w-4 text-green-500 mb-1" />
+            <div className="text-lg font-semibold text-green-500">
               ${(data.financials.remaining / 1000).toFixed(0)}K
             </div>
             <div className="text-xs text-muted-foreground">Remaining</div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Deliverables */}
       {data.deliverables && data.deliverables.length > 0 && (
@@ -244,6 +310,6 @@ export function ContractPerformanceDashboardWidget({ data }: { data: ContractPer
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

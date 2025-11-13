@@ -4,7 +4,8 @@ import {
   Activity,
   Target
 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
+import { motion } from 'framer-motion';
 import type { TeamVelocityData } from '@/types/widget';
 
 export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }) {
@@ -31,8 +32,32 @@ export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }
     return 'bg-muted-foreground';
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  };
+
+  const barColors = ['#8b5cf6', '#3b82f6'];
+
   return (
-    <div className="rounded-lg border border-border bg-card p-6 my-4">
+    <motion.div
+      className="rounded-lg border border-border bg-card p-6 my-4 shadow-lg"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header */}
       <div className="flex items-center gap-2 mb-6">
         <TrendingUp className="h-5 w-5 text-primary" />
@@ -67,12 +92,22 @@ export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }
 
       {/* Velocity Trend Chart */}
       {data.velocityTrend && data.velocityTrend.length > 0 && (
-        <div className="mb-6">
+        <motion.div className="mb-6" variants={itemVariants}>
           <h4 className="text-sm font-semibold mb-3 text-foreground">Velocity Trend</h4>
-          <div className="rounded-lg border border-border bg-card/50 p-4">
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={data.velocityTrend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+          <div className="rounded-lg border border-border bg-gradient-to-br from-card/50 to-muted/20 p-4 shadow-inner">
+            <ResponsiveContainer width="100%" height={270}>
+              <BarChart data={data.velocityTrend} barGap={8}>
+                <defs>
+                  <linearGradient id="colorPlanned" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1}/>
+                    <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.8}/>
+                  </linearGradient>
+                  <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={1}/>
+                    <stop offset="100%" stopColor="#2563eb" stopOpacity={0.8}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
                 <XAxis
                   dataKey="sprint"
                   stroke="hsl(var(--muted-foreground))"
@@ -86,16 +121,18 @@ export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }
                   contentStyle={{
                     backgroundColor: 'hsl(var(--card))',
                     border: '1px solid hsl(var(--border))',
-                    borderRadius: '6px'
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                   }}
+                  cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
                 />
                 <Legend />
-                <Bar dataKey="plannedVelocity" fill="hsl(var(--muted-foreground))" name="Planned Velocity" />
-                <Bar dataKey="actualVelocity" fill="hsl(var(--primary))" name="Actual Velocity" />
+                <Bar dataKey="plannedVelocity" fill="url(#colorPlanned)" name="Planned Velocity" radius={[8, 8, 0, 0]} animationDuration={1000} />
+                <Bar dataKey="actualVelocity" fill="url(#colorActual)" name="Actual Velocity" radius={[8, 8, 0, 0]} animationDuration={1000} />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Team Members */}
@@ -147,6 +184,6 @@ export function TeamVelocityDashboardWidget({ data }: { data: TeamVelocityData }
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

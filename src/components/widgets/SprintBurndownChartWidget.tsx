@@ -5,7 +5,8 @@ import {
   AlertTriangle,
   CheckCircle2
 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from 'recharts';
+import { motion } from 'framer-motion';
 import type { SprintBurndownData } from '@/types/widget';
 
 export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }) {
@@ -30,8 +31,30 @@ export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }
     decreasing: <TrendingDown className="h-4 w-4 text-destructive" />,
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  };
+
   return (
-    <div className="rounded-lg border border-border bg-card p-6 my-4">
+    <motion.div
+      className="rounded-lg border border-border bg-card p-6 my-4 shadow-lg"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
@@ -50,36 +73,62 @@ export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }
       </div>
 
       {/* Sprint Progress */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="rounded-lg border border-border bg-card/50 p-3">
+      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" variants={itemVariants}>
+        <motion.div
+          className="rounded-lg border border-border bg-gradient-to-br from-card/50 to-muted/20 p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+        >
           <div className="text-2xl font-bold text-foreground mb-1">{data.sprint.totalStoryPoints}</div>
           <p className="text-xs text-muted-foreground">Total Story Points</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card/50 p-3">
-          <div className="text-2xl font-bold text-success mb-1">{data.sprint.completedStoryPoints}</div>
+        </motion.div>
+        <motion.div
+          className="rounded-lg border border-green-500/30 bg-gradient-to-br from-green-500/20 to-green-600/10 p-3 shadow-sm hover:shadow-md hover:shadow-green-500/20 transition-shadow cursor-pointer"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="text-2xl font-bold text-green-500 mb-1">{data.sprint.completedStoryPoints}</div>
           <p className="text-xs text-muted-foreground">Completed Points</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card/50 p-3">
+        </motion.div>
+        <motion.div
+          className="rounded-lg border border-primary/30 bg-gradient-to-br from-primary/20 to-primary/10 p-3 shadow-sm hover:shadow-md hover:shadow-primary/20 transition-shadow cursor-pointer"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+        >
           <div className="text-2xl font-bold text-primary mb-1">{data.velocity.current}</div>
           <p className="text-xs text-muted-foreground">Current Velocity</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card/50 p-3">
+        </motion.div>
+        <motion.div
+          className="rounded-lg border border-border bg-gradient-to-br from-card/50 to-muted/20 p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+        >
           <div className="flex items-center gap-2 mb-1">
             <span className="text-2xl font-bold text-foreground">{data.velocity.average}</span>
             {velocityTrendIcon[data.velocity.trend]}
           </div>
           <p className="text-xs text-muted-foreground">Avg Velocity</p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Burndown Chart */}
       {data.burndown && data.burndown.length > 0 && (
-        <div className="mb-6">
+        <motion.div className="mb-6" variants={itemVariants}>
           <h4 className="text-sm font-semibold mb-3 text-foreground">Burndown Chart</h4>
-          <div className="rounded-lg border border-border bg-card/50 p-4">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={data.burndown}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+          <div className="rounded-lg border border-border bg-gradient-to-br from-card/50 to-muted/20 p-4 shadow-inner">
+            <ResponsiveContainer width="100%" height={320}>
+              <AreaChart data={data.burndown}>
+                <defs>
+                  <linearGradient id="colorIdeal" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#94a3b8" stopOpacity={0.3}/>
+                    <stop offset="100%" stopColor="#94a3b8" stopOpacity={0.05}/>
+                  </linearGradient>
+                  <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#f97316" stopOpacity={0.5}/>
+                    <stop offset="100%" stopColor="#f97316" stopOpacity={0.1}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
                 <XAxis
                   dataKey="date"
                   stroke="hsl(var(--muted-foreground))"
@@ -94,31 +143,37 @@ export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }
                   contentStyle={{
                     backgroundColor: 'hsl(var(--card))',
                     border: '1px solid hsl(var(--border))',
-                    borderRadius: '6px'
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                   }}
+                  cursor={{ stroke: 'hsl(var(--primary))', strokeWidth: 2, strokeDasharray: '5 5' }}
                 />
                 <Legend />
-                <Line
+                <Area
                   type="monotone"
                   dataKey="idealRemaining"
-                  stroke="hsl(var(--muted-foreground))"
+                  stroke="#94a3b8"
                   strokeWidth={2}
                   strokeDasharray="5 5"
+                  fill="url(#colorIdeal)"
                   name="Ideal Burndown"
-                  dot={false}
+                  animationDuration={1500}
                 />
-                <Line
+                <Area
                   type="monotone"
                   dataKey="actualRemaining"
-                  stroke="hsl(var(--primary))"
+                  stroke="#f97316"
                   strokeWidth={3}
+                  fill="url(#colorActual)"
                   name="Actual Burndown"
-                  dot={{ fill: 'hsl(var(--primary))', r: 4 }}
+                  animationDuration={1500}
+                  dot={{ fill: '#f97316', r: 5, strokeWidth: 2, stroke: '#fff' }}
+                  activeDot={{ r: 7, strokeWidth: 2 }}
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Risks */}
@@ -138,6 +193,6 @@ export function SprintBurndownChartWidget({ data }: { data: SprintBurndownData }
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
