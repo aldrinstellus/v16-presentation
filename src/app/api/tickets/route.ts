@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 
     // Initialize Zoho Desk client with credentials from .env.local
     const zoho = new ZohoDeskClient({
-      orgId: process.env.ZOHO_ORG_ID || '',
+      orgId: Number(process.env.ZOHO_ORG_ID) || 0,
       clientId: process.env.ZOHO_CLIENT_ID || '',
       clientSecret: process.env.ZOHO_CLIENT_SECRET || '',
       refreshToken: process.env.ZOHO_REFRESH_TOKEN || '',
