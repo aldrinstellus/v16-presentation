@@ -2856,7 +2856,7 @@ export const programHealthDemo: ProgramHealthData = {
     contractsActive: 5,
     deliverablesCompleted: 24,
     stakeholderSatisfaction: 82,
-    budgetRemaining: 450000,
+    budgetRemaining: 4.5, // in millions
   },
 };
 

@@ -1312,11 +1312,11 @@ function detectCORQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Contract Performance
+  // PRIORITY 0: Contract Status (MUST be checked BEFORE deliverables pattern)
   if (
-    q.includes('contract performance') ||
-    q.includes('contract status') ||
-    (q.includes('show') && q.includes('contract') && (q.includes('active') || q.includes('performance')))
+    (q.includes('current') && q.includes('contract') && q.includes('status')) ||
+    (q.includes('contract status') && !q.includes('deliverable')) ||
+    (q.includes('show') && q.includes('contract') && q.includes('current'))
   ) {
     return {
       widgetType: 'contract-performance-dashboard',
@@ -1325,7 +1325,68 @@ function detectCORQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Deliverable Reviews
+  // PRIORITY 1: Vendor Performance Metrics (UNIQUE - check FIRST before generic vendor queries)
+  if (
+    (q.includes('vendor') && q.includes('performance') && q.includes('metric')) ||
+    (q.includes('show') && q.includes('vendor performance'))
+  ) {
+    return {
+      widgetType: 'vendor-compliance-dashboard',
+      widgetData: vendorComplianceDemo,
+      responseText: "Vendor performance metrics show SLA compliance, quality scores, and trend analysis across all active contracts:",
+    };
+  }
+
+  // PRIORITY 2: Budget Tracking Dashboard (UNIQUE - uses Program Health widget)
+  if (
+    (q.includes('budget') && q.includes('tracking') && q.includes('dashboard')) ||
+    (q.includes('show') && q.includes('budget tracking'))
+  ) {
+    return {
+      widgetType: 'program-health-dashboard',
+      widgetData: programHealthDemo,
+      responseText: "Budget tracking dashboard displays program health metrics including budget utilization, schedule variance, resource allocation, and risk management:",
+    };
+  }
+
+  // PRIORITY 3: Compliance Dashboard (UNIQUE - uses Requirements Tracking widget)
+  if (
+    (q.includes('compliance') && q.includes('dashboard')) ||
+    (q.includes('show') && q.includes('compliance dashboard'))
+  ) {
+    return {
+      widgetType: 'requirements-tracking-dashboard',
+      widgetData: requirementsTrackingDemo,
+      responseText: "Compliance dashboard tracks regulatory requirements, policy adherence, and compliance metrics across all contracts and vendors:",
+    };
+  }
+
+  // PRIORITY 4: Contract Deliverables Status (UNIQUE)
+  if (
+    (q.includes('contract') && q.includes('deliverable') && q.includes('status')) ||
+    (q.includes('deliverable') && q.includes('status')) ||
+    (q.includes('show') && q.includes('deliverables status'))
+  ) {
+    return {
+      widgetType: 'deliverable-review-list',
+      widgetData: deliverableReviewListDemo,
+      responseText: "Contract deliverables status shows pending reviews, submissions, approvals, and quality scores across all active contracts:",
+    };
+  }
+
+  // Contract Performance (generic)
+  if (
+    q.includes('contract performance') ||
+    (q.includes('show') && q.includes('contract') && q.includes('performance'))
+  ) {
+    return {
+      widgetType: 'contract-performance-dashboard',
+      widgetData: contractPerformanceDemo,
+      responseText: "Contract performance analysis displays SLA compliance, budget utilization, and deliverable completion rates:",
+    };
+  }
+
+  // Deliverable Reviews (generic)
   if (
     q.includes('deliverable') && (q.includes('review') || q.includes('pending') || q.includes('approve')) ||
     q.includes('pending deliverables') ||
@@ -1338,10 +1399,9 @@ function detectCORQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Vendor Compliance
+  // Vendor Compliance (generic)
   if (
     q.includes('vendor compliance') ||
-    q.includes('vendor performance') ||
     (q.includes('vendor') && q.includes('sla'))
   ) {
     return {
@@ -1351,7 +1411,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Budget queries
+  // Budget queries (generic)
   if (q.includes('budget') && (q.includes('status') || q.includes('utilization') || q.includes('remaining'))) {
     return {
       widgetType: 'contract-performance-dashboard',
@@ -1360,7 +1420,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     };
   }
 
-  // SLA compliance
+  // SLA compliance (generic)
   if (q.includes('sla') && (q.includes('compliance') || q.includes('breach') || q.includes('violation'))) {
     return {
       widgetType: 'vendor-compliance-dashboard',
@@ -1369,7 +1429,7 @@ function detectCORQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Quality issues
+  // Quality issues (generic)
   if (q.includes('quality') && (q.includes('issue') || q.includes('score') || q.includes('problem'))) {
     return {
       widgetType: 'deliverable-review-list',

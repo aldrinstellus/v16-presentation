@@ -32,6 +32,12 @@ export function ProgramHealthDashboardWidget({ data }: { data: ProgramHealthData
     red: 'bg-destructive/20 text-destructive border-destructive/50',
   };
 
+  const healthStatusLabels: Record<string, string> = {
+    green: 'On Track',
+    yellow: 'At Risk',
+    red: 'Critical',
+  };
+
   const milestoneStatusColors = {
     completed: 'bg-success/10 text-success border-success/30',
     'on-track': 'bg-chart-3/10 text-chart-3 border-chart-3/30',
@@ -71,7 +77,7 @@ export function ProgramHealthDashboardWidget({ data }: { data: ProgramHealthData
           <div className="flex items-center justify-between mb-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
             <span className={`px-2 py-1 rounded text-xs font-medium border ${healthStatusColors[data.health.schedule.status]}`}>
-              {data.health.schedule.status.toUpperCase()}
+              {healthStatusLabels[data.health.schedule.status] || data.health.schedule.status}
             </span>
           </div>
           <div className="text-xl font-bold text-foreground mb-1">{data.health.schedule.score}%</div>
@@ -83,7 +89,7 @@ export function ProgramHealthDashboardWidget({ data }: { data: ProgramHealthData
           <div className="flex items-center justify-between mb-2">
             <DollarSign className="h-4 w-4 text-muted-foreground" />
             <span className={`px-2 py-1 rounded text-xs font-medium border ${healthStatusColors[data.health.budget.status]}`}>
-              {data.health.budget.status.toUpperCase()}
+              {healthStatusLabels[data.health.budget.status] || data.health.budget.status}
             </span>
           </div>
           <div className="text-xl font-bold text-foreground mb-1">{data.health.budget.score}%</div>
@@ -95,7 +101,7 @@ export function ProgramHealthDashboardWidget({ data }: { data: ProgramHealthData
           <div className="flex items-center justify-between mb-2">
             <Users className="h-4 w-4 text-muted-foreground" />
             <span className={`px-2 py-1 rounded text-xs font-medium border ${healthStatusColors[data.health.resources.status]}`}>
-              {data.health.resources.status.toUpperCase()}
+              {healthStatusLabels[data.health.resources.status] || data.health.resources.status}
             </span>
           </div>
           <div className="text-xl font-bold text-foreground mb-1">{data.health.resources.score}%</div>
@@ -107,7 +113,7 @@ export function ProgramHealthDashboardWidget({ data }: { data: ProgramHealthData
           <div className="flex items-center justify-between mb-2">
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             <span className={`px-2 py-1 rounded text-xs font-medium border ${healthStatusColors[data.health.risks.status]}`}>
-              {data.health.risks.status.toUpperCase()}
+              {healthStatusLabels[data.health.risks.status] || data.health.risks.status}
             </span>
           </div>
           <div className="text-xl font-bold text-foreground mb-1">{data.health.risks.count}</div>

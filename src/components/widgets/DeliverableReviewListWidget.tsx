@@ -2,10 +2,19 @@ import { FileCheck, Clock, CheckCircle2, AlertCircle, XCircle } from 'lucide-rea
 import type { DeliverableReviewListData } from '@/types/widget';
 
 export function DeliverableReviewListWidget({ data }: { data: DeliverableReviewListData }) {
-  if (!data || !data.deliverables) {
+  // Defensive validation
+  if (!data || typeof data !== 'object') {
     return (
       <div className="my-4 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
-        <p className="text-sm text-destructive">Unable to load deliverable review list</p>
+        <p className="text-sm text-destructive">Unable to load deliverable review list - invalid data</p>
+      </div>
+    );
+  }
+
+  if (!data.deliverables || !Array.isArray(data.deliverables)) {
+    return (
+      <div className="my-4 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
+        <p className="text-sm text-destructive">Unable to load deliverable review list - missing deliverables</p>
       </div>
     );
   }
@@ -62,13 +71,15 @@ export function DeliverableReviewListWidget({ data }: { data: DeliverableReviewL
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <FileCheck className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">{data.title}</h3>
+          <h3 className="text-lg font-semibold text-foreground">{data.title || 'Deliverable Reviews'}</h3>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-chart-4/10 text-chart-4">
-            {data.summary.pendingReview} Pending Review
-          </span>
-        </div>
+        {data.summary && (
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-chart-4/10 text-chart-4">
+              {data.summary.pendingReview || 0} Pending Review
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Deliverables List */}
