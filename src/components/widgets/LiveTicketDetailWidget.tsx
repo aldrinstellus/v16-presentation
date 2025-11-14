@@ -86,6 +86,9 @@ export function LiveTicketDetailWidget({ ticketNumber }: LiveTicketDetailProps) 
         setLoading(true);
         setError(null);
 
+        console.log('[LiveTicketDetail] Received ticketNumber prop:', ticketNumber);
+        console.log('[LiveTicketDetail] Fetching URL:', `/api/tickets/${ticketNumber}`);
+
         const response = await fetch(`/api/tickets/${ticketNumber}`);
 
         if (!response.ok) {

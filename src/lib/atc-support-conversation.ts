@@ -6,6 +6,8 @@ import {
   ticketListDemo,
   ticketDetailDemo,
   agentDashboardDemo,
+  agentPerformanceStatsDemo,
+  similarTicketsAnalysisDemo,
   knowledgeBaseSearchDemo,
   responseComposerDemo,
 } from '@/data/demo-widget-data';
@@ -136,7 +138,12 @@ const conversationEntries: ConversationEntry[] = [
     id: 'q10-performance',
     triggers: ['my performance', 'my stats', 'performance stats', 'how am i doing'],
     userQuery: 'Show me my performance stats.',
-    aiResponse: "Here's your performance summary for this week:\n\nTickets Resolved: 47\nAvg Resolution Time: 3.2 hours\nCustomer Satisfaction: 94%\nFirst Response Time: 8 minutes\nEscalation Rate: 4.2%\nReopen Rate: 2.1%\n\nYou're performing above team average in all key metrics!",
+    aiResponse: "Here's your comprehensive performance summary for this week:",
+    widgetType: 'agent-performance-stats',
+    widgetData: {
+      ...agentPerformanceStatsDemo,
+      title: 'Your Performance - This Week',
+    },
   },
 
   // Q11: Password Reset Flow
@@ -152,7 +159,12 @@ const conversationEntries: ConversationEntry[] = [
     id: 'q12-similar-tickets',
     triggers: ['similar tickets', 'ticket patterns', 'learn patterns', 'related tickets'],
     userQuery: 'Show me similar tickets I\'ve resolved.',
-    aiResponse: "Based on your resolution history, I found 8 similar tickets:\n\n**Pattern 1: Authentication timeout (5 tickets)**\n- Avg Resolution: 2.4 hours\n- Success Rate: 100%\n- Solution: Clear browser cache + session token refresh\n\n**Pattern 2: Browser cache login loop (3 tickets)**\n- Avg Resolution: 1.8 hours\n- Success Rate: 100%\n- Solution: Hard refresh (Ctrl+Shift+R) + cookie clear\n\nYour consistent success rate shows excellent troubleshooting skills!",
+    aiResponse: "Here are patterns from similar tickets you've successfully resolved:",
+    widgetType: 'similar-tickets-analysis',
+    widgetData: {
+      ...similarTicketsAnalysisDemo,
+      title: 'Your Resolution Patterns - Integrations',
+    },
   },
 
   // Q13: Call Preparation

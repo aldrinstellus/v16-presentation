@@ -290,9 +290,13 @@ function detectCLevelQuery(q: string): QueryMatch | null {
     (q.includes('show me ticket') && /\d+/.test(q)) ||
     (q.includes('details') && /\d+/.test(q))
   ) {
-    // Extract ticket number from query
-    const ticketNumberMatch = q.match(/#?(\d+)/);
-    const ticketNumber = ticketNumberMatch ? ticketNumberMatch[1] : null;
+    // Extract ticket number from query (preserve TICK- prefix)
+    const ticketNumberMatch = q.match(/tick-?(\d+)/i);
+    const ticketNumber = ticketNumberMatch ? `TICK-${ticketNumberMatch[1]}` : null;
+
+    console.log('[Query Detection - C-Level] Ticket query detected. Query:', q);
+    console.log('[Query Detection - C-Level] Regex match:', ticketNumberMatch);
+    console.log('[Query Detection - C-Level] Constructed ticketNumber:', ticketNumber);
 
     if (ticketNumber) {
       return {
@@ -484,9 +488,9 @@ function detectManagerQuery(q: string): QueryMatch | null {
     (q.includes('details') && /\d+/.test(q)) ||
     (q.includes('show me details for ticket') && /\d+/.test(q))
   ) {
-    // Extract ticket number from query
-    const ticketNumberMatch = q.match(/#?(\d+)/);
-    const ticketNumber = ticketNumberMatch ? ticketNumberMatch[1] : null;
+    // Extract ticket number from query (preserve TICK- prefix)
+    const ticketNumberMatch = q.match(/tick-?(\d+)/i);
+    const ticketNumber = ticketNumberMatch ? `TICK-${ticketNumberMatch[1]}` : null;
 
     console.log('[Query Detection - CS Manager] Ticket detail detected. Query:', q);
     console.log('[Query Detection - CS Manager] Extracted ticket number:', ticketNumber);
@@ -796,9 +800,9 @@ function detectAgentQuery(q: string): QueryMatch | null {
     (q.includes('details') && /\d+/.test(q)) ||
     (q.includes('show me details for ticket') && /\d+/.test(q))
   ) {
-    // Extract ticket number from query
-    const ticketNumberMatch = q.match(/#?(\d+)/);
-    const ticketNumber = ticketNumberMatch ? ticketNumberMatch[1] : null;
+    // Extract ticket number from query (preserve TICK- prefix)
+    const ticketNumberMatch = q.match(/tick-?(\d+)/i);
+    const ticketNumber = ticketNumberMatch ? `TICK-${ticketNumberMatch[1]}` : null;
 
     if (ticketNumber) {
       return {
@@ -1276,6 +1280,38 @@ function detectATCCSMQuery(q: string): QueryMatch | null {
 // ============================================================================
 
 function detectCORQuery(q: string): QueryMatch | null {
+  // Ticket Detail (specific ticket numbers) - PRIORITY: Check BEFORE generic queries
+  if (
+    q.includes('ticket #') ||
+    q.includes('ticket number') ||
+    /tick-?\d+/i.test(q) ||
+    (q.includes('show me ticket') && /\d+/.test(q)) ||
+    (q.includes('details') && /\d+/.test(q))
+  ) {
+    // Extract ticket number from query (preserve TICK- prefix)
+    const ticketNumberMatch = q.match(/tick-?(\d+)/i);
+    const ticketNumber = ticketNumberMatch ? `TICK-${ticketNumberMatch[1]}` : null;
+
+    console.log('[Query Detection - COR] Ticket query detected. Query:', q);
+    console.log('[Query Detection - COR] Regex match:', ticketNumberMatch);
+    console.log('[Query Detection - COR] Constructed ticketNumber:', ticketNumber);
+
+    if (ticketNumber) {
+      return {
+        widgetType: 'live-ticket-detail',
+        widgetData: { ticketNumber },
+        responseText: `Ticket details for government contract support:`,
+      };
+    }
+
+    // Fallback to demo if no number found
+    return {
+      widgetType: 'ticket-detail',
+      widgetData: ticketDetailDemo,
+      responseText: "Here are the complete details for this ticket:",
+    };
+  }
+
   // Contract Performance
   if (
     q.includes('contract performance') ||
