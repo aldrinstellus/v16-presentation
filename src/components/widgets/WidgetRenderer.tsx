@@ -48,6 +48,7 @@ import { SentimentAnalysisWidget } from './SentimentAnalysisWidget';
 import { CustomerRiskProfileWidget } from './CustomerRiskProfileWidget';
 import { LiveTicketListWidget } from './LiveTicketListWidget';
 import { LiveTicketDetailWidget } from './LiveTicketDetailWidget';
+import { LiveMetricsWidget } from './LiveMetricsWidget';
 import { AgentDashboardWidget } from './AgentDashboardWidget';
 import { TeamWorkloadDashboardWidget } from './TeamWorkloadDashboardWidget';
 import { MeetingSchedulerWidget } from './MeetingSchedulerWidget';
@@ -130,6 +131,9 @@ export function WidgetRenderer({ type, data, onAction }: WidgetRendererProps) {
 
       case 'live-ticket-detail':
         return <LiveTicketDetailWidget ticketNumber={(data as LiveTicketDetailData).ticketNumber} />;
+
+      case 'live-metrics':
+        return <LiveMetricsWidget />;
 
       case 'sla-performance-chart':
         return <SLAPerformanceChartWidget data={data as SLAPerformanceChartData} />;

@@ -1627,29 +1627,29 @@ function detectProjectManagerQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Sprint planning
+  // Sprint planning → Task Kanban Board (show upcoming sprint tasks)
   if (q.includes('sprint planning') || (q.includes('sprint') && q.includes('plan'))) {
     return {
-      widgetType: 'team-velocity-dashboard',
-      widgetData: teamVelocityDemo,
-      responseText: "Sprint planning data shows historical velocity for capacity-based commitment:",
+      widgetType: 'task-kanban-board',
+      widgetData: taskKanbanDemo,
+      responseText: "Sprint planning task board shows backlog items ready for next sprint commitment:",
     };
   }
 
-  // Blockers
+  // Blockers → Change Request Dashboard (blockers often need change requests)
   if (q.includes('blocker') || q.includes('blocked task')) {
     return {
-      widgetType: 'blocker-resolution-dashboard',
-      widgetData: blockerResolutionDemo,
-      responseText: "Blocker resolution status requires immediate attention from scrum master:",
+      widgetType: 'change-request-dashboard',
+      widgetData: changeRequestDemo,
+      responseText: "Blocker-related change requests require PM review and stakeholder approval:",
     };
   }
 
-  // Default: Show sprint burndown
+  // Default: Stakeholder Engagement (PM coordinates stakeholders)
   return {
-    widgetType: 'sprint-burndown-chart',
-    widgetData: sprintBurndownDemo,
-    responseText: "Sprint dashboard shows current iteration progress and team velocity:",
+    widgetType: 'stakeholder-engagement-dashboard',
+    widgetData: stakeholderEngagementDemo,
+    responseText: "Project coordination dashboard shows stakeholder engagement and sprint status:",
   };
 }
 
@@ -1686,41 +1686,41 @@ function detectServiceTeamLeadQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Blockers
+  // Blockers → Live Metrics (real-time blocker tracking)
   if (
     q.includes('blocker') && (q.includes('resolve') || q.includes('resolution') || q.includes('active')) ||
     q.includes('blocked tasks')
   ) {
     return {
-      widgetType: 'blocker-resolution-dashboard',
-      widgetData: blockerResolutionDemo,
-      responseText: "Technical blocker resolution requires engineering team intervention:",
+      widgetType: 'live-metrics',
+      widgetData: {}, // LiveMetricsWidget generates its own data
+      responseText: "Real-time blocker metrics show active impediments requiring immediate technical resolution:",
     };
   }
 
-  // Team workload
+  // Team workload → Performance Trends (long-term team capacity trends)
   if (q.includes('team') && (q.includes('workload') || q.includes('capacity') || q.includes('utilization'))) {
     return {
-      widgetType: 'resource-capacity-dashboard',
-      widgetData: resourceCapacityDemo,
-      responseText: "Team performance tracking shows developer workload and sprint capacity:",
+      widgetType: 'performance-trends',
+      widgetData: performanceTrendsDemo,
+      responseText: "Team performance trends show developer capacity utilization across sprints:",
     };
   }
 
-  // Performance metrics (DORA)
+  // Performance metrics (DORA) → Analytics Dashboard (DORA metric analytics)
   if (q.includes('dora') || (q.includes('performance') && (q.includes('metric') || q.includes('kpi')))) {
     return {
-      widgetType: 'deployment-pipeline-dashboard',
-      widgetData: deploymentPipelineDemo,
-      responseText: "DORA metrics analysis reveals deployment frequency and lead time performance:",
+      widgetType: 'analytics-dashboard',
+      widgetData: analyticsDashboardDemo,
+      responseText: "DORA metrics analytics reveal deployment frequency, lead time, and change failure rate:",
     };
   }
 
-  // Default: Show code quality
+  // Default: Blocker Resolution Dashboard
   return {
-    widgetType: 'code-quality-dashboard',
-    widgetData: codeQualityDemo,
-    responseText: "Code quality analysis dashboard displays technical health and engineering excellence:",
+    widgetType: 'blocker-resolution-dashboard',
+    widgetData: blockerResolutionDemo,
+    responseText: "Engineering blocker dashboard displays active impediments and resolution status:",
   };
 }
 
@@ -1738,36 +1738,36 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     (q.includes('task') && (q.includes('assigned') || q.includes('mine')))
   ) {
     return {
-      widgetType: 'task-kanban-board',
-      widgetData: taskKanbanDemo,
-      responseText: "Your task board shows current sprint assignments with priority and status:",
+      widgetType: 'agent-dashboard',
+      widgetData: agentDashboardDemo,
+      responseText: "Your personal dashboard shows current sprint assignments, PRs, and blockers:",
     };
   }
 
-  // Sprint tasks
+  // Sprint tasks → Interactive Update (sprint task updates/status changes)
   if (q.includes('sprint') && q.includes('task')) {
     return {
-      widgetType: 'task-kanban-board',
-      widgetData: taskKanbanDemo,
-      responseText: "Sprint assignments require completion before next standup meeting:",
+      widgetType: 'interactive-update',
+      widgetData: profileUpdateSuccessDemo,
+      responseText: "Sprint task status updates require confirmation before next standup:",
     };
   }
 
-  // Blockers
+  // Blockers → System Access Status (check if systems are blocking work)
   if (q.includes('blocker') || q.includes('blocked')) {
     return {
-      widgetType: 'blocker-resolution-dashboard',
-      widgetData: blockerResolutionDemo,
-      responseText: "Blocker status for your work requires team lead escalation:",
+      widgetType: 'system-access-status',
+      widgetData: multiSystemAccessResolvedDemo,
+      responseText: "System access check reveals infrastructure blockers affecting your work:",
     };
   }
 
-  // Code quality issues
+  // Code quality issues → Code Quality Dashboard (track code issues like technical debt)
   if (q.includes('code') && (q.includes('issue') || q.includes('bug') || q.includes('fix'))) {
     return {
       widgetType: 'code-quality-dashboard',
       widgetData: codeQualityDemo,
-      responseText: "Code quality issues in your PRs need attention before merge:",
+      responseText: "Code quality issues in your PRs are tracked for review and resolution:",
     };
   }
 
@@ -1785,10 +1785,10 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Default: Show my tasks
+  // Default: Show Agent Performance Stats (developer's own performance)
   return {
-    widgetType: 'task-kanban-board',
-    widgetData: taskKanbanDemo,
-    responseText: "Developer task board displays your current work items and sprint progress:",
+    widgetType: 'agent-performance-stats',
+    widgetData: agentPerformanceDemo,
+    responseText: "Your performance metrics show code contributions, PR reviews, and sprint velocity:",
   };
 }
