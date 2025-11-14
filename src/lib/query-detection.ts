@@ -1451,60 +1451,60 @@ function detectCORQuery(q: string): QueryMatch | null {
 // ============================================================================
 
 function detectProgramManagerQuery(q: string): QueryMatch | null {
-  // Program Health
+  // Program Health → Stakeholder Engagement Dashboard
   if (
     q.includes('program health') ||
     q.includes('program status') ||
     q.includes('program dashboard')
   ) {
     return {
-      widgetType: 'program-health-dashboard',
-      widgetData: programHealthDemo,
-      responseText: "Program health assessment for eGrants Modernization indicates overall status:",
+      widgetType: 'stakeholder-engagement-dashboard',
+      widgetData: stakeholderEngagementDemo,
+      responseText: "Program stakeholder engagement shows communication effectiveness across all program stakeholders:",
     };
   }
 
-  // Milestones
+  // Milestones → Sprint Burndown (shows progress tracking toward milestones)
   if (q.includes('milestone') && (q.includes('status') || q.includes('track') || q.includes('progress'))) {
     return {
-      widgetType: 'program-health-dashboard',
-      widgetData: programHealthDemo,
-      responseText: "Strategic milestone tracking shows progress across Phase 2 implementation:",
+      widgetType: 'sprint-burndown-chart',
+      widgetData: sprintBurndownDemo,
+      responseText: "Strategic milestone tracking shows sprint progress and completion velocity across program phases:",
     };
   }
 
-  // Risks
+  // Risks → Change Request Dashboard
   if (q.includes('risk') && (q.includes('top') || q.includes('critical') || q.includes('high'))) {
     return {
-      widgetType: 'program-health-dashboard',
-      widgetData: programHealthDemo,
-      responseText: "Cross-project risk analysis reveals critical items requiring executive attention:",
+      widgetType: 'change-request-dashboard',
+      widgetData: changeRequestDemo,
+      responseText: "Critical risks requiring change request review and approval:",
     };
   }
 
-  // Budget/Schedule variance
+  // Budget/Schedule variance → Team Velocity Dashboard
   if (q.includes('variance') || (q.includes('schedule') && q.includes('status'))) {
     return {
-      widgetType: 'program-health-dashboard',
-      widgetData: programHealthDemo,
-      responseText: "Schedule and budget variance analysis indicates deviation from baseline plan:",
+      widgetType: 'team-velocity-dashboard',
+      widgetData: teamVelocityDemo,
+      responseText: "Schedule variance analysis shows team velocity and sprint performance impact:",
     };
   }
 
-  // Resources
+  // Resources → Resource Capacity Dashboard
   if (q.includes('resource') && (q.includes('availability') || q.includes('allocation') || q.includes('capacity'))) {
     return {
-      widgetType: 'program-health-dashboard',
-      widgetData: programHealthDemo,
+      widgetType: 'resource-capacity-dashboard',
+      widgetData: resourceCapacityDemo,
       responseText: "Resource allocation across initiatives shows capacity and utilization:",
     };
   }
 
-  // Default: Show program health
+  // Default: Contract Performance Dashboard
   return {
-    widgetType: 'program-health-dashboard',
-    widgetData: programHealthDemo,
-    responseText: "Program portfolio dashboard displays strategic oversight for all initiatives:",
+    widgetType: 'contract-performance-dashboard',
+    widgetData: contractPerformanceDemo,
+    responseText: "Program portfolio overview showing contract performance metrics:",
   };
 }
 
