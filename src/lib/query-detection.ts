@@ -1513,74 +1513,74 @@ function detectProgramManagerQuery(q: string): QueryMatch | null {
 // ============================================================================
 
 function detectStakeholderLeadQuery(q: string): QueryMatch | null {
-  // Stakeholder Engagement
+  // Stakeholder Engagement → Task Kanban Board (tracks stakeholder-driven tasks)
   if (
     q.includes('stakeholder') && (q.includes('engagement') || q.includes('status') || q.includes('communication')) ||
     q.includes('stakeholder dashboard')
   ) {
     return {
-      widgetType: 'stakeholder-engagement-dashboard',
-      widgetData: stakeholderEngagementDemo,
-      responseText: "Stakeholder relationship tracking shows communication effectiveness with DNR leadership:",
+      widgetType: 'task-kanban-board',
+      widgetData: taskKanbanDemo,
+      responseText: "Stakeholder-driven tasks and initiatives organized by priority and status:",
     };
   }
 
-  // Requirements Tracking
+  // Requirements Tracking → Resource Capacity Dashboard (shows team capacity for requirements)
   if (
     q.includes('requirement') && (q.includes('track') || q.includes('status') || q.includes('progress')) ||
     q.includes('requirements tracking')
   ) {
     return {
-      widgetType: 'requirements-tracking-dashboard',
-      widgetData: requirementsTrackingDemo,
-      responseText: "Requirements validation indicates fulfillment status across all program objectives:",
+      widgetType: 'resource-capacity-dashboard',
+      widgetData: resourceCapacityDemo,
+      responseText: "Team capacity allocation for requirements implementation and validation:",
     };
   }
 
-  // Change Requests
+  // Change Requests → Blocker Resolution Dashboard (stakeholder-identified blockers)
   if (
     q.includes('change request') ||
     (q.includes('change') && (q.includes('pending') || q.includes('approval') || q.includes('approved')))
   ) {
     return {
-      widgetType: 'change-request-dashboard',
-      widgetData: changeRequestDemo,
-      responseText: "Change request pipeline shows items requiring stakeholder review and approval:",
+      widgetType: 'blocker-resolution-dashboard',
+      widgetData: blockerResolutionDemo,
+      responseText: "Critical blockers and change requests requiring stakeholder escalation and resolution:",
     };
   }
 
-  // Meetings
+  // Meetings → Meeting Scheduler (stakeholder coordination meetings)
   if (q.includes('meeting') && (q.includes('upcoming') || q.includes('schedule') || q.includes('next'))) {
     return {
-      widgetType: 'stakeholder-engagement-dashboard',
-      widgetData: stakeholderEngagementDemo,
+      widgetType: 'meeting-scheduler',
+      widgetData: meetingSchedulerDemo,
       responseText: "Upcoming stakeholder coordination meetings with DNR program office:",
     };
   }
 
-  // Action items
+  // Action items → Interactive Update (stakeholder action items and updates)
   if (q.includes('action item') || (q.includes('action') && q.includes('pending'))) {
     return {
-      widgetType: 'stakeholder-engagement-dashboard',
-      widgetData: stakeholderEngagementDemo,
+      widgetType: 'interactive-update',
+      widgetData: profileUpdateSuccessDemo,
       responseText: "Pending action items from stakeholder meetings require follow-up and closure:",
     };
   }
 
-  // Traceability
+  // Traceability → Analytics Dashboard (requirements analytics and coverage)
   if (q.includes('traceability') || (q.includes('requirement') && q.includes('coverage'))) {
     return {
-      widgetType: 'requirements-tracking-dashboard',
-      widgetData: requirementsTrackingDemo,
-      responseText: "Requirements traceability matrix shows coverage from business needs to implementation:",
+      widgetType: 'analytics-dashboard',
+      widgetData: analyticsDashboardDemo,
+      responseText: "Requirements traceability analytics showing coverage from business needs to implementation:",
     };
   }
 
-  // Default: Show stakeholder engagement
+  // Default: Executive Summary (high-level stakeholder overview)
   return {
-    widgetType: 'stakeholder-engagement-dashboard',
-    widgetData: stakeholderEngagementDemo,
-    responseText: "Stakeholder management dashboard displays engagement status across all groups:",
+    widgetType: 'executive-summary',
+    widgetData: executiveSummaryDemo,
+    responseText: "Stakeholder management executive summary displays key metrics and engagement status:",
   };
 }
 
