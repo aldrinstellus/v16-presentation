@@ -126,7 +126,7 @@ const conversationEntries: ConversationEntry[] = [
     id: 'q7-team-workload',
     triggers: ['team workload', 'team capacity', 'workload dashboard', 'team distribution', 'agent workload'],
     userQuery: 'Show me the current team workload distribution',
-    aiResponse: "Here's the real-time team workload dashboard. David Park is currently overloaded at 120% capacity and needs immediate support. I recommend redistributing tickets to Sarah Chen and Aisha Williams who have available capacity:",
+    aiResponse: "Here's the real-time team workload dashboard showing current capacity and distribution. I can identify any agents that are overloaded and recommend ticket redistribution to available team members:",
     widgetType: 'team-workload-dashboard',
     widgetData: teamWorkloadDashboardDemo,
   },

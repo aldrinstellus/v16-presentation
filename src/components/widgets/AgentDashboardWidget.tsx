@@ -69,6 +69,46 @@ export function AgentDashboardWidget({ data }: { data: AgentDashboardData }) {
         </div>
       </div>
 
+      {/* Performance Snapshot - MOVED AFTER SUMMARY CARDS */}
+      <div className="glass-card rounded-lg border border-border bg-card/70 p-4 backdrop-blur-md">
+        <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-foreground">
+          <TrendingUp className="h-4 w-4 text-success" />
+          Your Performance This Week
+        </h4>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">Resolved Today</div>
+            <div className="text-lg font-bold text-foreground">
+              {data.performanceSnapshot.ticketsResolvedToday}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">Resolved This Week</div>
+            <div className="text-lg font-bold text-foreground">
+              {data.performanceSnapshot.ticketsResolvedThisWeek}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">Avg Response</div>
+            <div className="text-lg font-bold text-foreground">
+              {data.performanceSnapshot.avgResponseTime}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">Satisfaction</div>
+            <div className="text-lg font-bold text-success">
+              {data.performanceSnapshot.customerSatisfaction.toFixed(1)}/5.0
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">SLA Compliance</div>
+            <div className="text-lg font-bold text-success">
+              {data.performanceSnapshot.slaCompliance}%
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Priority Alerts */}
       {data.priorities.length > 0 && (
         <div className="glass-card rounded-lg border border-border bg-card/70 p-4 backdrop-blur-md">
@@ -144,46 +184,6 @@ export function AgentDashboardWidget({ data }: { data: AgentDashboardData }) {
           </div>
         </div>
       )}
-
-      {/* Performance Snapshot */}
-      <div className="glass-card rounded-lg border border-border bg-card/70 p-4 backdrop-blur-md">
-        <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-foreground">
-          <TrendingUp className="h-4 w-4 text-success" />
-          Your Performance This Week
-        </h4>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div>
-            <div className="text-xs text-muted-foreground mb-1">Resolved Today</div>
-            <div className="text-lg font-bold text-foreground">
-              {data.performanceSnapshot.ticketsResolvedToday}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-muted-foreground mb-1">Resolved This Week</div>
-            <div className="text-lg font-bold text-foreground">
-              {data.performanceSnapshot.ticketsResolvedThisWeek}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-muted-foreground mb-1">Avg Response</div>
-            <div className="text-lg font-bold text-foreground">
-              {data.performanceSnapshot.avgResponseTime}
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-muted-foreground mb-1">Satisfaction</div>
-            <div className="text-lg font-bold text-success">
-              {data.performanceSnapshot.customerSatisfaction.toFixed(1)}/5.0
-            </div>
-          </div>
-          <div>
-            <div className="text-xs text-muted-foreground mb-1">SLA Compliance</div>
-            <div className="text-lg font-bold text-success">
-              {data.performanceSnapshot.slaCompliance}%
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

@@ -117,8 +117,8 @@ export function ExecutiveSummaryWidget({ data }: { data: ExecutiveSummaryData })
           <ul className="space-y-2">
             {data.keyInsights.map((insight, idx) => (
               <li key={idx} className="flex items-start gap-2">
-                <span className="text-primary mt-1.5">•</span>
-                <span className="text-sm text-foreground/90">{insight}</span>
+                <span className="text-primary mt-0.5 flex-shrink-0">•</span>
+                <span className="text-sm text-foreground/90 leading-relaxed">{insight}</span>
               </li>
             ))}
           </ul>

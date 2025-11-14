@@ -85,7 +85,7 @@ export const conversationEntries: ConversationEntry[] = [
     id: 'q1-exec-summary',
     triggers: ['executive summary', 'summary', 'overview', 'good morning', 'dashboard'],
     userQuery: 'Good morning. Give me the executive summary for today.',
-    aiResponse: "Good morning, Sarah. Here's your executive summary for today:",
+    aiResponse: "Good morning. Here's your executive summary for today:",
     widgetType: 'executive-summary',
     widgetData: {
       title: 'Executive Summary',

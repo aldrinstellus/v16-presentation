@@ -4,6 +4,10 @@
 import type { WidgetType, WidgetData } from '@/types/widget';
 import { findBestMatch as findCLevelMatch } from './c-level-conversation';
 import { findBestMatch as findCSManagerMatch } from './cs-manager-conversation';
+import { findBestMatch as findATCExecutiveMatch } from './atc-executive-conversation';
+import { findBestMatch as findATCManagerMatch } from './atc-manager-conversation';
+import { findBestMatch as findATCSupportMatch } from './atc-support-conversation';
+import { findBestMatch as findATCCSMMatch } from './atc-csm-conversation';
 import {
   executiveSummaryDemo,
   customerRiskProfileDemo,
@@ -86,15 +90,15 @@ export function detectWidgetQuery(
       return detectAgentQuery(q);
     case 'csm':
       return detectCSMQuery(q);
-    // V17 ATC Mode Personas (route to V14/V15 detection logic)
+    // V17 ATC Mode Personas (use dedicated ATC conversation files)
     case 'atc-executive':
-      return detectCLevelQuery(q);
+      return detectATCExecutiveQuery(q);
     case 'atc-manager':
-      return detectManagerQuery(q);
+      return detectATCManagerQuery(q);
     case 'atc-support':
-      return detectAgentQuery(q);
+      return detectATCSupportQuery(q);
     case 'atc-csm':
-      return detectCSMQuery(q);
+      return detectATCCSMQuery(q);
     // V17 Government Mode Personas
     case 'cor':
       return detectCORQuery(q);
@@ -1201,6 +1205,70 @@ function detectCSMQuery(q: string): QueryMatch | null {
     widgetData: null,
     responseText: "Customer Success Manager dashboard overview:",
   };
+}
+
+// ============================================================================
+// V17 ATC MODE QUERIES (Use dedicated conversation files)
+// ============================================================================
+
+function detectATCExecutiveQuery(q: string): QueryMatch | null {
+  // Use ATC Executive conversation pattern matching
+  const atcMatch = findATCExecutiveMatch(q);
+  if (atcMatch) {
+    return {
+      widgetType: atcMatch.widgetType as WidgetType,
+      widgetData: atcMatch.widgetData ?? null,
+      responseText: atcMatch.aiResponse,
+    };
+  }
+
+  // Fallback to generic C-Level detection for backward compatibility
+  return detectCLevelQuery(q);
+}
+
+function detectATCManagerQuery(q: string): QueryMatch | null {
+  // Use ATC Manager conversation pattern matching
+  const atcMatch = findATCManagerMatch(q);
+  if (atcMatch) {
+    return {
+      widgetType: atcMatch.widgetType as WidgetType,
+      widgetData: atcMatch.widgetData ?? null,
+      responseText: atcMatch.aiResponse,
+    };
+  }
+
+  // Fallback to generic CS Manager detection for backward compatibility
+  return detectManagerQuery(q);
+}
+
+function detectATCSupportQuery(q: string): QueryMatch | null {
+  // Use ATC Support conversation pattern matching
+  const atcMatch = findATCSupportMatch(q);
+  if (atcMatch) {
+    return {
+      widgetType: atcMatch.widgetType as WidgetType,
+      widgetData: atcMatch.widgetData ?? null,
+      responseText: atcMatch.aiResponse,
+    };
+  }
+
+  // Fallback to generic Support Agent detection for backward compatibility
+  return detectAgentQuery(q);
+}
+
+function detectATCCSMQuery(q: string): QueryMatch | null {
+  // Use ATC CSM conversation pattern matching
+  const atcMatch = findATCCSMMatch(q);
+  if (atcMatch) {
+    return {
+      widgetType: atcMatch.widgetType as WidgetType,
+      widgetData: atcMatch.widgetData ?? null,
+      responseText: atcMatch.aiResponse,
+    };
+  }
+
+  // Fallback to generic CSM detection for backward compatibility
+  return detectCSMQuery(q);
 }
 
 // ============================================================================

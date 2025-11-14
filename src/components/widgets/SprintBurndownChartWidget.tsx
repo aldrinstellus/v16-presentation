@@ -184,6 +184,25 @@ export function SprintBurndownChartWidget({ data: providedData }: { data?: Sprin
         </motion.div>
       )}
 
+      {/* Status Legend */}
+      <motion.div className="mb-6 rounded-lg border border-border bg-gradient-to-br from-card/50 to-muted/20 p-4" variants={itemVariants}>
+        <h4 className="text-sm font-semibold mb-3 text-foreground">Sprint Status Indicators</h4>
+        <div className="flex flex-wrap gap-4">
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-emerald-500 shadow-sm" />
+            <span className="text-sm text-muted-foreground">On Track</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-chart-4 shadow-sm" />
+            <span className="text-sm text-muted-foreground">At Risk</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-3 w-3 rounded-full bg-destructive shadow-sm" />
+            <span className="text-sm text-muted-foreground">Critical</span>
+          </div>
+        </div>
+      </motion.div>
+
       {/* Risks */}
       {data.risks && data.risks.length > 0 && (
         <div>

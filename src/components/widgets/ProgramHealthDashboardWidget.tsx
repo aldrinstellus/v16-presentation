@@ -116,6 +116,26 @@ export function ProgramHealthDashboardWidget({ data }: { data: ProgramHealthData
         </div>
       </div>
 
+      {/* Key Metrics - MOVED AFTER HEALTH INDICATORS */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
+          <div className="text-2xl font-bold text-foreground mb-1">{data.keyMetrics.contractsActive}</div>
+          <p className="text-xs text-muted-foreground">Active Contracts</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
+          <div className="text-2xl font-bold text-foreground mb-1">{data.keyMetrics.deliverablesCompleted}</div>
+          <p className="text-xs text-muted-foreground">Deliverables Done</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
+          <div className="text-2xl font-bold text-foreground mb-1">{data.keyMetrics.stakeholderSatisfaction}%</div>
+          <p className="text-xs text-muted-foreground">Stakeholder Satisfaction</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
+          <div className="text-2xl font-bold text-foreground mb-1">${data.keyMetrics.budgetRemaining}M</div>
+          <p className="text-xs text-muted-foreground">Budget Remaining</p>
+        </div>
+      </div>
+
       {/* Milestones */}
       {data.milestones && data.milestones.length > 0 && (
         <div className="mb-6">
@@ -177,26 +197,6 @@ export function ProgramHealthDashboardWidget({ data }: { data: ProgramHealthData
           </div>
         </div>
       )}
-
-      {/* Key Metrics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
-          <div className="text-2xl font-bold text-foreground mb-1">{data.keyMetrics.contractsActive}</div>
-          <p className="text-xs text-muted-foreground">Active Contracts</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
-          <div className="text-2xl font-bold text-foreground mb-1">{data.keyMetrics.deliverablesCompleted}</div>
-          <p className="text-xs text-muted-foreground">Deliverables Done</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
-          <div className="text-2xl font-bold text-foreground mb-1">{data.keyMetrics.stakeholderSatisfaction}%</div>
-          <p className="text-xs text-muted-foreground">Stakeholder Satisfaction</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card/50 p-3 text-center">
-          <div className="text-2xl font-bold text-foreground mb-1">${data.keyMetrics.budgetRemaining}M</div>
-          <p className="text-xs text-muted-foreground">Budget Remaining</p>
-        </div>
-      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Send } from 'lucide-react';
 import { InteractiveChat, type InteractiveChatRef } from './InteractiveChat';
-// import { CommandPalette } from '../concepts/CommandPalette'; // TODO: Create CommandPalette component
+import { CommandPalette } from '../concepts/CommandPalette';
 import { usePersona } from '@/hooks/use-persona';
 import { useSidebar } from '@/contexts/SidebarContext';
 import { useQuickAction } from '@/contexts/QuickActionContext';
@@ -19,8 +19,20 @@ export function InteractiveChatWithFloatingInput() {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatRef = useRef<InteractiveChatRef>(null);
   const processingQueryRef = useRef<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const widgets = getDashboardWidgets(currentPersona.id);
+
+  // Get widgets from dashboard config OR convert persona quick actions
+  const dashboardWidgets = getDashboardWidgets(currentPersona.id);
+  const widgets = dashboardWidgets.length > 0
+    ? dashboardWidgets
+    : currentPersona.quickActions.map(qa => ({
+        id: qa.id,
+        type: 'text-response' as const,
+        title: qa.label,
+        description: qa.query,
+        query: qa.query,
+        icon: qa.icon,
+        color: qa.color,
+      }));
 
   // Monitor QuickAction context for widget click events
   useEffect(() => {
@@ -111,13 +123,13 @@ export function InteractiveChatWithFloatingInput() {
         </button>
       </div>
 
-      {/* Command Palette - TODO: Create CommandPalette component */}
-      {/* <CommandPalette
+      {/* Command Palette */}
+      <CommandPalette
         isOpen={isPaletteOpen}
         onClose={() => setIsPaletteOpen(false)}
         widgets={widgets}
         onWidgetClick={handleWidgetClick}
-      /> */}
+      />
     </div>
   );
 }
