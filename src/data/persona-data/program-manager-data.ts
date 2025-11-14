@@ -6,19 +6,11 @@
  * Focus: Program-level governance, resource allocation, executive reporting
  */
 
-import type {
-  ProgramOverview,
-  ProgramMilestone,
-  ResourceAllocation,
-  StakeholderUpdate,
-  ProgramRisk
-} from '@/types/persona-types';
-
 /**
  * Program Manager Portfolio Dashboard
  * 5 active strategic initiatives across enterprise
  */
-export const programManagerOverviewData: ProgramOverview[] = [
+export const programManagerOverviewData = [
   {
     id: 'INIT-2025-DT',
     name: 'Digital Transformation Initiative',
@@ -170,7 +162,7 @@ export const programManagerOverviewData: ProgramOverview[] = [
  * Program-Level Milestone Tracker
  * Strategic milestones across all initiatives
  */
-export const programManagerMilestoneData: ProgramMilestone[] = [
+export const programManagerMilestoneData = [
   {
     id: 'MILE-DT-001',
     programId: 'INIT-2025-DT',
@@ -372,7 +364,7 @@ export const programManagerMilestoneData: ProgramMilestone[] = [
  * Resource Allocation Across Programs
  * Team capacity and budget distribution
  */
-export const programManagerResourceData: ResourceAllocation[] = [
+export const programManagerResourceData = [
   {
     id: 'RES-DT-2025',
     programId: 'INIT-2025-DT',
@@ -514,7 +506,7 @@ export const programManagerResourceData: ResourceAllocation[] = [
  * Stakeholder Communications & Executive Updates
  * High-level program status communications
  */
-export const programManagerStakeholderData: StakeholderUpdate[] = [
+export const programManagerStakeholderData = [
   {
     id: 'COMM-EXEC-001',
     type: 'executive-review',
@@ -640,7 +632,7 @@ export const programManagerStakeholderData: StakeholderUpdate[] = [
  * Program Risk Register
  * Strategic risks across portfolio
  */
-export const programManagerRiskData: ProgramRisk[] = [
+export const programManagerRiskData = [
   {
     id: 'RISK-PROG-001',
     programId: 'INIT-2024-CLOUD',
