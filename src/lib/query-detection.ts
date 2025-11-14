@@ -1771,9 +1771,10 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
     };
   }
 
-  // Knowledge base
+  // Knowledge base (including troubleshooting queries)
   if (
     q.includes('how to') ||
+    q.includes('troubleshoot') ||
     q.includes('knowledge') ||
     q.includes('documentation') ||
     q.includes('guide')
@@ -1788,7 +1789,7 @@ function detectServiceTeamMemberQuery(q: string): QueryMatch | null {
   // Default: Show Agent Performance Stats (developer's own performance)
   return {
     widgetType: 'agent-performance-stats',
-    widgetData: agentPerformanceDemo,
+    widgetData: agentPerformanceStatsDemo,
     responseText: "Your performance metrics show code contributions, PR reviews, and sprint velocity:",
   };
 }
