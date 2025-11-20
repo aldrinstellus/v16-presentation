@@ -928,18 +928,24 @@ export const atcPersonas: Persona[] = [
     ],
     demoScenarios: {
       'Team Performance': [
+        "Show me my team's status",
+        'Who are the top and bottom performers?',
         'Show me agent performance for this week',
         'Who is my most slacking agent?',
         'Who is my top performing agent?',
+        "Show me Sarah's tickets",
         'Compare agent metrics: resolution time vs customer satisfaction',
       ],
       'Customer Management': [
+        'Show me all high-risk customers',
         'Which customers need immediate attention?',
         'Show me all high-priority tickets by customer',
         'Customers with multiple open tickets',
         'Accounts with declining satisfaction scores',
       ],
       'Operations': [
+        'Draft a message to Acme Corp about the outage',
+        'Schedule a 1-on-1 coaching session with Marcus',
         'Recommend ticket reassignments for workload balance',
         'Show me SLA breach risks for next 24 hours',
         'Team capacity planning for Q1 2026',

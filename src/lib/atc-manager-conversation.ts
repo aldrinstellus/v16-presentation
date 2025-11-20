@@ -8,6 +8,7 @@ import {
   agentPerformanceComparisonDemo,
   ticketListDemo,
   slaPerformanceChartDemo,
+  messageComposerDemo,
 } from '@/data/demo-widget-data';
 
 export interface ConversationEntry {
@@ -213,6 +214,70 @@ const conversationEntries: ConversationEntry[] = [
         escalated: 15,
       },
     },
+  },
+
+  // V14 COMPATIBILITY QUERIES - Added for backward compatibility with v14 test scenarios
+
+  // V14-1: "Show me my team's status" (v14 compatibility)
+  {
+    id: 'v14-team-status',
+    triggers: ["team's status", 'team status', 'my team status', 'show me my team'],
+    userQuery: "Show me my team's status",
+    aiResponse: "Here's your team's current status with real-time workload and performance metrics:",
+    widgetType: 'team-workload-dashboard',
+    widgetData: teamWorkloadDashboardDemo,
+  },
+
+  // V14-2: "Who are the top and bottom performers?" (v14 compatibility)
+  {
+    id: 'v14-top-bottom-performers',
+    triggers: ['top and bottom performers', 'best and worst', 'highest and lowest performers', 'top bottom'],
+    userQuery: 'Who are the top and bottom performers?',
+    aiResponse: "Here's the performance ranking showing both top performers and those who need coaching:",
+    widgetType: 'agent-performance-comparison',
+    widgetData: agentPerformanceComparisonDemo,
+  },
+
+  // V14-3: "Show me Sarah's tickets" (v14 compatibility - agent-specific tickets)
+  {
+    id: 'v14-agent-tickets',
+    triggers: ["sarah's tickets", 'show me sarah', 'sarahs tickets', "marcus's tickets", 'marcus tickets', "agent's tickets"],
+    userQuery: "Show me Sarah's tickets",
+    aiResponse: "Here are Sarah's currently assigned tickets with priority and status:",
+    widgetType: 'ticket-list',
+    widgetData: {
+      ...ticketListDemo,
+      title: "Sarah's Assigned Tickets",
+    },
+  },
+
+  // V14-4: "Show me all high-risk customers" (v14 compatibility)
+  {
+    id: 'v14-high-risk-customers',
+    triggers: ['all high-risk customers', 'show me all high-risk', 'all at-risk customers', 'high risk list'],
+    userQuery: 'Show me all high-risk customers',
+    aiResponse: "Here are all high-risk customers requiring immediate attention and proactive outreach:",
+    widgetType: 'customer-risk-list',
+    widgetData: customerRiskListDemo,
+  },
+
+  // V14-5: "Draft a message to Acme Corp about the outage" (v14 compatibility)
+  {
+    id: 'v14-draft-message',
+    triggers: ['draft a message', 'draft message', 'message to', 'compose message', 'write message'],
+    userQuery: 'Draft a message to Acme Corp about the outage',
+    aiResponse: "I've drafted a professional message for Acme Corp addressing the recent outage with appropriate tone and next steps:",
+    widgetType: 'message-composer',
+    widgetData: messageComposerDemo,
+  },
+
+  // V14-6: "Schedule a 1-on-1 coaching session with Marcus" (v14 compatibility - more specific)
+  {
+    id: 'v14-schedule-marcus',
+    triggers: ['coaching session with marcus', '1-on-1 with marcus', 'schedule with marcus', 'marcus 1-on-1'],
+    userQuery: 'Schedule a 1-on-1 coaching session with Marcus',
+    aiResponse:
+      "I can help you schedule a 1-on-1 coaching session with Marcus. The session will be 30 minutes.\n\nWould you like me to check calendars for availability?",
   },
 ];
 
