@@ -32,12 +32,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Enterprise AI Support V16** - Client Feedback Phase 2 implementation with video title and keyword animations. Based on v15-presentation with all CTIS/ITSS branding and features.
+**Enterprise AI Support V18** - Unified Multi-Mode System with ATC/Government/Project Personas. Comprehensive persona testing and deployment infrastructure.
 
-**Version**: 16.0.0
-**Port**: 3017
-**Status**: Development - Phase 2 Client Feedback
-**Base**: Cloned from V15 (All Phase 1 feedback complete)
+**Version**: 18.0.0
+**Port**: 3019
+**Status**: Development - Unified Modes
+**Base**: Cloned from V17 (Mode Switcher with all features)
+**Production URL**: https://v18-unified-modes-fpbqd8c5f-aldos-projects-8cf34b67.vercel.app
+**GitHub**: https://github.com/aldrinstellus/enterprise-ai-support-v18
 
 ## 📚 Documentation Structure
 
@@ -56,24 +58,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Application URLs
 
-**Development Server**: http://localhost:3017
+**Development Server**: http://localhost:3019
 
-**Demo Pages** (Main Application):
-- **C-Level Executive**: http://localhost:3017/demo/c-level
-- **CS Manager**: http://localhost:3017/demo/cs-manager
-- **Support Agent**: http://localhost:3017/demo/support-agent
+**Production**: https://v18-unified-modes-fpbqd8c5f-aldos-projects-8cf34b67.vercel.app
 
-**API Health Check**: http://localhost:3017/api/health
+**Demo Pages** (ATC Mode):
+- **C-Level Executive**: http://localhost:3019/demo/atc-executive
+- **CS Manager**: http://localhost:3019/demo/atc-manager
+- **Support Agent**: http://localhost:3019/demo/atc-support
+- **Customer Success Manager**: http://localhost:3019/demo/atc-csm
+
+**Demo Pages** (Government Mode):
+- **Contract Officer Representative**: http://localhost:3019/demo/gov-cor
+- **Program Manager**: http://localhost:3019/demo/gov-program-manager
+- **Service Team Lead**: http://localhost:3019/demo/gov-service-team-lead
+- **Service Team Member**: http://localhost:3019/demo/gov-service-team-member
+- **Stakeholder Lead**: http://localhost:3019/demo/gov-stakeholder-lead
+
+**Demo Pages** (Project Mode):
+- **Project Lead**: http://localhost:3019/demo/project-lead
+- **Project Manager**: http://localhost:3019/demo/project-manager
+
+**API Health Check**: http://localhost:3019/api/health
 
 ## Development Commands
 
 ### Core Development
 ```bash
-npm run dev              # Start Next.js dev server with Turbopack (port 3017)
+npm run dev              # Start Next.js dev server with Turbopack (port 3019)
 npm run dev:full         # Start both frontend and mock WebSocket server
 npm run dev:ws           # Start mock WebSocket server only
 npm run build            # Production build with Turbopack
-npm run start            # Start production server (port 3017)
+npm run start            # Start production server (port 3018)
 ```
 
 ### Code Quality
@@ -298,7 +314,7 @@ NEXT_PUBLIC_WS_URL=ws://localhost:3001
 - **Demo Mode**: The app works fully without API keys using mock data
 - **Claude SDK**: Real AI responses available when `ANTHROPIC_API_KEY` is configured (see CLAUDE-SDK-SETUP.md)
 - **Database**: Prisma schema defined but database connection optional for demo
-- **Port 3017**: Chosen to avoid conflicts with other project versions (v15 uses 3016, v14 uses 3014)
+- **Port 3019**: Chosen to avoid conflicts with other project versions (v17 uses 3018, v15 uses 3016, v14 uses 3014)
 - **No Backend**: All state managed in localStorage for demo purposes
 - **Turbopack**: Next.js 15 uses Turbopack by default for fast builds (<1s)
 
@@ -372,6 +388,8 @@ All documentation is in `/docs/` organized into 15 categories:
 - **V12**: Zoho Desk webhook integration, production deployment
 - **V14**: **100/100 production score** with comprehensive SDLC documentation 🏆 (PRODUCTION)
 - **V15**: **Presentation branch** - Client Feedback Phase 1 (8/8 complete) + Gender avatars
-- **V16**: **Client Feedback Phase 2** - Video title + Keyword animations (THIS VERSION)
+- **V16**: **Client Feedback Phase 2** - Video title + Keyword animations
+- **V17**: **Mode Switcher** - Government/Project Mode Switcher with Dynamic Personas
+- **V18**: **Unified Modes** - Complete multi-mode system with ATC/Government/Project personas (THIS VERSION)
 
-**Focus**: Implementing Phase 2 client feedback (video title at top, animated keywords during intro) while preserving all v15 features and stability.
+**Focus**: Unified multi-mode system with comprehensive persona testing across ATC (4 personas), Government (5 personas), and Project (2 personas) modes. Full deployment to Vercel and GitHub integration.
