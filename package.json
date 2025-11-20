@@ -1,10 +1,10 @@
 {
-  "name": "enterprise-ai-support-v17-mode-switcher",
-  "version": "17.0.0",
+  "name": "enterprise-ai-support-v18-unified-modes",
+  "version": "18.0.0",
   "private": true,
-  "description": "Enterprise AI Support V17 - Government/Project Mode Switcher with Dynamic Personas",
+  "description": "Enterprise AI Support V18 - Unified Multi-Mode System with ATC/Government/Project Personas",
   "scripts": {
-    "dev": "next dev --turbopack -p 3018",
+    "dev": "next dev --turbopack -p 3019",
     "dev:full": "concurrently \"npm run dev:ws\" \"npm run dev\"",
     "dev:webhooks": "./scripts/start-dev.sh",
     "dev:stop": "./scripts/stop-dev.sh",
