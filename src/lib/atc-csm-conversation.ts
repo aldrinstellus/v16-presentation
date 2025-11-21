@@ -3,10 +3,16 @@
 
 import type { WidgetData } from '@/types/widget';
 import {
-  customerRiskListDemo,
   sentimentAnalysisDemo,
+  customerRiskListDemo,
   analyticsDashboardDemo,
 } from '@/data/demo-widget-data';
+import {
+  clientHealthDashboardDemo,
+  renewalPipelineDemo,
+  upsellOpportunitiesDemo,
+  productAdoptionMetricsDemo,
+} from '@/data/csm-widget-data';
 
 export interface ConversationEntry {
   id: string;
@@ -24,8 +30,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['client health scores', 'health scores', 'customer health', 'account health'],
     userQuery: 'Show me client health scores.',
     aiResponse: "Here are the health scores for your assigned client portfolio:",
-    widgetType: 'customer-risk-list',
-    widgetData: customerRiskListDemo,
+    widgetType: 'client-health-dashboard',
+    widgetData: clientHealthDashboardDemo,
   },
 
   // Q2: Product Adoption Metrics
@@ -34,8 +40,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['product adoption', 'adoption metrics', 'feature usage', 'usage analytics'],
     userQuery: 'Show me product adoption metrics.',
     aiResponse: "Here's the product adoption analysis showing feature usage across your client base:",
-    widgetType: 'analytics-dashboard',
-    widgetData: analyticsDashboardDemo,
+    widgetType: 'product-adoption-metrics',
+    widgetData: productAdoptionMetricsDemo,
   },
 
   // Q3: Renewal Pipeline
@@ -44,8 +50,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['renewal pipeline', 'upcoming renewals', 'renewals', 'contract renewals'],
     userQuery: 'Show me the renewal pipeline.',
     aiResponse: "Here are your upcoming renewals for the next 90 days:",
-    widgetType: 'customer-risk-list',
-    widgetData: customerRiskListDemo,
+    widgetType: 'renewal-pipeline',
+    widgetData: renewalPipelineDemo,
   },
 
   // Q4: Client Feedback / NPS
@@ -64,8 +70,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['upsell opportunities', 'upsell', 'expansion opportunities', 'growth opportunities'],
     userQuery: 'Show me upsell opportunities.',
     aiResponse: "Here are accounts with strong upsell potential based on product usage:",
-    widgetType: 'customer-risk-list',
-    widgetData: customerRiskListDemo,
+    widgetType: 'upsell-opportunities',
+    widgetData: upsellOpportunitiesDemo,
   },
 
   // Q6: Product Roadmap
@@ -110,8 +116,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['declining adoption', 'declining usage', 'low adoption', 'adoption issues'],
     userQuery: 'Show me clients with declining product adoption.',
     aiResponse: "Here are clients showing declining engagement that require attention:",
-    widgetType: 'analytics-dashboard',
-    widgetData: analyticsDashboardDemo,
+    widgetType: 'product-adoption-metrics',
+    widgetData: productAdoptionMetricsDemo,
   },
 
   // Q10: Expansion Revenue Opportunities
@@ -120,8 +126,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['expansion revenue', 'revenue expansion', 'cross-sell', 'premium upgrade'],
     userQuery: 'Show me expansion revenue opportunities.',
     aiResponse: "Here's the revenue expansion analysis with cross-sell and upsell opportunities:",
-    widgetType: 'customer-risk-list',
-    widgetData: customerRiskListDemo,
+    widgetType: 'upsell-opportunities',
+    widgetData: upsellOpportunitiesDemo,
   },
 
   // Q11: Client Engagement Trends
@@ -176,8 +182,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['premium upgrade', 'tier upgrade', 'premium tier', 'upgrade candidates'],
     userQuery: 'Show me clients ready for premium tier upgrade.',
     aiResponse: "Here are clients positioned for premium tier upgrades based on usage patterns:",
-    widgetType: 'customer-risk-list',
-    widgetData: customerRiskListDemo,
+    widgetType: 'upsell-opportunities',
+    widgetData: upsellOpportunitiesDemo,
   },
 
   // Q16: Revenue Retention Metrics
@@ -186,8 +192,8 @@ const conversationEntries: ConversationEntry[] = [
     triggers: ['revenue retention', 'retention metrics', 'net revenue retention', 'arr retention'],
     userQuery: 'Analyze revenue retention and expansion metrics.',
     aiResponse: "Here's the revenue retention and expansion metrics analysis:",
-    widgetType: 'customer-risk-list',
-    widgetData: customerRiskListDemo,
+    widgetType: 'renewal-pipeline',
+    widgetData: renewalPipelineDemo,
   },
 ];
 

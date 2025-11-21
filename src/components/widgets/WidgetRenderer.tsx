@@ -40,6 +40,10 @@ import type {
   TaskKanbanData,
   ResourceCapacityData,
   BlockerResolutionData,
+  ClientHealthDashboardData,
+  RenewalPipelineData,
+  UpsellOpportunitiesData,
+  ProductAdoptionMetricsData,
 } from '@/types/widget';
 import { ExecutiveSummaryWidget } from './ExecutiveSummaryWidget';
 import { AnalyticsDashboardWidget } from './AnalyticsDashboardWidget';
@@ -82,6 +86,10 @@ import { DeploymentPipelineDashboardWidget } from './DeploymentPipelineDashboard
 import { TaskKanbanBoardWidget } from './TaskKanbanBoardWidget';
 import { ResourceCapacityDashboardWidget } from './ResourceCapacityDashboardWidget';
 import { BlockerResolutionDashboardWidget } from './BlockerResolutionDashboardWidget';
+import { ClientHealthDashboardWidget } from './ClientHealthDashboardWidget';
+import { RenewalPipelineWidget } from './RenewalPipelineWidget';
+import { UpsellOpportunitiesWidget } from './UpsellOpportunitiesWidget';
+import { ProductAdoptionMetricsWidget } from './ProductAdoptionMetricsWidget';
 
 interface WidgetRendererProps {
   type: WidgetType;
@@ -214,6 +222,19 @@ export function WidgetRenderer({ type, data, onAction }: WidgetRendererProps) {
 
       case 'blocker-resolution-dashboard':
         return <BlockerResolutionDashboardWidget data={data as BlockerResolutionData} />;
+
+      // V18 ATC CSM Widgets
+      case 'client-health-dashboard':
+        return <ClientHealthDashboardWidget data={data as ClientHealthDashboardData} />;
+
+      case 'renewal-pipeline':
+        return <RenewalPipelineWidget data={data as RenewalPipelineData} />;
+
+      case 'upsell-opportunities':
+        return <UpsellOpportunitiesWidget data={data as UpsellOpportunitiesData} />;
+
+      case 'product-adoption-metrics':
+        return <ProductAdoptionMetricsWidget data={data as ProductAdoptionMetricsData} />;
 
       default:
         // Fallback for unimplemented widgets

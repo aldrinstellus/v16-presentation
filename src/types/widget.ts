@@ -1358,6 +1358,130 @@ export interface KBArticleViewerData {
   }>;
 }
 
+// ============================================================================
+// V18 ATC CSM (CUSTOMER SUCCESS MANAGER) WIDGET DATA INTERFACES
+// ============================================================================
+
+// Client Health Dashboard Widget (ATC CSM Persona)
+export interface ClientHealthDashboardData {
+  title: string;
+  period: string;
+  customersAnalyzed: number;
+  healthMetrics: Array<{
+    customerId: string;
+    customerName: string;
+    arr: string;
+    healthScore: number;
+    healthLevel: 'excellent' | 'good' | 'at-risk' | 'critical';
+    lastUpdated: string;
+    trendDirection: 'up' | 'down' | 'stable';
+    scoreComponents: {
+      productAdoption: number;
+      supportTickets: number;
+      paymentHealth: number;
+      renewalLikelihood: number;
+    };
+    riskFactors: string[];
+    recommendations: Array<{
+      priority: 'high' | 'medium' | 'low';
+      action: string;
+    }>;
+  }>;
+  overallHealthTrend: {
+    labels: string[];
+    datasets: Array<{
+      label: string;
+      data: number[];
+    }>;
+  };
+}
+
+// Renewal Pipeline Widget (ATC CSM Persona)
+export interface RenewalPipelineData {
+  title: string;
+  period: string;
+  renewalCount: number;
+  totalArr: number;
+  renewals: Array<{
+    customerId: string;
+    customerName: string;
+    currentArr: number;
+    renewalDate: string;
+    daysUntilRenewal: number;
+    status: 'on-track' | 'at-risk' | 'critical';
+    expansionOpportunity: number;
+    renewalLikelihood: number;
+    csm: string;
+    lastEngagement: string;
+    actionItems: string[];
+  }>;
+  summary: {
+    upcomingMonth: number;
+    upcomingQuarter: number;
+    atRisk: number;
+    highValue: number;
+  };
+}
+
+// Upsell Opportunities Widget (ATC CSM Persona)
+export interface UpsellOpportunitiesData {
+  title: string;
+  totalOpportunities: number;
+  totalPotentialRevenue: number;
+  opportunities: Array<{
+    customerId: string;
+    customerName: string;
+    currentArr: number;
+    opportunityType: 'tier-upgrade' | 'add-on' | 'cross-sell' | 'new-product';
+    suggestedProduct: string;
+    estimatedRevenue: number;
+    confidence: number;
+    reasons: string[];
+    buyingSignals: string[];
+    nextSteps: string[];
+    timelineToClose: string;
+  }>;
+  byType: {
+    tierUpgrade: number;
+    addOn: number;
+    crossSell: number;
+    newProduct: number;
+  };
+}
+
+// Product Adoption Metrics Widget (ATC CSM Persona)
+export interface ProductAdoptionMetricsData {
+  title: string;
+  period: string;
+  customersTracked: number;
+  metrics: Array<{
+    customerId: string;
+    customerName: string;
+    currentAdoptionRate: number;
+    previousAdoptionRate: number;
+    trend: 'improving' | 'stable' | 'declining';
+    trendPercentage: number;
+    featureUsage: Array<{
+      feature: string;
+      usageRate: number;
+      trend: 'up' | 'down' | 'stable';
+    }>;
+    loginsPerMonth: number;
+    activeUsers: number;
+    totalLicenses: number;
+    utilizationRate: number;
+    riskLevel: 'low' | 'medium' | 'high' | 'critical';
+    recommendations: string[];
+  }>;
+  adoptionTrend: {
+    labels: string[];
+    datasets: Array<{
+      label: string;
+      data: number[];
+    }>;
+  };
+}
+
 // Union type for all widget data
 export type WidgetData =
   | ExecutiveSummaryData
@@ -1402,4 +1526,9 @@ export type WidgetData =
   | TaskKanbanData
   | ResourceCapacityData
   | BlockerResolutionData
-  | KBArticleViewerData;
+  | KBArticleViewerData
+  // V18 ATC CSM Widget Data
+  | ClientHealthDashboardData
+  | RenewalPipelineData
+  | UpsellOpportunitiesData
+  | ProductAdoptionMetricsData;
